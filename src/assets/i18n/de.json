@@ -1,0 +1,18 @@
+{
+  "UI": {
+    "ERROR": "Fehler",
+    "OK": "Ok",
+    "CANCEL": "Abbrechen"
+  },
+  "LOGIN": {
+    "LOGIN": "Einloggen",
+    "SIGN_UP": "Anmelden",
+    "LOGIN_ERROR_MSG": "Die angegebenen Login-Daten sind ungültig. Bitte überprüfen Sie ihre E-Mail Adresse und das Passwort."
+  },
+  "USER": {
+    "FIRST_NAME": "Vorname",
+    "LAST_NAME": "Nachname",
+    "PASSWORD": "Passwort",
+    "E_MAIL": "E-Mail"
+  }
+}

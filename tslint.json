@@ -3,7 +3,11 @@
     "no-duplicate-variable": true,
     "no-unused-variable": [
       true
-    ]
+    ],
+    "component-selector-prefix": [
+      true,
+      "fltrz"
+    ],
   },
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"
