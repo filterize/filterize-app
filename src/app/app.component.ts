@@ -10,16 +10,21 @@ import { ViewChild } from '@angular/core';
 import { AnalyticsService } from '../services/analytics.service'
 import { LoginSignupComponent } from "../pages/login/login-signup.component";
 import { TranslateService } from "ng2-translate";
+import { DbGlobalService } from "../services/db-global.service";
+import { SideMenuComponent } from "../pages/side-menu/side-menu.component";
 
 
 @Component({
-  template: `<ion-nav [root]="rootPage"></ion-nav>`
+  template: `
+    <filterize-side-menu [content]="content"></filterize-side-menu>
+    <ion-nav #content [root]="rootPage"></ion-nav>
+  `
 })
 export class MyApp {
   rootPage = LoginSignupComponent;
   @ViewChild(Nav) navChild: Nav;
 
-  constructor(platform: Platform, private translate: TranslateService) {
+  constructor(platform: Platform, private translate: TranslateService, private dbGlobal: DbGlobalService) {
     translate.setDefaultLang("en");
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -35,5 +40,6 @@ export class MyApp {
         console.warn('Unmatched Route', nomatch);
       });
     });
+
   }
 }

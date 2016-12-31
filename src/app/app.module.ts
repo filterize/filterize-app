@@ -17,6 +17,13 @@ import { createTranslateLoader } from "./translation-loader";
 import { Http } from "@angular/http";
 import { SignupComponent } from "../pages/login/signup.component";
 import { UserEffects } from "../user/user.effects";
+import { userlistReducer } from "../user/userlist.reducers";
+import { DbGlobalService } from "../services/db-global.service";
+import { SideMenuComponent } from "../pages/side-menu/side-menu.component";
+import { UserButtonComponent } from "../user/user-button.component";
+import { currentUserReducer } from "../user/current-user.reducer";
+import { UserService } from "../services/user.service";
+import { UserSelectComponent } from "../user/user-select.component";
 
 /*const appRoutes = [
   {path: "login/login", component: LoginComponent, name: "Login"},
@@ -27,10 +34,15 @@ import { UserEffects } from "../user/user.effects";
 let imports = [
   IonicModule.forRoot(MyApp),
   // RouterModule.forRoot(appRoutes),
-  StoreModule.provideStore({router: routerReducer}),
+  StoreModule.provideStore({
+    router: routerReducer,
+    userlist: userlistReducer,
+    current_user: currentUserReducer,
+  }),
   // RouterStoreModule.connectRouter(),
   EffectsModule.runAfterBootstrap(AnalyticsEffects),
   EffectsModule.runAfterBootstrap(UserEffects),
+  EffectsModule.runAfterBootstrap(DbGlobalService),
   TranslateModule.forRoot({
     provide: TranslateLoader,
     useFactory: (createTranslateLoader),
@@ -49,23 +61,30 @@ if (CONFIG.production) {
 @NgModule({
   declarations: [
     MyApp,
+    SideMenuComponent,
     HomePage,
     HomePage2,
     LoginComponent,
     LoginSignupComponent,
     SignupComponent,
+    UserButtonComponent,
+    UserSelectComponent,
   ],
   imports: imports,
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    //HomePage
+    HomePage,
+    SideMenuComponent,
     LoginSignupComponent,
     SignupComponent,
     LoginComponent,
+    UserSelectComponent,
   ],
   providers: [
     AnalyticsService,
+    DbGlobalService,
+    UserService,
   ]
 })
 export class AppModule {

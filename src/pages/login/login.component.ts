@@ -19,24 +19,24 @@ import { TranslateService } from "ng2-translate";
       </ion-navbar>
     </ion-header>
     
-    <ion-content padding>   
+    <ion-content padding>  
+     <form (ngSubmit)="onLogin()">
      
       <ion-list>
         <ion-item>
           <ion-label floating>{{ "USER.E_MAIL" | translate }}</ion-label>
-          <ion-input type="text" [(ngModel)]="email"></ion-input>
+          <ion-input type="text" [(ngModel)]="email" name="email"></ion-input>
         </ion-item>
       
         <ion-item>
           <ion-label floating>{{ "USER.PASSWORD" | translate }}</ion-label>
-          <ion-input type="password" [(ngModel)]="password"></ion-input>
+          <ion-input type="password" [(ngModel)]="password" name="password"></ion-input>
         </ion-item>
       </ion-list>
       
       <button ion-button block [disabled]="in_progress" (click)="onLogin()">{{ "LOGIN.LOGIN" | translate }}</button>
+      </form>
     </ion-content>
-    
-    
   `
 })
 export class LoginComponent {

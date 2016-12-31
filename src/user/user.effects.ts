@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
+import { Http, Headers } from "@angular/http";
 import { Actions, Effect } from "@ngrx/effects";
 import * as UserActions from "./user.actions";
 import { CONFIG } from "../app/config"
 import { Observable } from "rxjs";
+import { jwtHeaderOnlyOptions } from "./user.tools";
 
 @Injectable()
 export class UserEffects {
@@ -23,6 +24,15 @@ export class UserEffects {
       }))
     .map(res => ({type: UserActions.LOGIN_SUCCESS, payload: res.json()}))
     .catch(res => Observable.of({type: UserActions.LOGIN_FAILED, payload: res.json()}));
+
+  @Effect() basicData$ = this.actions$
+  // Listen for Login
+    .ofType(UserActions.LOGIN_SUCCESS)
+    .switchMap(action => this.http.get(
+      `${CONFIG.filterize.api_url}/user`,
+      jwtHeaderOnlyOptions(action.payload.access_token),
+      ))
+    .map(res => ({type: UserActions.BASIC_DETAILS_FROM_SERVER, payload: res.json()}));
 
   @Effect() signup$ = this.actions$
     .ofType(UserActions.SIGN_UP)
