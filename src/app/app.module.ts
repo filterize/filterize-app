@@ -1,5 +1,5 @@
 import { IonicApp, IonicModule } from "ionic-angular";
-import { NgModule } from "@angular/core";
+import { NgModule, ErrorHandler } from "@angular/core";
 import { StoreModule } from "@ngrx/store";
 import { routerReducer } from "@ngrx/router-store";
 import { EffectsModule } from "@ngrx/effects";
@@ -24,6 +24,9 @@ import { UserButtonComponent } from "../user/user-button.component";
 import { currentUserReducer } from "../user/current-user.reducer";
 import { UserService } from "../services/user.service";
 import { UserSelectComponent } from "../user/user-select.component";
+import * as Raven from 'raven-js';
+import { RavenService } from "../services/raven.service";
+import { DbUserService } from "../services/db-user.service";
 
 /*const appRoutes = [
   {path: "login/login", component: LoginComponent, name: "Login"},
@@ -31,8 +34,26 @@ import { UserSelectComponent } from "../user/user-select.component";
   {path: "**", component: HomePage, name: "Home"}
 ];*/
 
+Raven
+  .config(CONFIG.raven.uri, {
+    release: CONFIG.version
+  })
+  .install();
+
+class RavenErrorHandler implements ErrorHandler {
+  handleError(err:any) : void {
+    Raven.captureException(err.originalError);
+  }
+}
+
 let imports = [
-  IonicModule.forRoot(MyApp),
+  IonicModule.forRoot(MyApp, {}, {
+    links: [
+      { component: HomePage, name: 'Home', segment: 'home' },
+      { component: LoginComponent, name: 'Login', segment: 'login' },
+      { component: SignupComponent, name: 'SignUp', segment: 'signup' },
+    ]
+  }),
   // RouterModule.forRoot(appRoutes),
   StoreModule.provideStore({
     router: routerReducer,
@@ -41,8 +62,11 @@ let imports = [
   }),
   // RouterStoreModule.connectRouter(),
   EffectsModule.runAfterBootstrap(AnalyticsEffects),
+  EffectsModule.runAfterBootstrap(AnalyticsService),
   EffectsModule.runAfterBootstrap(UserEffects),
   EffectsModule.runAfterBootstrap(DbGlobalService),
+  EffectsModule.runAfterBootstrap(DbUserService),
+  EffectsModule.runAfterBootstrap(RavenService),
   TranslateModule.forRoot({
     provide: TranslateLoader,
     useFactory: (createTranslateLoader),
@@ -82,8 +106,10 @@ if (CONFIG.production) {
     UserSelectComponent,
   ],
   providers: [
+    { provide: ErrorHandler, useClass: RavenErrorHandler },
     AnalyticsService,
     DbGlobalService,
+    DbUserService,
     UserService,
   ]
 })

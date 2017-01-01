@@ -7,13 +7,16 @@ import { Platform } from "ionic-angular";
 import { Observable } from "rxjs";
 import { SearchDocsResult } from "./pouchdb.types";
 import * as UserActions from "../user/user.actions";
+import { CONFIG } from "../app/config";
 
 @Injectable()
 export class DbGlobalService {
   private db;
 
   constructor(private store: Store<AppState>) {
-    console.log("DB Init");
+    if (!CONFIG.production) {
+      window["PouchDB"] = PouchDB;
+    }
 
     this.db = new PouchDB(
       "global",
@@ -21,6 +24,8 @@ export class DbGlobalService {
         // adapter: "websql",
         auto_compaction: true
       });
+
+    this.db.info().then(out => console.log("db-info",out));
 
     store.select("userlist")
       .flatMap((userList: Object[]) => Observable.from(userList))

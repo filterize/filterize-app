@@ -9,6 +9,7 @@ import { Observable } from "rxjs";
 import { currentUserSelector } from "../../user/user.selectors";
 import { UserService } from "../../services/user.service";
 import { UserSelectComponent } from "../../user/user-select.component";
+import { LoginSignupComponent } from "../login/login-signup.component";
 
 
 @Component({
@@ -16,10 +17,10 @@ import { UserSelectComponent } from "../../user/user-select.component";
   template: `
   <ion-menu [content]="content" persistent="true">
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar color="primary">
         <ion-title>
-          <ion-icon name="person"></ion-icon>
-          {{ "UI.MENU" | translate }}
+          <ion-icon name="menu"></ion-icon>
+          {{ "MENU.TITLE" | translate }}
         </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -29,19 +30,39 @@ import { UserSelectComponent } from "../../user/user-select.component";
         <filterize-user-button 
           *ngIf="currentUser$ | async" 
           [user]="currentUser$ | async"
-          (click)="openUserSelect()"></filterize-user-button>
-        <button list-item (click)="openUserSelect()">
-          open
-        </button>
+          (click)="openUserSelect()">  
+        </filterize-user-button>
+        
         <ion-item>
-          <ion-label floating>{{ "USER.E_MAIL" | translate }}</ion-label>
-          <ion-input type="text" [(ngModel)]="email" name="email"></ion-input>
+          <ion-grid>
+            <ion-row>
+              <ion-col width-50>
+                <button ion-button block small menuClose (click)="clickLogin()">
+                  <ion-icon name="log-in"></ion-icon>
+                  {{ "LOGIN.LOGIN" | translate }}
+                </button>
+              </ion-col>
+              <ion-col width-50>
+                <button ion-button block small outline disabled>
+                  <ion-icon name="log-out"></ion-icon>
+                  {{ "LOGIN.LOGOUT" | translate }}
+                </button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-item>
-      
-        <ion-item>
-          <ion-label floating>{{ "USER.PASSWORD" | translate }}</ion-label>
-          <ion-input type="password" [(ngModel)]="password" name="password"></ion-input>
+        
+        <ion-item *ngIf="(currentUser$ | async)?.business_id">
+          <ion-segment [ngModel]="business$ | async">
+            <ion-segment-button [value]="false" (click)="selectBusiness(false)">
+              {{ "USER.PRIVATE" | translate }}
+            </ion-segment-button>
+            <ion-segment-button [value]="true" (click)="selectBusiness(true)">
+              {{ "USER.BUSINESS" | translate }}
+            </ion-segment-button>
+          </ion-segment>
         </ion-item>
+
       </ion-list>
       
     </ion-content>
@@ -49,14 +70,19 @@ import { UserSelectComponent } from "../../user/user-select.component";
   `
 })
 export class SideMenuComponent {
+  @Output() goto = new EventEmitter();
+
   currentUser$;
+  business$;
 
   constructor(private store: Store<AppState>,
               private translate: TranslateService,
               private userService: UserService,
               private modalCtrl: ModalController
               ) {
-    this.currentUser$ = userService.getCurrentUser()
+    this.currentUser$ = userService.getCurrentUser();
+    this.business$ = userService.isBusiness();
+    this.business$.subscribe(data => console.log(data));
   }
 
   @Input() content;
@@ -65,6 +91,14 @@ export class SideMenuComponent {
     console.log("user_select");
     let modal = this.modalCtrl.create(UserSelectComponent);
     modal.present();
+  }
+
+  clickLogin() {
+    this.goto.emit(LoginSignupComponent);
+  }
+
+  selectBusiness(value) {
+    this.store.dispatch({type: UserActions.SELECT_BUSINESS, payload: value});
   }
 
 }

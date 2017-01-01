@@ -15,6 +15,15 @@ export const currentUserReducer = (state={profile: "", business: false}, action)
         business: false
       };
 
+    case UserActions.FROM_DATABASE:
+      return state.profile ? state : {profile: action.payload._id, business: false};
+
+    case UserActions.SELECT_BUSINESS:
+      return {
+        profile: state.profile,
+        business: action.payload
+      };
+
     default:
       return state;
   }

@@ -6,6 +6,7 @@
   },
   "LOGIN": {
     "LOGIN": "Login",
+    "LOGOUT": "Logout",
     "SIGN_UP": "Sign-Up",
     "LOGIN_ERROR_MSG": "The proposed login credentials are invalid. Please check your e-mail and password.",
     "SIGN_UP_ERROR_409": "The selected email address is already in use.",
@@ -15,6 +16,11 @@
     "FIRST_NAME": "First Name",
     "LAST_NAME": "Last Name",
     "PASSWORD": "Password",
-    "E_MAIL": "E-Mail"
+    "E_MAIL": "E-Mail",
+    "BUSINESS": "Business",
+    "PRIVATE": "Private"
+  },
+  "MENU": {
+    "TITLE": "Navigation"
   }
 }
