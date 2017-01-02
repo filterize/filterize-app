@@ -27,6 +27,7 @@ import { UserSelectComponent } from "../user/user-select.component";
 import * as Raven from 'raven-js';
 import { RavenService } from "../services/raven.service";
 import { DbUserService } from "../services/db-user.service";
+import { MamaMenuExpose } from "../mama-menu-expose/mama-menu-expose.component";
 
 /*const appRoutes = [
   {path: "login/login", component: LoginComponent, name: "Login"},
@@ -93,6 +94,7 @@ if (CONFIG.production) {
     SignupComponent,
     UserButtonComponent,
     UserSelectComponent,
+    MamaMenuExpose,
   ],
   imports: imports,
   bootstrap: [IonicApp],

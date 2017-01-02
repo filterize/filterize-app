@@ -8,14 +8,14 @@ module.exports = function(grunt) {
             options: {
                 files: ['src/app/config.ts'],
                 updateConfigs: [],
-                commit: false,  // true
+                commit: true,  // true
                 commitMessage: 'Release v%VERSION%',
                 commitFiles: ['src/app/config.ts'],
-                createTag: false,  // true
+                createTag: true,  // true
                 tagName: 'v%VERSION%',
                 tagMessage: 'Version %VERSION%',
-                push: false,  // true
-                pushTo: 'upstream',
+                push: true,  // true
+                pushTo: 'origin',
                 gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
                 globalReplace: false,
                 prereleaseName: false,

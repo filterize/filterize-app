@@ -13,7 +13,7 @@
     "run:before": "build",
     "electron": "electron .",
     "electron dist": "electron .",
-    "test": "grunt bump:prerelease && ionic serve",
+    "test": "grunt bump-only:prerelease && ionic serve",
     "start": "grunt bump && ionic build browser && firebase deploy"
   },
   "dependencies": {

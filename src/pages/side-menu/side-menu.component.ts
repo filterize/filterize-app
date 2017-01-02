@@ -15,7 +15,7 @@ import { LoginSignupComponent } from "../login/login-signup.component";
 @Component({
   selector: "filterize-side-menu",
   template: `
-  <ion-menu [content]="content" persistent="true">
+  <ion-menu [content]="content" persistent="true" type="push" mamaMenuExposeWhen>
     <ion-header>
       <ion-toolbar color="primary">
         <ion-title>

@@ -1,0 +1,87 @@
+$mama-menu-expose-when: 1024px !default;
+
+@media(min-width: $mama-menu-expose-when) {
+  ion-menu,
+  ion-menu[type=reveal] {
+    z-index: 80;
+    display: block;
+    right: inherit;
+    width: $menu-width + 10px;
+
+    > ion-backdrop {
+      display: none;
+    }
+
+    > .menu-inner {
+      transform: translateX(0) !important;
+
+      > ion-header {
+        position: relative;
+      }
+
+      > ion-content {
+        position: relative;
+        margin-top: -$toolbar-md-height;
+
+        > .fixed-content,
+        > .scroll-content {
+          margin-top: $toolbar-md-height;
+        }
+
+        &.content-ios {
+          margin-top: -$toolbar-ios-height;
+
+          > .fixed-content,
+          > .scroll-content {
+            margin-top: $toolbar-ios-height;
+          }
+        }
+
+        &.content-wp {
+          margin-top: -$toolbar-wp-height;
+
+          > .fixed-content,
+          > .scroll-content {
+            margin-top: $toolbar-wp-height;
+          }
+        }
+      }
+    }
+  }
+
+  .md ion-menu .menu-inner {
+    box-shadow: $menu-md-box-shadow;
+  }
+
+  .ios ion-menu .menu-inner {
+    box-shadow: $menu-ios-box-shadow;
+  }
+
+  ion-nav {
+    > .ion-page {
+      left: $menu-width;
+      padding-right: $menu-width;
+
+      > ion-header {
+        position: relative;
+      }
+
+      > ion-content {
+        position: relative;
+        margin-top: -$toolbar-md-height;
+
+        &.content-ios {
+          margin-top: -$toolbar-ios-height;
+        }
+
+        &.content-wp {
+          margin-top: -$toolbar-wp-height;
+        }
+      }
+    }
+  }
+
+  button[menutoggle] {
+    display: none;
+  }
+}
