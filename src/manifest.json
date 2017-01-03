@@ -1,6 +1,6 @@
 {
-  "name": "Ionic",
-  "short_name": "Ionic",
+  "name": "Filterize Console",
+  "short_name": "Filterize",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{

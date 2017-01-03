@@ -13,6 +13,7 @@ import { TranslateService } from "ng2-translate";
 import { DbGlobalService } from "../services/db-global.service";
 import { SideMenuComponent } from "../pages/side-menu/side-menu.component";
 import { LoginComponent } from "../pages/login/login.component";
+import {Network} from "ionic-native";
 
 
 @Component({
@@ -37,6 +38,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
+      console.log("connection", <string> Network.type)
 
 
     });

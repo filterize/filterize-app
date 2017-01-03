@@ -11,7 +11,7 @@ export class RavenService {
   constructor(private actions$: Actions,
               private store: Store<AppState>,
               private userSrv: UserService) {
-    this.setTags();
+    // this.setTags();
 
     userSrv.getCurrentUser().subscribe(user => {
       if (user == null) {
@@ -29,7 +29,7 @@ export class RavenService {
 
   setTags() {
     Raven.setTagsContext({
-      env: CONFIG.version.indexOf("-") === -1 ? "live" : "development"
+
     });
   }
 }

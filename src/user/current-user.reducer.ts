@@ -1,28 +1,31 @@
 import * as UserActions from "./user.actions";
 import { profileLabelFromToken } from "./user.tools";
 
-export const currentUserReducer = (state={profile: "", business: false}, action) => {
+export const currentUserReducer = (state={profile: "", business: false, _id: "current_user"}, action) => {
   switch (action.type) {
     case UserActions.LOGIN_SUCCESS:
-      return {
+      return Object.assign({}, state, {
         profile: profileLabelFromToken(action.payload.access_token),
-        business: false
-      };
+        business: false,
+        "#dirty-db": true
+      });
 
     case UserActions.SELECT:
-      return {
+      return Object.assign({}, state, {
         profile: action.payload,
-        business: false
-      };
-
-    case UserActions.FROM_DATABASE:
-      return state.profile ? state : {profile: action.payload._id, business: false};
+        business: false,
+        "#dirty-db": true
+      });
 
     case UserActions.SELECT_BUSINESS:
-      return {
+      return Object.assign({}, state, {
         profile: state.profile,
-        business: action.payload
-      };
+        business: action.payload,
+        "#dirty-db": true
+      });
+
+    case "CURRENT_USER_FROM_DATABASE":
+      return Object.assign({}, action.payload);
 
     default:
       return state;

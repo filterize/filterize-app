@@ -28,6 +28,9 @@ import * as Raven from 'raven-js';
 import { RavenService } from "../services/raven.service";
 import { DbUserService } from "../services/db-user.service";
 import { MamaMenuExpose } from "../mama-menu-expose/mama-menu-expose.component";
+import { ResourcesService } from "../global-ressources/resources.service";
+import { globalReducer } from "../global-ressources/globals.reducer";
+import { settingsReducer } from "../settings/settings.reducer";
 
 /*const appRoutes = [
   {path: "login/login", component: LoginComponent, name: "Login"},
@@ -37,7 +40,8 @@ import { MamaMenuExpose } from "../mama-menu-expose/mama-menu-expose.component";
 
 Raven
   .config(CONFIG.raven.uri, {
-    release: CONFIG.version
+    release: CONFIG.version,
+    environment: CONFIG.version.indexOf("-") === -1 ? "live" : "development"
   })
   .install();
 
@@ -60,6 +64,8 @@ let imports = [
     router: routerReducer,
     userlist: userlistReducer,
     current_user: currentUserReducer,
+    globals: globalReducer,
+    settings: settingsReducer
   }),
   // RouterStoreModule.connectRouter(),
   EffectsModule.runAfterBootstrap(AnalyticsEffects),
@@ -67,6 +73,7 @@ let imports = [
   EffectsModule.runAfterBootstrap(UserEffects),
   EffectsModule.runAfterBootstrap(DbGlobalService),
   EffectsModule.runAfterBootstrap(DbUserService),
+  EffectsModule.runAfterBootstrap(ResourcesService),
   EffectsModule.runAfterBootstrap(RavenService),
   TranslateModule.forRoot({
     provide: TranslateLoader,
@@ -113,6 +120,7 @@ if (CONFIG.production) {
     DbGlobalService,
     DbUserService,
     UserService,
+    ResourcesService
   ]
 })
 export class AppModule {

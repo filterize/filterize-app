@@ -7,6 +7,7 @@ let jwtHelper = new JwtHelper();
 export const userlistReducer = (state=[], action) => {
   switch (action.type) {
 
+    case UserActions.REFRESH_TOKEN:
     case UserActions.LOGIN_SUCCESS: {
       let data = jwtHelper.decodeToken(action.payload.access_token);
       let id = profileLabelFromTokenData(data)

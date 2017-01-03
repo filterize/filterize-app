@@ -2,13 +2,19 @@ import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { AppState } from "../app/appstate";
+import { Actions } from "@ngrx/effects";
+import { Http } from "@angular/http";
+import { jwtHeaderOnlyOptions } from "../user/user.tools";
+import { CONFIG } from "../app/config";
+import * as UserActions from "../user/user.actions";
+
 
 @Injectable()
 export class UserService {
   currentUser$;
   business$;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private actions$: Actions, private http:Http) {
 
     this.currentUser$ = Observable.combineLatest(
       store.select("userlist"),
@@ -21,6 +27,40 @@ export class UserService {
       .select("current_user")
       .map(data => data["business"])
       .distinctUntilChanged();
+
+    this.actions$
+      .ofType("CHECK_TOKEN")
+      .withLatestFrom(
+        this.currentUser$,
+        this.store.select("settings").map(settings => settings["time_offset"])
+      )
+      .subscribe(([action, user, time]) => this.checkToken(action, user, time));
+  }
+
+  private checkToken(action, user, time_offset) {
+    // convert to client time, subtract 5 minutes, convert to milliseconds
+    let valid_until = (user["exp"] - time_offset - 300) * 1000;
+    if (valid_until > new Date().getTime()) {
+      if (action.payload) {
+        this.store.dispatch(action.payload)
+      }
+    } else {
+      this.http.post(
+        `${CONFIG.filterize.oauth_url}/token`,
+        {
+          grant_type: "refresh_token",
+          refresh_token: user["refresh_token"],
+        }
+      ).map(data => data.json()).subscribe(data => {
+        this.store.dispatch({
+          type: UserActions.REFRESH_TOKEN,
+          payload: data
+        });
+        if (action.payload) {
+          this.store.dispatch(action.payload)
+        }
+      });
+    }
   }
 
   public getCurrentUser() {

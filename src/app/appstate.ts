@@ -6,5 +6,8 @@ export interface AppState {
   current_user: {
     profile: string,
     business: boolean
-  }
+  };
+  globals: {
+    country_devisions: Object
+  };
 };

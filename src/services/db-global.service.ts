@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 import { SearchDocsResult } from "./pouchdb.types";
 import * as UserActions from "../user/user.actions";
 import { CONFIG } from "../app/config";
+import { GLOBAL_RESOURCES } from "../global-ressources/resources.list";
 
 @Injectable()
 export class DbGlobalService {
@@ -30,13 +31,32 @@ export class DbGlobalService {
     store.select("userlist")
       .flatMap((userList: Object[]) => Observable.from(userList))
       .filter(obj => "#dirty-db" in obj)
-      .subscribe(user => this.update_user(user));
+      .subscribe(user => this.store_obj(user));
+
+    store.select("current_user")
+      .filter(obj => "#dirty-db" in obj)
+      .subscribe(conf => this.store_obj(conf));
+
+    store.select("settings")
+      .filter(obj => "#dirty-db" in obj)
+      .subscribe(conf => this.store_obj(conf));
+
+    store.select("globals")
+      .switchMap(globals => {
+        let objects = [];
+        for (let key in globals) {
+          objects.push(globals[key])
+        }
+        return Observable.from(objects)
+      })
+      .filter(obj => "#dirty-db" in obj)
+      .subscribe(conf => this.store_obj(conf));
 
     Observable.fromPromise<SearchDocsResult>(this.db.allDocs({include_docs: true}))
       .map(result => result.rows)
       .flatMap(rows => rows)
       .map(row => row.doc)
-      .subscribe(doc => this.handle_object(doc));
+      .subscribe(doc => this.handle_object(doc), null, () => this.store.dispatch({type: "LOAD_GLOBALS"}));
 
     this.db.changes({
       live: true,
@@ -46,25 +66,35 @@ export class DbGlobalService {
   }
 
   handle_object(obj) {
-    console.log("handle:", obj);
-    if (obj._id.startsWith("user")) {
-      this.store.dispatch({
-        type: UserActions.FROM_DATABASE,
-        payload: obj
-      })
+    let types = [
+      "user", "current_user", "settings"
+    ];
+    for (let t of types) {
+      if (obj._id.startsWith(t)) {
+        t = t.toUpperCase();
+        this.store.dispatch({
+          type: `${t}_FROM_DATABASE`,
+          payload: obj
+        });
+        return;
+      }
+    }
+    for (let res of GLOBAL_RESOURCES) {
+      if (obj._id = res.name) {
+        this.store.dispatch({
+          type: `${res.action_prefix}_FROM_DATABASE`,
+          payload: obj
+        });
+        return;
+      }
     }
   }
 
-  update_user(user) {
-    console.log(user);
-    let obj = Object.assign({}, user);
+  store_obj(obj) {
+    obj = Object.assign({}, obj);
     if ("#dirty-db" in obj) {
       delete obj["#dirty-db"];
       this.db.put(obj);
-      console.log("store")
-    }
-    else {
-      console.log("discard")
     }
   }
 }

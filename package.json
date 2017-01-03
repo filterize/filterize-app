@@ -14,7 +14,7 @@
     "electron": "electron .",
     "electron dist": "electron .",
     "test": "grunt bump-only:prerelease && ionic serve",
-    "start": "grunt bump && ionic build browser && firebase deploy"
+    "start": "grunt bump && ionic build browser --minify && grunt swPrecache:release && firebase deploy"
   },
   "dependencies": {
     "@angular/common": "2.2.1",
@@ -49,6 +49,8 @@
     "electron-prebuilt": "^1.4.13",
     "grunt": "^1.0.1",
     "grunt-bump": "^0.8.0",
+    "ionic-minify": "^2.0.10",
+    "sw-precache": "^4.2.3",
     "typescript": "2.1.4"
   },
   "cordovaPlugins": [

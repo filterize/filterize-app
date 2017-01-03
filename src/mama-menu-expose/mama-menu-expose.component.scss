@@ -60,7 +60,8 @@ $mama-menu-expose-when: 1024px !default;
   ion-nav {
     > .ion-page {
       left: $menu-width;
-      padding-right: $menu-width;
+      right: 0;
+      width: auto;
 
       > ion-header {
         position: relative;
