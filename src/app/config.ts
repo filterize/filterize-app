@@ -1,5 +1,5 @@
 export const CONFIG = {
-  "version": "0.1.6",
+  "version": "0.1.7",
   "production": false,
   "analytics": {
     "tracking_id": "UA-73257223-4",
