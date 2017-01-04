@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 import { SearchDocsResult } from "./pouchdb.types";
 import * as UserActions from "../user/user.actions";
 import { CONFIG } from "../app/config";
-import { GLOBAL_RESOURCES } from "../global-ressources/resources.list";
+import { GLOBAL_RESOURCES } from "../filterize-ressources/resources.list";
 
 @Injectable()
 export class DbGlobalService {
@@ -56,7 +56,11 @@ export class DbGlobalService {
       .map(result => result.rows)
       .flatMap(rows => rows)
       .map(row => row.doc)
-      .subscribe(doc => this.handle_object(doc), null, () => this.store.dispatch({type: "LOAD_GLOBALS"}));
+      .subscribe(doc => this.handle_object(doc),
+        null,
+        () => {
+        this.store.dispatch({type: "LOAD_GLOBALS"});
+      });
 
     this.db.changes({
       live: true,

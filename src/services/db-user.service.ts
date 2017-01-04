@@ -8,6 +8,8 @@ import { Observable } from "rxjs";
 import { SearchDocsResult } from "./pouchdb.types";
 import * as UserActions from "../user/user.actions";
 import { CONFIG } from "../app/config";
+import { USER_RESOURCES } from "../filterize-ressources/resources.list";
+import { filter } from "rxjs/operator/filter";
 
 @Injectable()
 export class DbUserService {
@@ -15,9 +17,12 @@ export class DbUserService {
   private db = null;
   private p_id: string = null;
   private business: boolean = null;
+  private seq = 0;
+  private observables: any[] = [];
 
   constructor(private store: Store<AppState>, private actions$: Actions) {
     this.init_user_switch_db_load();
+    this.init_store_listener();
 
     /*
     store.select("userlist")
@@ -30,9 +35,10 @@ export class DbUserService {
   init_user_switch_db_load() {
     this.store
       .select("current_user")
-      .filter(obj => obj["_id"] !== this.p_id ||  obj["business"] !== this.business)
+      .filter(obj => ("profile" in obj && "business" in obj))
+      .filter(obj => obj["profile"] !== this.p_id ||  obj["business"] !== this.business)
       .subscribe(current_user => {
-        this.p_id = current_user["_id"];
+        this.p_id = current_user["profile"];
         this.business = current_user["business"];
 
         this.store.dispatch({type: UserActions.CLEAR_DATA});
@@ -43,7 +49,7 @@ export class DbUserService {
           if (current_user["business"]) {
             label = label + "_business";
           }
-
+          console.log("open_db", label);
           // Load Database
           if (label in this.dbPool) {
             this.db = this.dbPool[label];
@@ -55,31 +61,64 @@ export class DbUserService {
                 auto_compaction: true
               });
 
-            this.db.changes({
-              live: true,
-              since: 'now',
-              include_docs: true
-            }).on('change', change => this.handle_object(change.doc));
-
             this.dbPool[label] = this.db;
           }
+          console.log("db-instance", this.db);
 
-          // read Database
-          Observable.fromPromise<SearchDocsResult>(this.db.allDocs({include_docs: true}))
-            .map(result => result.rows)
-            .flatMap(rows => rows)
-            .map(row => row.doc)
-            .subscribe(
-              doc => this.handle_object(doc),
-              null,
-              () => this.store.dispatch({
-                type: "CHECK_TOKEN",
-                payload: {
-                  type: "START_USER_SYNC"
-                }
-              }));
+          this.seq = 0;
+          this.fetch_changes(() => this.store.dispatch({
+            type: "CHECK_TOKEN",
+            payload: {
+              type: "START_USER_SYNC"
+            }
+          }));
         }
       });
+  }
+
+  init_store_listener() {
+    for (let key in USER_RESOURCES) {
+      let res = USER_RESOURCES[key];
+      this.observables.push(
+        this.store.select(res.store)
+          .map((collection: any[]) => collection.filter((obj) => "#dirty-db" in obj))
+          .map(collection => collection.map(obj => {delete obj["#dirty-db"]; return obj}))
+          .filter(collection => collection.length > 0)
+          .subscribe(data => {
+            console.log("store", this, data);
+            if (this.db) {
+              this.db.bulkDocs(data).then(this.fetch_changes(null, key))
+            }
+          })
+      );
+    }
+  }
+
+  fetch_changes(finished=null, type_only=null) {
+    this.db.changes({
+      since: this.seq,
+      include_docs: true
+    }).then(changes => {
+      let object_collection = Object();
+      this.seq = changes.last_seq;
+      for (let res of changes.results) {
+        let type = res.id.split("_")[0];
+        if (type_only && type != type_only) continue;
+        if (object_collection[type] == null) {
+          object_collection[type] = [];
+        }
+        object_collection[type].push(res.doc);
+      }
+      console.log("user-db-loaded:", object_collection, type_only);
+      for (let key in object_collection) {
+        if (key in USER_RESOURCES) {
+          this.store.dispatch({
+            type: `${USER_RESOURCES[key].action_prefix}_BULK_FROM_DATABASE`,
+            payload: object_collection[key]
+          })
+        }
+      }
+    }).then(finished)
   }
 
   handle_object(obj) {

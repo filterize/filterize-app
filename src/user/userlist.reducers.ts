@@ -10,7 +10,7 @@ export const userlistReducer = (state=[], action) => {
     case UserActions.REFRESH_TOKEN:
     case UserActions.LOGIN_SUCCESS: {
       let data = jwtHelper.decodeToken(action.payload.access_token);
-      let id = profileLabelFromTokenData(data)
+      let id = profileLabelFromTokenData(data);
       let old = state.find(obj => obj._id === id);
       return [
         ...state.filter(obj => obj._id !== id),

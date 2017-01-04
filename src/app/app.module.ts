@@ -28,9 +28,10 @@ import * as Raven from 'raven-js';
 import { RavenService } from "../services/raven.service";
 import { DbUserService } from "../services/db-user.service";
 import { MamaMenuExpose } from "../mama-menu-expose/mama-menu-expose.component";
-import { ResourcesService } from "../global-ressources/resources.service";
-import { globalReducer } from "../global-ressources/globals.reducer";
+import { ResourcesService } from "../filterize-ressources/resources.service";
+import { globalReducer } from "../filterize-ressources/globals.reducer";
 import { settingsReducer } from "../settings/settings.reducer";
+import { userResourceReducerAddOn } from "../filterize-ressources/combined-user-resources.reducer";
 
 /*const appRoutes = [
   {path: "login/login", component: LoginComponent, name: "Login"},
@@ -60,13 +61,13 @@ let imports = [
     ]
   }),
   // RouterModule.forRoot(appRoutes),
-  StoreModule.provideStore({
+  StoreModule.provideStore(Object.assign({
     router: routerReducer,
     userlist: userlistReducer,
     current_user: currentUserReducer,
     globals: globalReducer,
     settings: settingsReducer
-  }),
+  }, userResourceReducerAddOn)),
   // RouterStoreModule.connectRouter(),
   EffectsModule.runAfterBootstrap(AnalyticsEffects),
   EffectsModule.runAfterBootstrap(AnalyticsService),

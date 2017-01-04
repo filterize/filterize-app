@@ -65,6 +65,7 @@ module.exports = function(grunt) {
         rootDir + '/assets/**/*',
         rootDir + '/lib/*',
         rootDir + '/index.html',
+        rootDir + '/config.xml',
         rootDir + '/manifest.json',
         rootDir + '/cordova*',
         rootDir + '/plugins/**/*',
@@ -72,6 +73,18 @@ module.exports = function(grunt) {
       ],
       stripPrefix: rootDir + '/',
       // verbose defaults to false, but for the purposes of this demo, log more.
+      ignoreUrlParametersMatching: [/./],
+      maximumFileSizeToCacheInBytes: 10485760,
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/www\.googletagmanager\.com/,
+          handler: 'networkFirst'
+        },
+        {
+          urlPattern: /^https:\/\/www\.google-analytics\.com\/analytics\.js$/,
+          handler: 'networkFirst'
+        }
+      ],
       verbose: true
     };
 

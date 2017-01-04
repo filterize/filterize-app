@@ -42,7 +42,10 @@ export class UserService {
     let valid_until = (user["exp"] - time_offset - 300) * 1000;
     if (valid_until > new Date().getTime()) {
       if (action.payload) {
-        this.store.dispatch(action.payload)
+        this.store.dispatch({
+          type: action.payload.type,
+          payload: Object.assign({}, action.payload.payload, {access_token: user.access_token})
+        })
       }
     } else {
       this.http.post(
@@ -57,7 +60,10 @@ export class UserService {
           payload: data
         });
         if (action.payload) {
-          this.store.dispatch(action.payload)
+          this.store.dispatch({
+            type: action.payload.type,
+            payload: Object.assign({}, action.payload.payload, {access_token: data.access_token})
+          })
         }
       });
     }

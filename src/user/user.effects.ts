@@ -5,6 +5,7 @@ import * as UserActions from "./user.actions";
 import { CONFIG } from "../app/config"
 import { Observable } from "rxjs";
 import { jwtHeaderOnlyOptions } from "./user.tools";
+import { USER_RESOURCES } from "../filterize-ressources/resources.list";
 
 @Injectable()
 export class UserEffects {
@@ -34,6 +35,24 @@ export class UserEffects {
       ))
     .map(res => ({type: UserActions.BASIC_DETAILS_FROM_SERVER, payload: res.json()}));
 
+  /*
+  @Effect() syncAfterLogin = this.actions$
+    .ofType(UserActions.LOGIN_SUCCESS)
+    .map(() => ({type: UserActions.START_SYNC}));
+  */
+
+  /*
+  @Effect() syncUserResources = this.actions$
+    .ofType(UserActions.START_SYNC)
+    .switchMap(() => {
+      let events = [];
+      for (let key in USER_RESOURCES) {
+        events.push({type: `${USER_RESOURCES[key]["action_prefix"]}_START_SYNC`})
+      }
+      return Observable.from(events);
+    });
+    */
+
   @Effect() signup$ = this.actions$
     .ofType(UserActions.SIGN_UP)
     .switchMap(action => this.http.post(
@@ -55,4 +74,5 @@ export class UserEffects {
       }
     }))
     .catch(res => Observable.of({type: UserActions.SIGN_UP_FAILED, payload: res.status}));
+
 }
