@@ -23,6 +23,7 @@ export class DbUserService {
   constructor(private store: Store<AppState>, private actions$: Actions) {
     this.init_user_switch_db_load();
     this.init_store_listener();
+    this.initLogoutListener();
 
     /*
     store.select("userlist")
@@ -119,6 +120,16 @@ export class DbUserService {
         }
       }
     }).then(finished)
+  }
+
+  initLogoutListener() {
+    this.actions$.ofType(UserActions.LOGOUT)
+      .subscribe(action => {
+        for (let name of [action.payload, `${action.payload}_business`]) {
+          delete this.dbPool[name];
+          new PouchDB(name).destroy();
+        }
+      })
   }
 
   handle_object(obj) {

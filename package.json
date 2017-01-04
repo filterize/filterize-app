@@ -14,7 +14,7 @@
     "electron": "electron .",
     "electron dist": "electron .",
     "test": "grunt bump-only:prerelease && ionic serve",
-    "start": "grunt bump-only:prerelease && ionic build browser --minify && grunt swPrecache:release && firebase deploy"
+    "start": "grunt bump && ionic build browser --minify && grunt swPrecache:release && firebase deploy"
   },
   "dependencies": {
     "@angular/common": "2.2.1",

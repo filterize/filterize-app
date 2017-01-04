@@ -23,11 +23,20 @@ export class LoginSignupComponent {
   loginLabel = "LOGIN.LOGIN";
   loginTab = LoginComponent;
 
+  private can_leave = false;
+
   constructor(private store: Store<AppState>, translate: TranslateService) {
     translate.get(["LOGIN.LOGIN", "LOGIN.SIGN_UP"]).subscribe(data => {
         this.signupLabel = data["LOGIN.SIGN_UP"];
         this.loginLabel = data["LOGIN.LOGIN"];
       }
     );
+
+    store.select("current_user")
+      .subscribe(data => this.can_leave = data["profile"] != "");
+  }
+
+  ionViewCanLeave() {
+    return this.can_leave;
   }
 }

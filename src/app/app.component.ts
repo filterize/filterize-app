@@ -14,16 +14,22 @@ import { DbGlobalService } from "../services/db-global.service";
 import { SideMenuComponent } from "../pages/side-menu/side-menu.component";
 import { LoginComponent } from "../pages/login/login.component";
 import {Network} from "ionic-native";
+import { AppState } from "./appstate";
+import { Actions } from "@ngrx/effects";
+import * as UserActions from "../user/user.actions";
 
 
 @Component({
   template: `
-    <filterize-side-menu [content]="content" (goto)="rootPage=$event"></filterize-side-menu>
+    <filterize-side-menu [content]="content" (goto)="nav.push($event)"></filterize-side-menu>
     <ion-nav #content [root]="rootPage"></ion-nav>
+    
   `
 })
 export class MyApp {
-  rootPage = HomePage;
+  user_start = HomePage;
+  login_start = LoginSignupComponent;
+  rootPage = this.user_start;
   @ViewChild(Nav) navChild: Nav;
 
   constructor(platform: Platform,
@@ -31,7 +37,9 @@ export class MyApp {
               private dbGlobal: DbGlobalService,
               private app: App,
               private ionicApp: IonicApp,
-              private menuCtrl: MenuController) {
+              private menuCtrl: MenuController,
+              private store: Store<AppState>,
+              private actions$: Actions) {
     translate.setDefaultLang("en");
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -39,12 +47,20 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
       console.log("connection", <string> Network.type)
-
-
     });
     // this.setupBackButtonBehavior();
+  }
 
+  ngOnInit() {
+    this.store.select("current_user").take(1).subscribe(data => {
+      if (data["profile"] == "") this.navChild.setRoot(this.login_start);
+    });
 
+    let goHome = () => this.navChild.setRoot(this.user_start);
+
+    this.actions$.ofType(UserActions.SELECT).subscribe(goHome);
+    this.actions$.ofType(UserActions.LOGIN_SUCCESS).subscribe(goHome);
+    this.actions$.ofType(UserActions.LOGOUT).subscribe(() => this.navChild.setRoot(this.login_start));
   }
 
   // https://gist.github.com/t00ts/3542ac4573ffbc73745641fa269326b8

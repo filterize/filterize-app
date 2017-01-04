@@ -6,6 +6,7 @@ import { ModalController, ViewController } from "ionic-angular";
 
 
 @Component({
+  selector: "filterize-user-select",
   template: `
     <ion-header>
       <ion-toolbar>

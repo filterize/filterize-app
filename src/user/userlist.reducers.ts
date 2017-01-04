@@ -18,6 +18,9 @@ export const userlistReducer = (state=[], action) => {
       ]
     }
 
+    case UserActions.LOGOUT:
+      return state.filter(obj => obj._id !== action.payload);
+
     case UserActions.FROM_DATABASE:
       return [
         ...state.filter(obj => obj._id !== action.payload._id),

@@ -1,21 +1,22 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store'
 import { AppState } from "../../app/appstate";
 import * as UserActions from "../../user/user.actions";
 import { Actions } from "@ngrx/effects";
-import { AlertController, ModalController } from "ionic-angular";
+import { AlertController, ModalController, NavController, App } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
 import { Observable } from "rxjs";
 import { currentUserSelector } from "../../user/user.selectors";
 import { UserService } from "../../services/user.service";
 import { UserSelectComponent } from "../../user/user-select.component";
 import { LoginSignupComponent } from "../login/login-signup.component";
+import { HomePage } from "../home/home";
 
 
 @Component({
   selector: "filterize-side-menu",
   template: `
-  <ion-menu [content]="content" persistent="true" type="push" mamaMenuExposeWhen>
+  <ion-menu [content]="content" [enabled]="enabled" persistent="true" type="push" mamaMenuExposeWhen>
     <ion-header>
       <ion-toolbar color="primary">
         <ion-title>
@@ -43,7 +44,7 @@ import { LoginSignupComponent } from "../login/login-signup.component";
                 </button>
               </ion-col>
               <ion-col width-50>
-                <button ion-button block small outline disabled>
+                <button ion-button block small outline (click)="clickLogout()">
                   <ion-icon name="log-out"></ion-icon>
                   {{ "LOGIN.LOGOUT" | translate }}
                 </button>
@@ -62,15 +63,19 @@ import { LoginSignupComponent } from "../login/login-signup.component";
             </ion-segment-button>
           </ion-segment>
         </ion-item>
+        
+        <button ion-item (click)="clickTest()">HomePage</button>
 
       </ion-list>
       
     </ion-content>
   </ion-menu>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideMenuComponent {
   @Output() goto = new EventEmitter();
+  @Input() enabled = true;
 
   currentUser$;
   business$;
@@ -78,7 +83,8 @@ export class SideMenuComponent {
   constructor(private store: Store<AppState>,
               private translate: TranslateService,
               private userService: UserService,
-              private modalCtrl: ModalController
+              private modalCtrl: ModalController,
+              private appCtrl: App,
               ) {
     this.currentUser$ = userService.getCurrentUser();
     this.business$ = userService.isBusiness();
@@ -94,7 +100,19 @@ export class SideMenuComponent {
   }
 
   clickLogin() {
-    this.goto.emit(LoginSignupComponent);
+    this.appCtrl.getRootNav().push(LoginSignupComponent);
+    // this.goto.emit(LoginSignupComponent);
+  }
+
+  clickTest() {
+    this.appCtrl.getRootNav().push(HomePage);
+    //this.goto.emit(HomePage);
+  }
+
+  clickLogout() {
+    this.currentUser$.first().subscribe(
+      user => this.store.dispatch({type: UserActions.LOGOUT, payload: user._id})
+    );
   }
 
   selectBusiness(value) {
