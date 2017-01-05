@@ -11,6 +11,7 @@ import { UserService } from "../../services/user.service";
 import { UserSelectComponent } from "../../user/user-select.component";
 import { LoginSignupComponent } from "../login/login-signup.component";
 import { HomePage } from "../home/home";
+import { TagHierarchyComponent } from "../tag-hierarchy/tag-hierarchy.component";
 
 
 @Component({
@@ -64,7 +65,10 @@ import { HomePage } from "../home/home";
           </ion-segment>
         </ion-item>
         
-        <button ion-item (click)="clickTest()">HomePage</button>
+        <button ion-item (click)="clickHierarchy()">
+          <ion-icon name="git-pull-request"></ion-icon> 
+          {{ "HIERARCHY.TITLE" | translate }}
+        </button>
 
       </ion-list>
       
@@ -101,12 +105,10 @@ export class SideMenuComponent {
 
   clickLogin() {
     this.appCtrl.getRootNav().push(LoginSignupComponent);
-    // this.goto.emit(LoginSignupComponent);
   }
 
-  clickTest() {
-    this.appCtrl.getRootNav().push(HomePage);
-    //this.goto.emit(HomePage);
+  clickHierarchy() {
+    this.appCtrl.getRootNav().push(TagHierarchyComponent);
   }
 
   clickLogout() {

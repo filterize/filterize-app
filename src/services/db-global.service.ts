@@ -14,7 +14,7 @@ import { GLOBAL_RESOURCES } from "../filterize-ressources/resources.list";
 export class DbGlobalService {
   private db;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private actions$: Actions) {
     if (!CONFIG.production) {
       window["PouchDB"] = PouchDB;
     }
@@ -27,6 +27,10 @@ export class DbGlobalService {
       });
 
     this.db.info().then(out => console.log("db-info",out));
+
+    actions$.ofType(UserActions.LOGOUT)
+      .map(action => action.payload)
+      .subscribe(p_id => this.db.get(p_id).then((obj => this.db.put({_id: obj._id, _rev: obj._rev}))));
 
     store.select("userlist")
       .flatMap((userList: Object[]) => Observable.from(userList))
@@ -75,6 +79,9 @@ export class DbGlobalService {
     ];
     for (let t of types) {
       if (obj._id.startsWith(t)) {
+        if (t == "user" && !("access_token" in obj)) {
+          continue;
+        }
         t = t.toUpperCase();
         this.store.dispatch({
           type: `${t}_FROM_DATABASE`,
@@ -98,7 +105,14 @@ export class DbGlobalService {
     obj = Object.assign({}, obj);
     if ("#dirty-db" in obj) {
       delete obj["#dirty-db"];
-      this.db.put(obj);
+      this.db.put(obj).catch(err => {
+        this.db.get(obj._id).then(stored => {
+          delete obj._id;
+          delete obj._rev;
+          Object.assign(stored, obj);
+          this.db.put(stored);
+        })
+      });
     }
   }
 }

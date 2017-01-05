@@ -56,9 +56,16 @@ export class ResourcesService {
     for (let type_name in USER_RESOURCES) {
       let type_obj = USER_RESOURCES[type_name];
       let since = this.get_last_changed(type_name);
-      let url = `${CONFIG.filterize.api_url}/${entity_str}/${obj_id}${type_obj.path}?since=${since}`;
+      let url = `${CONFIG.filterize.api_url}/${entity_str}/${obj_id}${type_obj.path}`;
       console.log(url);
-      this.http.get(url, jwtHeaderOnlyOptions(access_token))
+      this.http.put(
+        url,
+        {
+          data: [],
+          since: since
+        },
+        jwtHeaderOnlyOptions(access_token)
+      )
         .map(data => data.json())
         .withLatestFrom(this.userSrv.currentUser$, this.store.select("current_user"))
         .filter(([data, user, current]) => data.user.id == user["user_id"] && data.user.business == current["business"])
@@ -77,7 +84,7 @@ export class ResourcesService {
     for (let key in USER_RESOURCES) {
       let res = USER_RESOURCES[key];
       this.store.select(res.store)
-        .map((data:any[]) => data.map((obj) => obj["#changed"]))
+        .map((data: any[]) => data.map((obj) => obj["#changed"]))
         .map(data => Math.max(...data, 0))
         .map(data => isNaN(data) ? 0 : data)
         .subscribe(data => this.last_changed[key] = data);

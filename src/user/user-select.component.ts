@@ -17,7 +17,7 @@ import { ModalController, ViewController } from "ionic-angular";
         </ion-buttons>
         
         <ion-title>
-          {{ "UI.SELECT_USER" | translate }}
+          {{ "USER.SELECT" | translate }}
         </ion-title>
       </ion-toolbar>
     </ion-header>

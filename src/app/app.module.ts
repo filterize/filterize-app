@@ -32,6 +32,8 @@ import { ResourcesService } from "../filterize-ressources/resources.service";
 import { globalReducer } from "../filterize-ressources/globals.reducer";
 import { settingsReducer } from "../settings/settings.reducer";
 import { userResourceReducerAddOn } from "../filterize-ressources/combined-user-resources.reducer";
+import { TagHierarchyComponent } from "../pages/tag-hierarchy/tag-hierarchy.component"
+import { TagHierarchyItemComponent } from "../pages/tag-hierarchy/tag-hierarchy-item.component";
 
 /*const appRoutes = [
   {path: "login/login", component: LoginComponent, name: "Login"},
@@ -103,6 +105,8 @@ if (CONFIG.production) {
     UserButtonComponent,
     UserSelectComponent,
     MamaMenuExpose,
+    TagHierarchyComponent,
+    TagHierarchyItemComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -114,6 +118,7 @@ if (CONFIG.production) {
     SignupComponent,
     LoginComponent,
     UserSelectComponent,
+    TagHierarchyComponent,
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },

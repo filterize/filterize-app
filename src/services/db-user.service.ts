@@ -3,13 +3,14 @@ import * as PouchDB from 'pouchdb';
 import { Store } from "@ngrx/store";
 import { Actions } from "@ngrx/effects";
 import { AppState } from "../app/appstate";
-import { Platform } from "ionic-angular";
+import { Platform, LoadingController, Loading } from "ionic-angular";
 import { Observable } from "rxjs";
 import { SearchDocsResult } from "./pouchdb.types";
 import * as UserActions from "../user/user.actions";
 import { CONFIG } from "../app/config";
 import { USER_RESOURCES } from "../filterize-ressources/resources.list";
 import { filter } from "rxjs/operator/filter";
+import { TranslateService } from "ng2-translate";
 
 @Injectable()
 export class DbUserService {
@@ -20,7 +21,11 @@ export class DbUserService {
   private seq = 0;
   private observables: any[] = [];
 
-  constructor(private store: Store<AppState>, private actions$: Actions) {
+  constructor(private store: Store<AppState>,
+              private actions$: Actions,
+              private loadingCtrl: LoadingController,
+              private trans: TranslateService
+  ) {
     this.init_user_switch_db_load();
     this.init_store_listener();
     this.initLogoutListener();
@@ -39,6 +44,11 @@ export class DbUserService {
       .filter(obj => ("profile" in obj && "business" in obj))
       .filter(obj => obj["profile"] !== this.p_id ||  obj["business"] !== this.business)
       .subscribe(current_user => {
+        let loading = this.loadingCtrl.create();
+        this.trans.get("UI.LOADING").subscribe(content => {
+          loading.setContent(content);
+        });
+        loading.present();
         this.p_id = current_user["profile"];
         this.business = current_user["business"];
 
@@ -67,12 +77,17 @@ export class DbUserService {
           console.log("db-instance", this.db);
 
           this.seq = 0;
-          this.fetch_changes(() => this.store.dispatch({
-            type: "CHECK_TOKEN",
-            payload: {
-              type: "START_USER_SYNC"
-            }
-          }));
+          this.fetch_changes(() => {
+            this.store.dispatch({
+              type: "CHECK_TOKEN",
+              payload: {
+                type: "START_USER_SYNC"
+              }
+            });
+            loading.dismiss();
+          });
+        } else {
+          loading.dismiss();
         }
       });
   }

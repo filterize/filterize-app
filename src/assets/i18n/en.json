@@ -2,7 +2,8 @@
   "UI": {
     "ERROR": "Error",
     "OK": "Ok",
-    "CANCEL": "Cancel"
+    "CANCEL": "Cancel",
+    "LOADING": "please wait..."
   },
   "LOGIN": {
     "LOGIN": "Login",
@@ -18,9 +19,14 @@
     "PASSWORD": "Password",
     "E_MAIL": "E-Mail",
     "BUSINESS": "Business",
-    "PRIVATE": "Private"
+    "PRIVATE": "Private",
+    "SELECT": "Select"
   },
   "MENU": {
     "TITLE": "Navigation"
+  },
+  "HIERARCHY": {
+    "TITLE": "Tag Hierarchy",
+    "DESC": "A nice tag hierarchy description."
   }
 }
