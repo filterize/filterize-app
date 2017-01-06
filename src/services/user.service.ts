@@ -13,6 +13,7 @@ import * as UserActions from "../user/user.actions";
 export class UserService {
   currentUser$;
   business$;
+  currentServerParams$;
 
   constructor(private store: Store<AppState>, private actions$: Actions, private http:Http) {
 
@@ -27,6 +28,24 @@ export class UserService {
       .select("current_user")
       .map(data => data["business"])
       .distinctUntilChanged();
+
+    this.currentServerParams$ = Observable
+      .combineLatest(
+        store.select("current_user"),
+        this.currentUser$.filter(x => x != null)
+      )
+      .map(x => {console.log("p1", x); return x})
+      .map(([params, user]) => {
+        console.log("current_params", user, params)
+        return Object({
+          user_id: user["user_id"],
+          business_id: user["business_id"],
+          obj_type: params["business"] ? "business" : "user",
+          obj_id: params["business"] ? user["business_id"] : user["user_id"],
+          access_token: user["access_token"]
+        })
+      });
+
 
     this.actions$
       .ofType("CHECK_TOKEN")
@@ -74,6 +93,10 @@ export class UserService {
   }
 
   public isBusiness() {
-    return this.business$
+    return this.business$;
+  }
+
+  public getCurrentServerParams() {
+    return this.currentServerParams$;
   }
 }

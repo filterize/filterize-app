@@ -49,6 +49,34 @@ export class ResourcesService {
       let access_token = (action.payload) ? action.payload.access_token : user_data["access_token"];
       this.startSync(obj_id, access_token, business);
     });
+
+    for (let type_name in USER_RESOURCES) {
+      let type_obj = USER_RESOURCES[type_name];
+      // todo: check for current token
+      this.store.select(type_obj.store)
+        .flatMap((obj: any[]) => obj)
+        .filter(obj => !obj["#dirty-db"] && !obj["#dirty-server-sync"] && obj["#dirty-server"])
+       .withLatestFrom(
+          this.userSrv.getCurrentServerParams(),
+        )
+        .subscribe(([obj, params]) => {
+          console.log("toSync", obj, params);
+          this.http.put(
+            `${CONFIG.filterize.api_url}/${params.obj_type}/${params.obj_id}${type_obj.path}/${obj[type_obj.id]}`,
+            obj,
+            jwtHeaderOnlyOptions(params["access_token"])
+          )
+            .subscribe(
+              () => {},
+              () => {
+                console.log({type: `${type_obj.action_prefix}_SINGLE_SYNC_FAIL`, payload:obj});
+                this.store.dispatch({type: `${type_obj.action_prefix}_SINGLE_SYNC_FAIL`, payload:obj});
+
+              },
+              () => this.store.dispatch({type: `${type_obj.action_prefix}_SINGLE_SYNC_OK`, payload:obj})
+            )
+        });
+    }
   }
 
   startSync(obj_id, access_token, business) {
