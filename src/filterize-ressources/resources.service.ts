@@ -8,10 +8,12 @@ import { Actions } from "@ngrx/effects";
 import { AppState } from "../app/appstate";
 import * as UserActions from "../user/user.actions";
 import { jwtHeaderOnlyOptions } from "../user/user.tools";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class ResourcesService {
-  private last_changed = Object()
+  private last_changed = Object();
+  private openSync$: Observable<number>;
 
   constructor(private http: Http,
               private userSrv: UserService,
@@ -20,6 +22,26 @@ export class ResourcesService {
     this.initSyncObserver();
     this.refreshGlobalResources();
     this.init_last_changed();
+    this.initOpenSyncCount();
+  }
+
+  getOpenSyncCount () {
+    return this.openSync$;
+  }
+
+  initOpenSyncCount() {
+    let obs: Observable<number>[] = [];
+    for (let key in USER_RESOURCES) {
+      let type = USER_RESOURCES[key];
+      obs.push(
+        this.store
+          .select(type.store)
+          .map((data: Object[]) => data.filter(obj => obj["#dirty-server"] || obj["#dirty-server-sync"]).length)
+          .distinctUntilChanged()
+      );
+    }
+    this.openSync$ = Observable.combineLatest(...obs)
+      .map(elems => elems.reduce((a, b) => a+b, 0));
   }
 
   refreshGlobalResources() {
@@ -83,28 +105,34 @@ export class ResourcesService {
     let entity_str = business ? "business" : "user";
     for (let type_name in USER_RESOURCES) {
       let type_obj = USER_RESOURCES[type_name];
-      let since = this.get_last_changed(type_name);
-      let url = `${CONFIG.filterize.api_url}/${entity_str}/${obj_id}${type_obj.path}`;
-      console.log(url);
-      this.http.put(
-        url,
-        {
-          data: [],
-          since: since
-        },
-        jwtHeaderOnlyOptions(access_token)
-      )
-        .map(data => data.json())
-        .withLatestFrom(this.userSrv.currentUser$, this.store.select("current_user"))
-        .filter(([data, user, current]) => data.user.id == user["user_id"] && data.user.business == current["business"])
-        .map(([data, user, current]) => data["data"])
-        .filter(data => data.length > 0)
-        .subscribe(obj => {
-          this.store.dispatch({
-            type: `${type_obj.action_prefix}_BULK_FROM_SERVER`,
-            payload: obj
-          })
-        })
+      this.store
+        .select(type_obj.store)
+        .first()
+        .map((data: Object[]) => data.filter(obj => obj["#dirty-server-sync"]))
+        .subscribe(unsynced => {
+          let since = this.get_last_changed(type_name);
+          let url = `${CONFIG.filterize.api_url}/${entity_str}/${obj_id}${type_obj.path}`;
+          console.log(url, unsynced);
+          this.http.put(
+            url,
+            {
+              data: unsynced,
+              since: since
+            },
+            jwtHeaderOnlyOptions(access_token)
+          )
+            .map(data => data.json())
+            .withLatestFrom(this.userSrv.currentUser$, this.store.select("current_user"))
+            .filter(([data, user, current]) => data.user.id == user["user_id"] && data.user.business == current["business"])
+            .map(([data, user, current]) => data["data"])
+            .filter(data => data.length > 0)
+            .subscribe(obj => {
+              this.store.dispatch({
+                type: `${type_obj.action_prefix}_BULK_FROM_SERVER`,
+                payload: obj
+              })
+            })
+        });
     }
   }
 

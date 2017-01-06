@@ -12,6 +12,7 @@ import { UserSelectComponent } from "../../user/user-select.component";
 import { LoginSignupComponent } from "../login/login-signup.component";
 import { HomePage } from "../home/home";
 import { TagHierarchyComponent } from "../tag-hierarchy/tag-hierarchy.component";
+import { ResourcesService } from "../../filterize-ressources/resources.service";
 
 
 @Component({
@@ -21,14 +22,14 @@ import { TagHierarchyComponent } from "../tag-hierarchy/tag-hierarchy.component"
     <ion-header>
       <ion-toolbar color="primary">
         <ion-title>
-          <ion-icon name="menu"></ion-icon>
+          <ion-icon name="menu"></ion-icon> &nbsp;
           {{ "MENU.TITLE" | translate }}
         </ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content padding>  
-      <ion-list>
+      <ion-list no-lines>
         <filterize-user-button 
           *ngIf="currentUser$ | async" 
           [user]="currentUser$ | async"
@@ -66,16 +67,30 @@ import { TagHierarchyComponent } from "../tag-hierarchy/tag-hierarchy.component"
         </ion-item>
         
         <button ion-item (click)="clickHierarchy()">
-          <ion-icon name="git-pull-request"></ion-icon> 
+          <ion-icon name="git-pull-request"></ion-icon> &nbsp;
           {{ "HIERARCHY.TITLE" | translate }}
         </button>
 
       </ion-list>
       
     </ion-content>
+    
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons>
+          <button ion-button full (click)="startSync()">
+            <ion-icon name="sync"></ion-icon> &nbsp;
+            {{ "UI.SYNC" | translate }} &nbsp;
+            <ion-badge right *ngIf="openSync$ | async">{{ openSync$ | async }}</ion-badge>
+          </button>
+        </ion-buttons>
+        <!--<ion-badge right *ngIf="openSync$ | async">{{ openSync$ | async }}</ion-badge>-->
+        <!--<ion-title>Footer</ion-title>-->
+      </ion-toolbar>
+    </ion-footer>
   </ion-menu>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideMenuComponent {
   @Output() goto = new EventEmitter();
@@ -83,16 +98,19 @@ export class SideMenuComponent {
 
   currentUser$;
   business$;
+  openSync$;
 
   constructor(private store: Store<AppState>,
               private translate: TranslateService,
               private userService: UserService,
               private modalCtrl: ModalController,
               private appCtrl: App,
+              private resSrv: ResourcesService
               ) {
     this.currentUser$ = userService.getCurrentUser();
     this.business$ = userService.isBusiness();
     this.business$.subscribe(data => console.log(data));
+    this.openSync$ = resSrv.getOpenSyncCount();
   }
 
   @Input() content;
@@ -119,6 +137,15 @@ export class SideMenuComponent {
 
   selectBusiness(value) {
     this.store.dispatch({type: UserActions.SELECT_BUSINESS, payload: value});
+  }
+
+  startSync() {
+    this.store.dispatch({
+      type: "CHECK_TOKEN",
+      payload: {
+        type: "START_USER_SYNC"
+      }
+    });
   }
 
 }

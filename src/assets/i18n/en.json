@@ -3,7 +3,8 @@
     "ERROR": "Error",
     "OK": "Ok",
     "CANCEL": "Cancel",
-    "LOADING": "please wait..."
+    "LOADING": "please wait...",
+    "SYNC": "Synchronize"
   },
   "LOGIN": {
     "LOGIN": "Login",

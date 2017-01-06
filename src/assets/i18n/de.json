@@ -3,7 +3,8 @@
     "ERROR": "Fehler",
     "OK": "Ok",
     "CANCEL": "Abbrechen",
-    "LOADING": "Bitte warten..."
+    "LOADING": "Bitte warten...",
+    "SYNC": "Synchronisation"
   },
   "LOGIN": {
     "LOGIN": "Einloggen",
