@@ -12,6 +12,10 @@ import { TranslateService } from "ng2-translate";
     <ion-header>
       <ion-navbar>
         
+        <button ion-button icon-only menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+    
         <ion-title>
           <ion-icon name="speedometer"></ion-icon>
           {{ "DASHBOARD.TITLE" | translate }}
