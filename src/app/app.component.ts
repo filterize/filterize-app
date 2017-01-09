@@ -17,6 +17,7 @@ import {Network} from "ionic-native";
 import { AppState } from "./appstate";
 import { Actions } from "@ngrx/effects";
 import * as UserActions from "../user/user.actions";
+import { TagHierarchyComponent } from "../pages/tag-hierarchy/tag-hierarchy.component";
 
 
 @Component({
@@ -47,6 +48,13 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
       console.log("connection", <string> Network.type)
+
+      /*
+      Deeplinks.routeWithNavController(this.navChild, {
+        '/login': LoginSignupComponent,
+        '/tag-hierarchy': TagHierarchyComponent
+      }); */
+
     });
     // this.setupBackButtonBehavior();
   }

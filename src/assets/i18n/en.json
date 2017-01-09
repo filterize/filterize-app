@@ -26,8 +26,29 @@
   "MENU": {
     "TITLE": "Navigation"
   },
+  "DASHBOARD": {
+    "TITLE": "Dashboard"
+  },
   "HIERARCHY": {
     "TITLE": "Tag Hierarchy",
     "DESC": "A nice tag hierarchy description."
+  },
+  "FILTER": {
+    "TITLE": "Filter"
+  },
+  "CALENDAR": {
+    "TITLE": "Calendar"
+  },
+  "MAIL_IN": {
+    "TITLE": "Mail-In"
+  },
+  "PAYMENT": {
+    "TITLE": "Payment"
+  },
+  "LIBRARY": {
+    "TITLE": "Library"
+  },
+  "SETTINGS": {
+    "TITLE": "Settings"
   }
 }

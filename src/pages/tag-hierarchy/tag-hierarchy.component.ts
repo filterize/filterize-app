@@ -13,6 +13,7 @@ import { TagHierarchyElement, Tag } from "../../tags/tags.spec";
         </button>
     
         <ion-title>
+          <ion-icon name="git-pull-request"></ion-icon>
           {{ "HIERARCHY.TITLE" | translate }}
         </ion-title>
       </ion-navbar>

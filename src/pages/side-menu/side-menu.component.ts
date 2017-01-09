@@ -13,7 +13,25 @@ import { LoginSignupComponent } from "../login/login-signup.component";
 import { HomePage } from "../home/home";
 import { TagHierarchyComponent } from "../tag-hierarchy/tag-hierarchy.component";
 import { ResourcesService } from "../../filterize-ressources/resources.service";
+import { DashboardComponent } from "../dashboard/dashboard.component";
+import { FilterComponent } from "../filter/filter.component";
+import { CalendarComponent } from "../calendar/calendar.component";
+import { MailInComponent } from "../mail-in/mail-in.component";
+import { LibraryComponent } from "../library/library.component";
+import { PaymentComponent } from "../payment/payment.component";
+import { SettingsComponent } from "../settings/settings.component";
 
+let COMPONENTS = {
+  dashboard: DashboardComponent,
+  login: LoginSignupComponent,
+  hierarchy: TagHierarchyComponent,
+  filter: FilterComponent,
+  calendar: CalendarComponent,
+  library: LibraryComponent,
+  mail_in: MailInComponent,
+  payment: PaymentComponent,
+  settings: SettingsComponent
+};
 
 @Component({
   selector: "filterize-side-menu",
@@ -40,7 +58,7 @@ import { ResourcesService } from "../../filterize-ressources/resources.service";
           <ion-grid>
             <ion-row>
               <ion-col width-50>
-                <button ion-button block small menuClose (click)="clickLogin()">
+                <button ion-button block small menuClose (click)="goto('login')">
                   <ion-icon name="log-in"></ion-icon>
                   {{ "LOGIN.LOGIN" | translate }}
                 </button>
@@ -58,20 +76,58 @@ import { ResourcesService } from "../../filterize-ressources/resources.service";
         <ion-item *ngIf="(currentUser$ | async)?.business_id">
           <ion-segment [ngModel]="business$ | async">
             <ion-segment-button [value]="false" (click)="selectBusiness(false)">
+              <ion-icon name="person"></ion-icon> &nbsp;
               {{ "USER.PRIVATE" | translate }}
             </ion-segment-button>
             <ion-segment-button [value]="true" (click)="selectBusiness(true)">
+              <ion-icon name="briefcase"></ion-icon> &nbsp;
               {{ "USER.BUSINESS" | translate }}
             </ion-segment-button>
           </ion-segment>
         </ion-item>
         
-        <button ion-item (click)="clickHierarchy()">
+        <button ion-item menuClose (click)="goto('dashboard')">
+          <ion-icon name="speedometer"></ion-icon> &nbsp;
+          {{ "DASHBOARD.TITLE" | translate }}
+        </button>
+
+        <button ion-item menuClose (click)="goto('hierarchy')">
           <ion-icon name="git-pull-request"></ion-icon> &nbsp;
           {{ "HIERARCHY.TITLE" | translate }}
         </button>
 
+        <button ion-item menuClose (click)="goto('filter')">
+          <ion-icon name="funnel"></ion-icon> &nbsp;
+          {{ "FILTER.TITLE" | translate }}
+        </button>
+
+        <button ion-item menuClose (click)="goto('calendar')">
+          <ion-icon name="calendar"></ion-icon> &nbsp;
+          {{ "CALENDAR.TITLE" | translate }}
+        </button>
+
+        <button ion-item menuClose (click)="goto('mail_in')">
+          <ion-icon name="mail"></ion-icon> &nbsp;
+          {{ "MAIL_IN.TITLE" | translate }}
+        </button>
+
+        <button ion-item menuClose (click)="goto('payment')">
+          <ion-icon name="card"></ion-icon> &nbsp;
+          {{ "PAYMENT.TITLE" | translate }}
+        </button>
+
+        <button ion-item menuClose (click)="goto('library')">
+          <ion-icon name="map"></ion-icon> &nbsp;
+          {{ "LIBRARY.TITLE" | translate }}
+        </button>
+
+        <button ion-item menuClose (click)="goto('settings')">
+          <ion-icon name="settings"></ion-icon> &nbsp;
+          {{ "SETTINGS.TITLE" | translate }}
+        </button>
+
       </ion-list>
+      <br><br><br>
       
     </ion-content>
     
@@ -93,7 +149,6 @@ import { ResourcesService } from "../../filterize-ressources/resources.service";
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideMenuComponent {
-  @Output() goto = new EventEmitter();
   @Input() enabled = true;
 
   currentUser$;
@@ -115,18 +170,16 @@ export class SideMenuComponent {
 
   @Input() content;
 
+  goto(target) {
+    if (target in COMPONENTS) {
+      this.appCtrl.getRootNav().setRoot(COMPONENTS[target]);
+    }
+  }
+
   openUserSelect() {
     console.log("user_select");
     let modal = this.modalCtrl.create(UserSelectComponent);
     modal.present();
-  }
-
-  clickLogin() {
-    this.appCtrl.getRootNav().push(LoginSignupComponent);
-  }
-
-  clickHierarchy() {
-    this.appCtrl.getRootNav().push(TagHierarchyComponent);
   }
 
   clickLogout() {

@@ -1,5 +1,5 @@
 import { IonicApp, IonicModule } from "ionic-angular";
-import { NgModule, ErrorHandler } from "@angular/core";
+import { NgModule, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { StoreModule } from "@ngrx/store";
 import { routerReducer } from "@ngrx/router-store";
 import { EffectsModule } from "@ngrx/effects";
@@ -33,7 +33,16 @@ import { globalReducer } from "../filterize-ressources/globals.reducer";
 import { settingsReducer } from "../settings/settings.reducer";
 import { userResourceReducerAddOn } from "../filterize-ressources/combined-user-resources.reducer";
 import { TagHierarchyComponent } from "../pages/tag-hierarchy/tag-hierarchy.component"
-import { TagHierarchyItemComponent } from "../pages/tag-hierarchy/tag-hierarchy-item.component";
+import { TagHierarchyItemComponent } from "../pages/tag-hierarchy/tag-hierarchy-item.component"
+import { TbdComponent } from "./tbd.component";
+import { DashboardComponent } from "../pages/dashboard/dashboard.component";
+import { FilterComponent } from "../pages/filter/filter.component";
+import { CalendarComponent } from "../pages/calendar/calendar.component";
+import { LibraryComponent } from "../pages/library/library.component";
+import { MailInComponent } from "../pages/mail-in/mail-in.component";
+import { PaymentComponent } from "../pages/payment/payment.component";
+import { SettingsComponent } from "../pages/settings/settings.component";
+
 
 /*const appRoutes = [
   {path: "login/login", component: LoginComponent, name: "Login"},
@@ -55,13 +64,25 @@ class RavenErrorHandler implements ErrorHandler {
 }
 
 let imports = [
-  IonicModule.forRoot(MyApp, {}, {
+  IonicModule.forRoot(MyApp, {}
+  , {
     links: [
+      //{ component: MyApp, name: 'Filterize', segment: 'm' },
       { component: HomePage, name: 'Home', segment: 'home' },
       { component: LoginComponent, name: 'Login', segment: 'login' },
-      { component: SignupComponent, name: 'SignUp', segment: 'signup' },
+      { component: SignupComponent, name: 'Sign-Up', segment: 'sign-up' },
+      { component: UserSelectComponent, name: 'Select', segment: 'select-user' },
+      { component: TagHierarchyComponent, name: 'Tag Hierarchy', segment: 'tag-hierarchy' },
+      { component: DashboardComponent, name: 'Dashboard', segment: 'dashboard' },
+      { component: FilterComponent, name: 'Filter', segment: 'filter' },
+      { component: CalendarComponent, name: 'Calendar', segment: 'calendar' },
+      { component: LibraryComponent, name: 'Library', segment: 'library' },
+      { component: MailInComponent, name: 'Mail-In', segment: 'mail-in' },
+      { component: PaymentComponent, name: 'Payment', segment: 'payment' },
+      { component: SettingsComponent, name: 'Settings', segment: 'settings' },
     ]
-  }),
+  }
+  ),
   // RouterModule.forRoot(appRoutes),
   StoreModule.provideStore(Object.assign({
     router: routerReducer,
@@ -106,7 +127,15 @@ if (CONFIG.production) {
     UserSelectComponent,
     MamaMenuExpose,
     TagHierarchyComponent,
-    TagHierarchyItemComponent
+    TagHierarchyItemComponent,
+    TbdComponent,
+    DashboardComponent,
+    FilterComponent,
+    CalendarComponent,
+    LibraryComponent,
+    MailInComponent,
+    PaymentComponent,
+    SettingsComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -119,6 +148,13 @@ if (CONFIG.production) {
     LoginComponent,
     UserSelectComponent,
     TagHierarchyComponent,
+    DashboardComponent,
+    FilterComponent,
+    CalendarComponent,
+    LibraryComponent,
+    MailInComponent,
+    PaymentComponent,
+    SettingsComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },
@@ -127,7 +163,8 @@ if (CONFIG.production) {
     DbUserService,
     UserService,
     ResourcesService
-  ]
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule {
 }
