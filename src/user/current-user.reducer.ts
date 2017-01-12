@@ -27,6 +27,9 @@ export const currentUserReducer = (state={profile: "", business: false, _id: "cu
     case "CURRENT_USER_FROM_DATABASE":
       return Object.assign({}, action.payload);
 
+    case UserActions.SELECT_WITH_BUSINESS:
+      return Object.assign({}, state, action.payload, {"#dirty-db": true});
+
     case UserActions.LOGOUT:
       return Object.assign({}, state, {
         profile: "",

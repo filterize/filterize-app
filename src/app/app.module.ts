@@ -24,7 +24,7 @@ import { UserButtonComponent } from "../user/user-button.component";
 import { currentUserReducer } from "../user/current-user.reducer";
 import { UserService } from "../services/user.service";
 import { UserSelectComponent } from "../user/user-select.component";
-import * as Raven from 'raven-js';
+import * as Raven from "raven-js";
 import { RavenService } from "../services/raven.service";
 import { DbUserService } from "../services/db-user.service";
 import { MamaMenuExpose } from "../mama-menu-expose/mama-menu-expose.component";
@@ -32,8 +32,8 @@ import { ResourcesService } from "../filterize-ressources/resources.service";
 import { globalReducer } from "../filterize-ressources/globals.reducer";
 import { settingsReducer } from "../settings/settings.reducer";
 import { userResourceReducerAddOn } from "../filterize-ressources/combined-user-resources.reducer";
-import { TagHierarchyComponent } from "../pages/tag-hierarchy/tag-hierarchy.component"
-import { TagHierarchyItemComponent } from "../pages/tag-hierarchy/tag-hierarchy-item.component"
+import { TagHierarchyComponent } from "../pages/tag-hierarchy/tag-hierarchy.component";
+import { TagHierarchyItemComponent } from "../pages/tag-hierarchy/tag-hierarchy-item.component";
 import { TbdComponent } from "./tbd.component";
 import { DashboardComponent } from "../pages/dashboard/dashboard.component";
 import { FilterComponent } from "../pages/filter/filter.component";
@@ -42,6 +42,8 @@ import { LibraryComponent } from "../pages/library/library.component";
 import { MailInComponent } from "../pages/mail-in/mail-in.component";
 import { PaymentComponent } from "../pages/payment/payment.component";
 import { SettingsComponent } from "../pages/settings/settings.component";
+import { NotebookTitleComponent } from "../notebook/notebook-title.component";
+import { CalendarDetailsComponent } from "../pages/calendar/calendar-details.component";
 
 
 /*const appRoutes = [
@@ -76,6 +78,8 @@ let imports = [
       { component: DashboardComponent, name: 'Dashboard', segment: 'dashboard' },
       { component: FilterComponent, name: 'Filter', segment: 'filter' },
       { component: CalendarComponent, name: 'Calendar', segment: 'calendar' },
+      { component: CalendarDetailsComponent, name: 'Calendar Details', segment: 'calendar/:profile/:business/:guid',
+        defaultHistory: [CalendarComponent]},
       { component: LibraryComponent, name: 'Library', segment: 'library' },
       { component: MailInComponent, name: 'Mail-In', segment: 'mail-in' },
       { component: PaymentComponent, name: 'Payment', segment: 'payment' },
@@ -135,7 +139,9 @@ if (CONFIG.production) {
     LibraryComponent,
     MailInComponent,
     PaymentComponent,
-    SettingsComponent
+    SettingsComponent,
+    NotebookTitleComponent,
+    CalendarDetailsComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -154,7 +160,8 @@ if (CONFIG.production) {
     LibraryComponent,
     MailInComponent,
     PaymentComponent,
-    SettingsComponent
+    SettingsComponent,
+    CalendarDetailsComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },

@@ -60,6 +60,5 @@ export class TagHierarchyComponent {
         root.children.sort(sorter);
         return root;
       });
-    this.tags$.subscribe(data => console.log(data));
   }
 }

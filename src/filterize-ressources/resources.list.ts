@@ -1,3 +1,4 @@
+import { notebookReducer } from "../notebook/notebook.reducer";
 export const USER_RESOURCES = {
   filter: {
     action_prefix: "FILTER",
@@ -21,7 +22,8 @@ export const USER_RESOURCES = {
     path: "/notebooks",
     id: "guid",
     personal: true,
-    business: true
+    business: true,
+    reducer: notebookReducer
   }
 };
 

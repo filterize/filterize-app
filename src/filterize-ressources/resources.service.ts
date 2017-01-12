@@ -9,11 +9,14 @@ import { AppState } from "../app/appstate";
 import * as UserActions from "../user/user.actions";
 import { jwtHeaderOnlyOptions } from "../user/user.tools";
 import { Observable } from "rxjs";
+import { Notebook } from "../notebook/notebook.spec";
+import { notebookIgnoreDeleted, notebookSort } from "../notebook/notebook.tools";
 
 @Injectable()
 export class ResourcesService {
   private last_changed = Object();
   private openSync$: Observable<number>;
+  private notebooks$: Observable<Notebook[]>;
 
   constructor(private http: Http,
               private userSrv: UserService,
@@ -23,6 +26,10 @@ export class ResourcesService {
     this.refreshGlobalResources();
     this.init_last_changed();
     this.initOpenSyncCount();
+
+    this.notebooks$ = store.select(USER_RESOURCES.notebook.store)
+      .map(notebookIgnoreDeleted)
+      .map(notebookSort)
   }
 
   getOpenSyncCount () {
@@ -78,7 +85,7 @@ export class ResourcesService {
       this.store.select(type_obj.store)
         .flatMap((obj: any[]) => obj)
         .filter(obj => !obj["#dirty-db"] && !obj["#dirty-server-sync"] && obj["#dirty-server"])
-       .withLatestFrom(
+        .withLatestFrom(
           this.userSrv.getCurrentServerParams(),
         )
         .subscribe(([obj, params]) => {
@@ -88,15 +95,16 @@ export class ResourcesService {
             obj,
             jwtHeaderOnlyOptions(params["access_token"])
           )
+            .map(data => data.json().data)
+            .map(data => {
+              delete data["#hash"];
+              delete data["#changed"];
+              return data;
+            })
             .subscribe(
-              () => {},
-              () => {
-                console.log({type: `${type_obj.action_prefix}_SINGLE_SYNC_FAIL`, payload:obj});
-                this.store.dispatch({type: `${type_obj.action_prefix}_SINGLE_SYNC_FAIL`, payload:obj});
-
-              },
-              () => this.store.dispatch({type: `${type_obj.action_prefix}_SINGLE_SYNC_OK`, payload:obj})
-            )
+              (res) => this.store.dispatch({type: `${type_obj.action_prefix}_SINGLE_SYNC_OK`, payload: Object.assign({}, obj, res)}),
+              () => this.store.dispatch({type: `${type_obj.action_prefix}_SINGLE_SYNC_FAIL`, payload: obj})
+            );
         });
     }
   }
@@ -152,5 +160,9 @@ export class ResourcesService {
       return this.last_changed[type];
     }
     return 0;
+  }
+
+  getNotebooks() {
+    return this.notebooks$;
   }
 }
