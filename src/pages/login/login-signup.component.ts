@@ -5,7 +5,7 @@ import { LoginComponent } from "./login.component";
 import { SignupComponent } from "./signup.component";
 import { TranslateService } from "ng2-translate";
 import { UserSelectComponent } from "../../user/user-select.component";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 
 
 
@@ -32,6 +32,7 @@ export class LoginSignupComponent {
   loginTab = LoginComponent;
 
   private can_leave = false;
+  private sub: Subscription;
 
   constructor(private store: Store<AppState>, translate: TranslateService) {
     translate.get(["LOGIN.LOGIN", "LOGIN.SIGN_UP", "USER.SELECT"]).subscribe(data => {
@@ -41,10 +42,18 @@ export class LoginSignupComponent {
       }
     );
 
-    store.select("current_user")
-      .subscribe(data => this.can_leave = data["profile"] != "");
-
     this.userAvailable$ = store.select("userlist").map((list: any[]) => list.length > 0);
+  }
+
+  ngOnInit() {
+    this.sub = this.store.select("current_user")
+      .subscribe(data => this.can_leave = data["profile"] != "");
+  }
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   ionViewCanLeave() {

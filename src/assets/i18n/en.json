@@ -37,7 +37,14 @@
     "TITLE": "Filter"
   },
   "CALENDAR": {
-    "TITLE": "Calendar"
+    "TITLE": "Calendar",
+    "DURATION": "Duration",
+    "LINK_TYPE": "Link type",
+    "LINK_APP": "In-App link",
+    "LINK_WEB": "Web link",
+    "DAY": "full day",
+    "REVOKE": "Revoke calendar links",
+    "SYNC_FIRST": "Link can only be created of notebook is synchronized"
   },
   "MAIL_IN": {
     "TITLE": "Mail-In"

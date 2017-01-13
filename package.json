@@ -14,6 +14,8 @@
     "electron": "electron .",
     "electron dist": "electron .",
     "test": "grunt bump-only:prerelease && ionic serve",
+    "browserify": "browserify -s main www/build/main.js | exorcist www/build/bundle.js.map > www/build/bundle.js",
+    "minify": "uglifyjs www/build/main.js --in-source-map www/build/main.js.map --source-map www/build/main.min.js.map --screw-ie8 --compress warnings=false --mangle --output www/build/main.min.js",
     "start": "grunt bump && ionic build browser --minify && grunt swPrecache:release && firebase deploy"
   },
   "dependencies": {
@@ -45,13 +47,17 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "0.0.48",
+    "browserify": "^13.3.0",
     "electron-packager": "^8.2.0",
     "electron-prebuilt": "^1.4.13",
+    "exorcist": "^0.4.0",
     "grunt": "^1.0.1",
     "grunt-bump": "^0.8.0",
     "ionic-minify": "^2.0.10",
+    "node-version-compare": "^1.0.1",
     "sw-precache": "^4.2.3",
-    "typescript": "2.1.4"
+    "typescript": "2.1.4",
+    "uglify-js": "^2.7.5"
   },
   "cordovaPlugins": [
     "cordova-plugin-device",

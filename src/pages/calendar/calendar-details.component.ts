@@ -4,7 +4,7 @@ import { AppState } from "../../app/appstate";
 import { Actions } from "@ngrx/effects";
 import { AlertController, NavParams } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { Notebook } from "../../notebook/notebook.spec";
 import { USER_RESOURCES } from "../../filterize-ressources/resources.list";
 import { ignoreDeletedFilter } from "../../filterize-ressources/resources.tools";
@@ -57,10 +57,18 @@ import * as UserActions from "../../user/user.actions";
             <ion-option value="web">{{ "CALENDAR.LINK_WEB" | translate }}</ion-option>
           </ion-select>
         </ion-item>
-        <ion-item>
+        <ion-item *ngIf="(item$|async)?.calendar_token">
           <a [href]="link">{{ link }}</a>
         </ion-item>
-      <button ion-item color="danger">{{ "CALENDAR.REVOKE" | translate}}</button>
+        <ion-item *ngIf="!(item$|async)?.calendar_token">
+          <ion-label color="danger">
+            <ion-icon name="warning"></ion-icon>
+            {{ "CALENDAR.SYNC_FIRST" | translate }}
+          </ion-label>
+        </ion-item>
+      <button ion-item color="danger" (click)="revoke()" *ngIf="(item$|async)?.calendar_token">
+        {{ "CALENDAR.REVOKE" | translate}}
+      </button>
      </ion-list>
     </ion-content>
   `
@@ -74,6 +82,8 @@ export class CalendarDetailsComponent {
   private duration = "15";
   private linkType = "app";
   private link = "";
+  private sub: Subscription;
+  private lastNotebook: Notebook;
 
   constructor(private store: Store<AppState>,
               private actions$: Actions,
@@ -105,13 +115,30 @@ export class CalendarDetailsComponent {
     console.log(this.profile, this.business, this.guid);
   }
 
-  ngOnInit() {
-    this.updateLink();
+  updateLink(nb) {
+    if (nb) {
+      this.lastNotebook = nb
+    }
+    this.link = `https://api.filterize.net/calendar/${this.lastNotebook.calendar_token}.ics?d=${this.duration}&link=${this.linkType}`;
   }
 
-  updateLink() {
-    this.item$.first().subscribe(nb => {
-      this.link = `https://api.filterize.net/calendar/${nb.calendar_token}.ics?d=${this.duration}&link=${this.linkType}`
+  ngOnInit() {
+    this.sub = this.item$.subscribe(nb => {
+      this.updateLink(nb);
+      console.log("sub", nb)
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
+
+  revoke() {
+    this.store.dispatch({
+      type: CalendarActions.REVOKE,
+      payload: this.guid
     });
   }
 

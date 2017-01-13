@@ -21,7 +21,6 @@ import { TagHierarchyElement, Tag } from "../../tags/tags.spec";
     
     <ion-content padding>
     
-      {{ "HIERARCHY.DESC" | translate}}
       <ion-list>
         <filterize-tag-hierarchy-item [element]="tags$ | async" [collapse]="false" ></filterize-tag-hierarchy-item>
       </ion-list>
