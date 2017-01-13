@@ -74,7 +74,7 @@ module.exports = function(grunt) {
       stripPrefix: rootDir + '/',
       // verbose defaults to false, but for the purposes of this demo, log more.
       ignoreUrlParametersMatching: [/./],
-      maximumFileSizeToCacheInBytes: 10485760,
+      maximumFileSizeToCacheInBytes: 104857600,
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/www\.googletagmanager\.com/,
