@@ -27,12 +27,38 @@ export const userlistReducer = (state=[], action) => {
         action.payload
       ];
 
-    case UserActions.BASIC_DETAILS_FROM_SERVER:
+    case UserActions.DETAILS_FROM_SERVER:
       return state
-        .map(obj => obj.profile_id == action.payload.profile.id
-          ? Object.assign(obj, action.payload, {"#dirty-db": true})
+        .map(obj => obj.profile_id == action.payload.profile_id
+          ? Object.assign(obj, action.payload, {"#dirty-db": true, "#dirty-server": false, "#dirty-server-sync": false})
           : obj
         );
+
+    case UserActions.SYNC_SINGLE_OK:
+      return state
+        .map(obj => obj._id == action.payload._id && obj._rev == action.payload._rev
+          ? Object.assign(obj, action.payload, {"#dirty-db": true, "#dirty-server": false, "#dirty-server-sync": false})
+          : obj
+        );
+
+    case UserActions.SYNC_SINGLE_FAILED:
+      return state
+        .map(obj => obj._id == action.payload._id && obj._rev == action.payload._rev
+          ? Object.assign(obj, {"#dirty-db": true, "#dirty-server": false, "#dirty-server-sync": true})
+          : obj
+        );
+
+    case UserActions.CHANGED:
+      return state.map(obj =>
+        (obj._id == action.payload._id)
+          ? Object.assign(
+            {},
+            obj,
+            action.payload,
+            {"#dirty-db": true, "#dirty-server": true, "#dirty-server-sync": false}
+          )
+          : obj
+      );
 
     default:
       return state;

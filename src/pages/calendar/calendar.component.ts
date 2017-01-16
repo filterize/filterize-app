@@ -31,8 +31,12 @@ import { CalendarDetailsComponent } from "./calendar-details.component";
       </ion-navbar>
     </ion-header>
     
-    <ion-content padding>  
-      <filterize-tbd feature="calendar"></filterize-tbd>
+    <ion-content padding>
+      <ion-list>
+        <ion-button ion-item *ngIf="!(business$ | async)" (click)="clickAll()">
+          <strong>{{ "CALENDAR.ALL" | translate }}</strong>
+        </ion-button>
+      </ion-list>
       <ion-list [virtualScroll]="items$ | async">
         <ion-button ion-item *virtualItem="let nb" (click)="clickNotebook(nb)">
           <ion-label>
@@ -53,6 +57,7 @@ import { CalendarDetailsComponent } from "./calendar-details.component";
 export class CalendarComponent {
   items$: Observable<Notebook[]>;
   detailsPage = CalendarDetailsComponent;
+  business$: Observable<boolean>;
 
   constructor(private store: Store<AppState>,
               private actions$: Actions,
@@ -61,6 +66,9 @@ export class CalendarComponent {
               private navCtrl: NavController,
               private translate: TranslateService) {
     this.items$ = resourceSrv.getNotebooks();
+    this.business$ = this.store.select("current_user")
+      .map(user => user["business"])
+      .distinctUntilChanged();
   }
 
   clickNotebook(nb: Notebook) {
@@ -73,6 +81,16 @@ export class CalendarComponent {
         })
       );
     }
+  }
+
+  clickAll(nb: Notebook) {
+    this.store.select("current_user").first().subscribe(user =>
+      this.navCtrl.push(CalendarDetailsComponent, {
+        profile: user["profile"],
+        business: user["business"],
+        guid: "all",
+      })
+    );
   }
 
   clickToggle(nb: Notebook, state) {

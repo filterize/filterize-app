@@ -44,7 +44,8 @@
     "LINK_WEB": "Web link",
     "DAY": "full day",
     "REVOKE": "Revoke calendar links",
-    "SYNC_FIRST": "Link can only be created of notebook is synchronized"
+    "SYNC_FIRST": "Link can only be created of notebook is synchronized",
+    "ALL": "All activated calendars"
   },
   "MAIL_IN": {
     "TITLE": "Mail-In"

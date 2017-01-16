@@ -26,14 +26,15 @@ export class UserEffects {
     .map(res => ({type: UserActions.LOGIN_SUCCESS, payload: res.json()}))
     .catch(res => Observable.of({type: UserActions.LOGIN_FAILED, payload: res.json()}));
 
+  /*
   @Effect() basicData$ = this.actions$
   // Listen for Login
     .ofType(UserActions.LOGIN_SUCCESS)
     .switchMap(action => this.http.get(
-      `${CONFIG.filterize.api_url}/user`,
+      `${CONFIG.filterize.api_url}/user/${action.payload.user_id}`,
       jwtHeaderOnlyOptions(action.payload.access_token),
       ))
-    .map(res => ({type: UserActions.BASIC_DETAILS_FROM_SERVER, payload: res.json()}));
+    .map(res => ({type: UserActions.DETAILS_FROM_SERVER, payload: res.json()}));*/
 
   /*
   @Effect() syncAfterLogin = this.actions$

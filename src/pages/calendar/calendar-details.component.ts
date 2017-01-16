@@ -12,6 +12,7 @@ import { notebookIgnoreDeleted, notebookSort } from "../../notebook/notebook.too
 import { ResourcesService } from "../../filterize-ressources/resources.service";
 import * as CalendarActions from "./calendar.actions"
 import * as UserActions from "../../user/user.actions";
+import { UserService } from "../../services/user.service";
 
 
 @Component({
@@ -35,7 +36,8 @@ import * as UserActions from "../../user/user.actions";
         <ion-item *ngIf="(item$|async)?.stack">
           <strong>{{ (item$ |async)?.stack}}:</strong>
         </ion-item>
-        <ion-item>{{ (item$ |async)?.name}}</ion-item>
+        <ion-item *ngIf="(item$ |async)?.name">{{ (item$ |async)?.name}}</ion-item>
+        <ion-item *ngIf="!(item$ |async)?.name">{{ "CALENDAR.ALL" | translate }}</ion-item>
         <ion-item>
           <ion-label>{{ "CALENDAR.DURATION" | translate }}</ion-label>
           <ion-select [(ngModel)]="duration" (ionChange)="updateLink()">
@@ -90,7 +92,8 @@ export class CalendarDetailsComponent {
               private alertCtrl: AlertController,
               private resourceSrv: ResourcesService,
               private params: NavParams,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private userSrv: UserService) {
     this.profile = this.params.get("profile");
     this.business = this.params.get("business") === true || this.params.get("business") === "true";
     this.guid = this.params.get("guid");
@@ -109,8 +112,18 @@ export class CalendarDetailsComponent {
         }
       });
 
-    this.item$ = this.store.select(USER_RESOURCES.notebook.store)
-      .map((nbs:Notebook[]) => nbs.find(nb => nb.guid === this.guid));
+    if (this.guid != "all") {
+      this.item$ = this.store.select(USER_RESOURCES.notebook.store)
+        .map((nbs: Notebook[]) => nbs.find(nb => nb.guid === this.guid));
+    } else {
+      this.item$ = this.userSrv.getCurrentUser()
+        .map(user => Object({
+          calendar_token: user["calendar_token"],
+          stack: null,
+          name: null,
+          _id: user["_id"]
+        }))
+    }
 
     console.log(this.profile, this.business, this.guid);
   }
@@ -119,7 +132,11 @@ export class CalendarDetailsComponent {
     if (nb) {
       this.lastNotebook = nb
     }
-    this.link = `https://api.filterize.net/calendar/${this.lastNotebook.calendar_token}.ics?d=${this.duration}&link=${this.linkType}`;
+    if (this.lastNotebook) {
+      this.link = `https://api.filterize.net/calendar/${this.lastNotebook.calendar_token}.ics?d=${this.duration}&link=${this.linkType}`;
+    } else {
+      this.link = "";
+    }
   }
 
   ngOnInit() {
@@ -136,10 +153,20 @@ export class CalendarDetailsComponent {
   }
 
   revoke() {
-    this.store.dispatch({
-      type: CalendarActions.REVOKE,
-      payload: this.guid
-    });
+    if (this.guid != "all") {
+      this.store.dispatch({
+        type: CalendarActions.REVOKE,
+        payload: this.guid
+      });
+    } else {
+      this.store.dispatch({
+        type: UserActions.CHANGED,
+        payload: {
+          _id: this.lastNotebook["_id"],
+          calendar_token: ""
+        }
+      })
+    }
   }
 
 }

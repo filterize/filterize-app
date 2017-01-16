@@ -47,7 +47,10 @@ export class ResourcesService {
           .distinctUntilChanged()
       );
     }
-    this.openSync$ = Observable.combineLatest(...obs)
+    obs.push(this.userSrv.getCurrentUser().map(obj => obj != null && (obj["#dirty-server"] || obj["#dirty-server-sync"])
+      ? 1 : 0));
+    this.openSync$ = Observable
+      .combineLatest(...obs)
       .map(elems => elems.reduce((a, b) => a+b, 0));
   }
 
@@ -70,14 +73,32 @@ export class ResourcesService {
       .withLatestFrom(
         this.userSrv.getCurrentUser()
           .map(data => data
-            ? Object({user_id: data.user_id, business_id: data.business_id, access_token: data.access_token})
+            ? data
             : Object({user_id: null, business_id: null})),
         this.store.select("current_user").map(data => data["business"])
-      ).subscribe(([action, user_data, business]) => {
-      let obj_id = business ? user_data["business_id"] : user_data["user_id"];
-      let access_token = (action.payload) ? action.payload.access_token : user_data["access_token"];
-      this.startSync(obj_id, access_token, business);
-    });
+      )
+      .subscribe(([action, user_data, business]) => {
+        let obj_id = business ? user_data["business_id"] : user_data["user_id"];
+        let access_token = (action.payload) ? action.payload.access_token : user_data["access_token"];
+        this.startSync(obj_id, access_token, business);
+
+        if (user_data["user_id"]) {
+          this.http.put(
+            `${CONFIG.filterize.api_url}/user/${user_data["user_id"]}`,
+            {
+              data: user_data["#dirty-server-sync"] ? user_data : null,
+              state: user_data["profile_id"]
+            },
+            jwtHeaderOnlyOptions(access_token),
+          )
+            .map(data => data.json())
+            .map(data => Object.assign({}, data["data"], {"profile_id": data["state"]}))
+            .subscribe(res => {
+              this.store.dispatch({type: UserActions.DETAILS_FROM_SERVER, payload: res})
+            });
+        }
+      });
+
 
     for (let type_name in USER_RESOURCES) {
       let type_obj = USER_RESOURCES[type_name];
@@ -107,6 +128,37 @@ export class ResourcesService {
             );
         });
     }
+
+    this.userSrv.getCurrentUser()
+      .filter(obj => obj != null)
+      .filter(obj => !obj["#dirty-db"] && !obj["#dirty-server-sync"] && obj["#dirty-server"])
+      .distinctUntilChanged()
+      .subscribe(user_data => {
+        if (user_data["user_id"]) {
+          this.http.put(
+            `${CONFIG.filterize.api_url}/user/${user_data["user_id"]}`,
+            {
+              data: user_data,
+              state: {
+                _id: user_data._id,
+                _rev: user_data._rev
+              }
+            },
+            jwtHeaderOnlyOptions(user_data["access_token"]),
+          )
+            .map(data => data.json())
+            .map(data => Object.assign({}, data["data"], data["state"]))
+            .subscribe(res => {
+              this.store.dispatch({type: UserActions.SYNC_SINGLE_OK, payload: res})
+            }, (err) => {
+              this.store.dispatch({type: UserActions.SYNC_SINGLE_FAILED, payload: {
+                _id: user_data._id,
+                _rev: user_data._rev,
+                error: err
+              }})
+            });
+        }
+      });
   }
 
   startSync(obj_id, access_token, business) {

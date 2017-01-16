@@ -88,7 +88,7 @@ let getSpecialUserResourceReducer = (type: any, type_name) => {
       case `${type.action_prefix}_SINGLE_SYNC_FAIL`:
         return state.map(obj =>
           (obj._id == action.payload._id && obj._rev == action.payload._rev)
-            ? Object.assign({}, obj, {"#dirty-server-sync": true, "#dirty-db": true})
+            ? Object.assign({}, obj, {"#dirty-server": false, "#dirty-server-sync": true, "#dirty-db": true})
             : obj
         );
 
