@@ -48,7 +48,12 @@
     "ALL": "All activated calendars"
   },
   "MAIL_IN": {
-    "TITLE": "Mail-In"
+    "TITLE": "Mail-In",
+    "ADDRESS": "Evernote mail-in address",
+    "ADDRESS_SHORT": "mail-in address",
+    "INTRO": "Please insert your Evernote mail-in address to activate this feature.",
+    "REQUIRE_TOKEN": "Require security token",
+    "RESET_TOKEN": "Reset security token"
   },
   "PAYMENT": {
     "TITLE": "Payment"

@@ -1,7 +1,9 @@
 import { UserService } from "./user.service";
 import { Injectable } from "@angular/core";
+import { App, NavController } from "ionic-angular";
 
 declare var zE;
+declare var $zopim;
 
 @Injectable()
 export class ZendeskService {
@@ -20,10 +22,21 @@ export class ZendeskService {
         }
       }
       zE(() => zE.identify(data));
-    })
+    });
   }
 
   startSupport() {
-    zE.activate({hideOnClose: true});
+    if (!!zE.activate) {
+      zE.activate({hideOnClose: true});
+    }
+  }
+
+  updatePath() {
+    if (!!$zopim && !!$zopim.livechat) {
+      $zopim.livechat.sendVisitorPath();
+    }
+    if (!!zE.activate) {
+      zE.setHelpCenterSuggestions({url: true});
+    }
   }
 }

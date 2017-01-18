@@ -18,6 +18,7 @@ import { AppState } from "./appstate";
 import { Actions } from "@ngrx/effects";
 import * as UserActions from "../user/user.actions";
 import { TagHierarchyComponent } from "../pages/tag-hierarchy/tag-hierarchy.component";
+import { ZendeskService } from "../services/zendesk.service";
 
 
 @Component({
@@ -40,7 +41,8 @@ export class MyApp {
               private ionicApp: IonicApp,
               private menuCtrl: MenuController,
               private store: Store<AppState>,
-              private actions$: Actions) {
+              private actions$: Actions,
+              private zendeskSrv: ZendeskService) {
     translate.setDefaultLang("en");
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -69,6 +71,8 @@ export class MyApp {
     this.actions$.ofType(UserActions.SELECT).subscribe(goHome);
     this.actions$.ofType(UserActions.LOGIN_SUCCESS).subscribe(goHome);
     this.actions$.ofType(UserActions.LOGOUT).subscribe(() => this.navChild.setRoot(this.login_start));
+
+    this.navChild.viewDidEnter.subscribe(() => this.zendeskSrv.updatePath());
   }
 
   // https://gist.github.com/t00ts/3542ac4573ffbc73745641fa269326b8
