@@ -41,6 +41,23 @@
     }
   </style>
 
+  <script>
+    window.zEmbed||(function(){
+      var queue = [];
+
+      window.zEmbed = function() {
+        queue.push(arguments);
+      }
+      window.zE = window.zE || window.zEmbed;
+      document.zendeskHost = 'filterize.zendesk.com';
+      document.zEQueue = queue;
+    }());
+    zE(function() {
+      zE.hide();
+    });
+  </script>
+  <script src="https://assets.zendesk.com/embeddable_framework/main.js" data-ze-csp="true" async defer></script>
+
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->

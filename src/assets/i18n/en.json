@@ -58,5 +58,8 @@
   },
   "SETTINGS": {
     "TITLE": "Settings"
+  },
+  "ZENDESK": {
+    "SUPPORT": "Support"
   }
 }

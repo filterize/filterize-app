@@ -44,6 +44,7 @@ import { PaymentComponent } from "../pages/payment/payment.component";
 import { SettingsComponent } from "../pages/settings/settings.component";
 import { NotebookTitleComponent } from "../notebook/notebook-title.component";
 import { CalendarDetailsComponent } from "../pages/calendar/calendar-details.component";
+import { ZendeskService } from "../services/zendesk.service";
 
 
 /*const appRoutes = [
@@ -169,7 +170,8 @@ if (CONFIG.production) {
     DbGlobalService,
     DbUserService,
     UserService,
-    ResourcesService
+    ResourcesService,
+    ZendeskService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

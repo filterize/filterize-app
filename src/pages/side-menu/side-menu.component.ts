@@ -20,6 +20,7 @@ import { MailInComponent } from "../mail-in/mail-in.component";
 import { LibraryComponent } from "../library/library.component";
 import { PaymentComponent } from "../payment/payment.component";
 import { SettingsComponent } from "../settings/settings.component";
+import { ZendeskService } from "../../services/zendesk.service";
 
 let COMPONENTS = {
   dashboard: DashboardComponent,
@@ -126,6 +127,11 @@ let COMPONENTS = {
           {{ "SETTINGS.TITLE" | translate }}
         </button>
 
+        <button ion-item menuClose (click)="startSupport()">
+          <ion-icon name="help"></ion-icon> &nbsp;
+          {{ "ZENDESK.SUPPORT" | translate }}
+        </button>
+
       </ion-list>
       <br><br><br>
       
@@ -160,7 +166,8 @@ export class SideMenuComponent {
               private userService: UserService,
               private modalCtrl: ModalController,
               private appCtrl: App,
-              private resSrv: ResourcesService
+              private resSrv: ResourcesService,
+              private zendeskSrv: ZendeskService
               ) {
     this.currentUser$ = userService.getCurrentUser();
     this.business$ = userService.isBusiness();
@@ -201,4 +208,7 @@ export class SideMenuComponent {
     });
   }
 
+  startSupport() {
+    this.zendeskSrv.startSupport();
+  }
 }
