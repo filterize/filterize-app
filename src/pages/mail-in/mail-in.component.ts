@@ -27,28 +27,34 @@ import { ResourcesService } from "../../filterize-ressources/resources.service";
       </ion-navbar>
     </ion-header>
     
-    <ion-content padding>  
+    <ion-content>  
       <ion-list>
-        <ion-button ion-item *ngIf="!has_address" (click)="changeAddress()">
-          {{ "MAIL_IN.INTRO" | translate }}
-        </ion-button>
-        <ion-button ion-item *ngIf="has_address" (click)="changeAddress()">
-          {{ (current_user$ | async)?.mailin_address }}
-        </ion-button>
-        <ion-item>
-          <ion-label>{{ "MAIL_IN.REQUIRE_TOKEN" | translate }}</ion-label>
-          <ion-toggle 
-            [disabled]="!has_address"
-            (ionChange)="toggleToken($event)"
-            [ngModel]="require_token"></ion-toggle>
-        </ion-item>
-        <ion-button ion-item outline *ngIf="require_token" color="danger" >
-          {{ "MAIL_IN.RESET_TOKEN" | translate}}
-        </ion-button>
-        <filterize-mailin-notebook 
-          *ngFor="let nb of (notebooks$|async)" 
-          [notebook]="nb" [user]="current_user" [business]="business">
-        </filterize-mailin-notebook>
+        <ion-item-group>
+          <ion-item-divider color="light">{{ "SETTINGS.TITLE" | translate }}</ion-item-divider>
+          <ion-button ion-item *ngIf="!has_address" (click)="changeAddress()">
+            {{ "MAIL_IN.INTRO" | translate }}
+          </ion-button>
+          <ion-button ion-item *ngIf="has_address" (click)="changeAddress()">
+            {{ (current_user$ | async)?.mailin_address }}
+          </ion-button>
+          <ion-item>
+            <ion-label>{{ "MAIL_IN.REQUIRE_TOKEN" | translate }}</ion-label>
+            <ion-toggle 
+              [disabled]="!has_address"
+              (ionChange)="toggleToken($event)"
+              [ngModel]="require_token"></ion-toggle>
+          </ion-item>
+          <ion-button ion-item outline *ngIf="require_token" color="danger" >
+            {{ "MAIL_IN.RESET_TOKEN" | translate}}
+          </ion-button>
+        </ion-item-group>
+        <ion-item-group>
+          <ion-item-divider color="light">{{ "MAIL_IN.NOTEBOOKS" | translate }}</ion-item-divider>
+          <filterize-mailin-notebook 
+            *ngFor="let nb of (notebooks$|async)" 
+            [notebook]="nb" [user]="current_user" [business]="business">
+          </filterize-mailin-notebook>
+        </ion-item-group>
       </ion-list>
     </ion-content>
   `

@@ -88,47 +88,47 @@ let COMPONENTS = {
         </ion-item>
         
         <button ion-item menuClose (click)="goto('dashboard')">
-          <ion-icon name="speedometer"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="speedometer"></ion-icon></ion-avatar>
           {{ "DASHBOARD.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="goto('hierarchy')">
-          <ion-icon name="git-pull-request"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="git-pull-request"></ion-icon></ion-avatar>
           {{ "HIERARCHY.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="goto('filter')">
-          <ion-icon name="funnel"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="funnel"></ion-icon></ion-avatar>
           {{ "FILTER.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="goto('calendar')">
-          <ion-icon name="calendar"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="calendar"></ion-icon></ion-avatar>
           {{ "CALENDAR.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="goto('mail_in')">
-          <ion-icon name="mail"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="mail"></ion-icon></ion-avatar>
           {{ "MAIL_IN.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="goto('payment')">
-          <ion-icon name="card"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="card"></ion-icon></ion-avatar>
           {{ "PAYMENT.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="goto('library')">
-          <ion-icon name="map"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="map"></ion-icon></ion-avatar>
           {{ "LIBRARY.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="goto('settings')">
-          <ion-icon name="settings"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="settings"></ion-icon></ion-avatar>
           {{ "SETTINGS.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="startSupport()">
-          <ion-icon name="help"></ion-icon> &nbsp;
+          <ion-avatar item-left><ion-icon name="help"></ion-icon></ion-avatar>
           {{ "ZENDESK.SUPPORT" | translate }}
         </button>
 
@@ -152,7 +152,14 @@ let COMPONENTS = {
     </ion-footer>
   </ion-menu>
   `,
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  styles: [`
+    ion-avatar {
+      min-height: unset;
+      min-width: 1.5rem;
+      text-align: center;
+    }
+  `]
+
 })
 export class SideMenuComponent {
   @Input() enabled = true;

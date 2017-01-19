@@ -19,7 +19,7 @@ import { TagHierarchyElement, Tag } from "../../tags/tags.spec";
       </ion-navbar>
     </ion-header>
     
-    <ion-content padding>
+    <ion-content>
     
       <ion-list>
         <filterize-tag-hierarchy-item [element]="tags$ | async" [collapse]="false" ></filterize-tag-hierarchy-item>

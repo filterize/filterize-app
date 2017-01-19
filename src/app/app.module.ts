@@ -46,6 +46,7 @@ import { NotebookTitleComponent } from "../notebook/notebook-title.component";
 import { CalendarDetailsComponent } from "../pages/calendar/calendar-details.component";
 import { ZendeskService } from "../services/zendesk.service";
 import { MailinNotebookComponent } from "../pages/mail-in/mail-in-notebook.component";
+import { FixedSizeIconComponent } from "./fixed-icon.component";
 
 
 /*const appRoutes = [
@@ -144,7 +145,8 @@ if (CONFIG.production) {
     SettingsComponent,
     NotebookTitleComponent,
     CalendarDetailsComponent,
-    MailinNotebookComponent
+    MailinNotebookComponent,
+    FixedSizeIconComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],

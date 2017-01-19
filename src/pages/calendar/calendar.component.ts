@@ -31,7 +31,7 @@ import { CalendarDetailsComponent } from "./calendar-details.component";
       </ion-navbar>
     </ion-header>
     
-    <ion-content padding>
+    <ion-content>
       <ion-list>
         <ion-button ion-item *ngIf="!(business$ | async)" (click)="clickAll()">
           <strong>{{ "CALENDAR.ALL" | translate }}</strong>
