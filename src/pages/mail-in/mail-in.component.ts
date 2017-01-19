@@ -28,7 +28,6 @@ import { ResourcesService } from "../../filterize-ressources/resources.service";
     </ion-header>
     
     <ion-content padding>  
-      <filterize-tbd feature="mail-in"></filterize-tbd>
       <ion-list>
         <ion-button ion-item *ngIf="!has_address" (click)="changeAddress()">
           {{ "MAIL_IN.INTRO" | translate }}
@@ -46,12 +45,10 @@ import { ResourcesService } from "../../filterize-ressources/resources.service";
         <ion-button ion-item outline *ngIf="require_token" color="danger" >
           {{ "MAIL_IN.RESET_TOKEN" | translate}}
         </ion-button>
-      </ion-list>
-      
-      <ion-list [virtualScroll]="notebooks$ | async">
-        <ion-item *virtualItem="let nb">
-          <filterize-mailin-notebook [notebook]="nb"></filterize-mailin-notebook>
-        </ion-item>
+        <filterize-mailin-notebook 
+          *ngFor="let nb of (notebooks$|async)" 
+          [notebook]="nb" [user]="current_user" [business]="business">
+        </filterize-mailin-notebook>
       </ion-list>
     </ion-content>
   `
@@ -63,6 +60,7 @@ export class MailInComponent {
   require_token: boolean = false;
   sub: Subscription;
   notebooks$: Observable<Notebook[]>;
+  business: boolean = false;
 
   constructor(private store: Store<AppState>,
               private actions$: Actions,
@@ -75,11 +73,16 @@ export class MailInComponent {
   }
 
   ngOnInit() {
-    this.sub = this.current_user$.subscribe(user => {
-      this.has_address = !!user ? !!user.mailin_address : false;
-      this.require_token = !!user ? !!user.mailin_require_token : false;
-      this.current_user = user;
-    })
+    this.sub = Observable.combineLatest(
+      this.current_user$,
+      this.store.select("current_user").map(data => data["business"])
+    )
+      .subscribe(([user, business]) => {
+        this.has_address = !!user ? !!user["mailin_address"] : false;
+        this.require_token = !!user ? !!user["mailin_require_token"] : false;
+        this.current_user = user;
+        this.business = business;
+      })
   }
 
   ngOnDestroy() {

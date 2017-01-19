@@ -4,6 +4,7 @@ import { App, NavController } from "ionic-angular";
 
 declare var zE;
 declare var $zopim;
+declare var window;
 
 @Injectable()
 export class ZendeskService {
@@ -17,8 +18,8 @@ export class ZendeskService {
         }
       } else {
         data = {
-          name: null,
-          email: null,
+          name: "",
+          email: "",
         }
       }
       zE(() => zE.identify(data));
@@ -32,7 +33,7 @@ export class ZendeskService {
   }
 
   updatePath() {
-    if (!!$zopim && !!$zopim.livechat) {
+    if (window["$zopim"] != undefined && !!$zopim.livechat) {
       $zopim.livechat.sendVisitorPath();
     }
     if (!!zE.activate) {

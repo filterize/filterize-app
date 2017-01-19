@@ -15,9 +15,11 @@ export class DbGlobalService {
   private db;
 
   constructor(private store: Store<AppState>, private actions$: Actions) {
+    /*
     if (!CONFIG.production) {
       window["PouchDB"] = PouchDB;
     }
+    */
 
     this.db = new PouchDB(
       "global",
