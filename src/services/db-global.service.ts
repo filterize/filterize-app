@@ -36,17 +36,26 @@ export class DbGlobalService {
 
     store.select("userlist")
       .flatMap((userList: Object[]) => Observable.from(userList))
-      .filter(obj => "#dirty-db" in obj)
+      .filter(obj => obj["#dirty-db"])
       .subscribe(user => this.store_obj(user));
 
     store.select("current_user")
-      .filter(obj => "#dirty-db" in obj)
+      .filter(obj => obj["#dirty-db"])
       .subscribe(conf => this.store_obj(conf));
 
     store.select("settings")
-      .filter(obj => "#dirty-db" in obj)
+      .filter(obj => obj["#dirty-db"])
       .subscribe(conf => this.store_obj(conf));
 
+    for (let res of GLOBAL_RESOURCES) {
+      store.select("globals")
+        .map(globals => globals[res.name])
+        .distinctUntilChanged()
+        .filter(obj => obj && obj["#dirty-db"])
+        .subscribe(conf => this.store_obj(conf));
+    }
+
+    /*
     store.select("globals")
       .switchMap(globals => {
         let objects = [];
@@ -55,8 +64,9 @@ export class DbGlobalService {
         }
         return Observable.from(objects)
       })
-      .filter(obj => "#dirty-db" in obj)
+      .filter(obj => obj["#dirty-db"])
       .subscribe(conf => this.store_obj(conf));
+      */
 
     Observable.fromPromise<SearchDocsResult>(this.db.allDocs({include_docs: true}))
       .map(result => result.rows)

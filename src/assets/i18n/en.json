@@ -57,7 +57,15 @@
     "NOTEBOOKS": "Notebooks"
   },
   "PAYMENT": {
-    "TITLE": "Payment"
+    "TITLE": "Payment",
+    "0": "Free",
+    "1": "Plus",
+    "2": "Premium",
+    "BUSINESS": "Business",
+    "CURRENT_PLAN": "Current plan",
+    "SUBSCRIPTION": "Subscription",
+    "NEXT_CAPTURE": "Next capture",
+    "VALID_UNTIL": "Valid until"
   },
   "LIBRARY": {
     "TITLE": "Library"

@@ -185,7 +185,10 @@ export class SideMenuComponent {
   @Input() content;
 
   goto(target) {
+    this.currentUser$.first().subscribe(user => console.log("goto", "user", user));
+    console.log("preif");
     if (target in COMPONENTS) {
+      console.log("if");
       this.appCtrl.getRootNav().setRoot(COMPONENTS[target]);
     }
   }

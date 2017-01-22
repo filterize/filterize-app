@@ -37,5 +37,10 @@ export const GLOBAL_RESOURCES = [
     path: "/global/country_divisions",
     action_prefix: "COUNTRY_DEVISIONS",
     name: "country_devisions"
+  },
+  {
+    path: "/global/countries",
+    action_prefix: "COUNTRIES",
+    name: "countries"
   }
 ];

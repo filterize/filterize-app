@@ -47,6 +47,11 @@ import { CalendarDetailsComponent } from "../pages/calendar/calendar-details.com
 import { ZendeskService } from "../services/zendesk.service";
 import { MailinNotebookComponent } from "../pages/mail-in/mail-in-notebook.component";
 import { FixedSizeIconComponent } from "./fixed-icon.component";
+import { CountryService } from "../services/country.service";
+import { AddressComponent } from "../tools/address.component";
+import { ConfigService } from "../services/config.service";
+import { CustomDatePipe } from "../tools/customdate.pipe";
+import { AddressChangeComponent } from "../tools/address-change.component";
 
 
 /*const appRoutes = [
@@ -146,7 +151,10 @@ if (CONFIG.production) {
     NotebookTitleComponent,
     CalendarDetailsComponent,
     MailinNotebookComponent,
-    FixedSizeIconComponent
+    FixedSizeIconComponent,
+    AddressComponent,
+    CustomDatePipe,
+    AddressChangeComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -166,7 +174,8 @@ if (CONFIG.production) {
     MailInComponent,
     PaymentComponent,
     SettingsComponent,
-    CalendarDetailsComponent
+    CalendarDetailsComponent,
+    AddressChangeComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },
@@ -175,7 +184,9 @@ if (CONFIG.production) {
     DbUserService,
     UserService,
     ResourcesService,
-    ZendeskService
+    ZendeskService,
+    CountryService,
+    ConfigService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
