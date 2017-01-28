@@ -52,6 +52,8 @@ import { AddressComponent } from "../tools/address.component";
 import { ConfigService } from "../services/config.service";
 import { CustomDatePipe } from "../tools/customdate.pipe";
 import { AddressChangeComponent } from "../tools/address-change.component";
+import { SearchSelectModalComponent } from "../tools/search-select-modal.component";
+import { SearchSelectComponent } from "../tools/search-select.component";
 
 
 /*const appRoutes = [
@@ -154,7 +156,9 @@ if (CONFIG.production) {
     FixedSizeIconComponent,
     AddressComponent,
     CustomDatePipe,
-    AddressChangeComponent
+    AddressChangeComponent,
+    SearchSelectModalComponent,
+    SearchSelectComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -175,7 +179,9 @@ if (CONFIG.production) {
     PaymentComponent,
     SettingsComponent,
     CalendarDetailsComponent,
-    AddressChangeComponent
+    AddressChangeComponent,
+    SearchSelectModalComponent,
+    SearchSelectComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },

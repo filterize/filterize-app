@@ -102,6 +102,14 @@ export class DashboardComponent {
 
   editAddress() {
     let modal = this.modalCtrl.create(AddressChangeComponent, {obj: this.current_user});
+    modal.onDidDismiss(data => {
+      if (data != null) {
+        this.store.dispatch({
+          type: UserActions.CHANGED,
+          payload: Object.assign({}, {_id: this.current_user._id}, data)
+        })
+      }
+    })
     modal.present();
   }
 

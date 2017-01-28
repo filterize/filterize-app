@@ -117,10 +117,12 @@ export class DbGlobalService {
     obj = Object.assign({}, obj);
     if ("#dirty-db" in obj) {
       delete obj["#dirty-db"];
+      console.log("store", obj);
       this.db.put(obj).catch(err => {
         this.db.get(obj._id).then(stored => {
           delete obj._id;
           delete obj._rev;
+          console.log("store-newrev", stored);
           Object.assign(stored, obj);
           this.db.put(stored);
         })

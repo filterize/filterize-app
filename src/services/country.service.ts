@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppState } from "../app/appstate";
 import { Observable } from "rxjs";
+import { SelectItem } from "../tools/search-select.spec";
 @Injectable()
 export class CountryService {
   country_devisions$;
@@ -33,6 +34,14 @@ export class CountryService {
   get_country(code: string): Observable<string> {
     return this.countries$
       .map(c => c[code] ? c[code] : code);
+  }
+
+  getCountryObservable() {
+    return this.countries$;
+  }
+
+  getStates(country: string) {
+    return this.country_devisions$.map(obj => country in obj ? obj[country] : {});
   }
 
 }
