@@ -30,10 +30,6 @@ import { AddressChangeComponent } from "../../tools/address-change.component";
     
     <ion-content>  
     <ion-card>
-      <ion-card-content><filterize-tbd feature="dashboard"></filterize-tbd></ion-card-content>
-    </ion-card>
-     
-    <ion-card>
       <ion-card-header>Profile</ion-card-header>
       
       <ion-list>
@@ -63,6 +59,11 @@ import { AddressChangeComponent } from "../../tools/address-change.component";
           </span>
         </button>
       </ion-list>
+    </ion-card>
+     
+    <ion-card>
+      <ion-card-header>Evernote</ion-card-header>
+      <ion-card-content><filterize-tbd feature="dashboard"></filterize-tbd></ion-card-content>
     </ion-card>
      
     </ion-content>

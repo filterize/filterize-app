@@ -103,7 +103,7 @@ export class DbGlobalService {
       }
     }
     for (let res of GLOBAL_RESOURCES) {
-      if (obj._id = res.name) {
+      if (obj._id == res.name) {
         this.store.dispatch({
           type: `${res.action_prefix}_FROM_DATABASE`,
           payload: obj

@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { CONFIG } from "./config";
 
 let FEATURES = [
-  "dashboard",
   "filter",
+  "dashboard",
   "settings",
   "payment",
   "library"

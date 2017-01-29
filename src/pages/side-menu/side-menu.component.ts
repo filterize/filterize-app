@@ -201,7 +201,11 @@ export class SideMenuComponent {
 
   clickLogout() {
     this.currentUser$.first().subscribe(
-      user => this.store.dispatch({type: UserActions.LOGOUT, payload: user._id})
+      user => {
+        if (user) {
+          this.store.dispatch({type: UserActions.LOGOUT, payload: user._id});
+        }
+      }
     );
   }
 

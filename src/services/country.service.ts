@@ -20,7 +20,7 @@ export class CountryService {
   get_state(code: string): Observable<string> {
     return this.country_devisions$
       .map(cd => {
-        let country = code.split("-")[0];
+        let country = code ? code.split("-")[0] : "";
         if (cd[country] && cd[country].find) {
           let dev = cd[country].find(obj => obj["code"] == code);
           if (dev) {
