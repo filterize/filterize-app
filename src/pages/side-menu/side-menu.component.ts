@@ -21,12 +21,13 @@ import { LibraryComponent } from "../library/library.component";
 import { PaymentComponent } from "../payment/payment.component";
 import { SettingsComponent } from "../settings/settings.component";
 import { ZendeskService } from "../../services/zendesk.service";
+import { FilterGroupsComponent } from "../filter/filter-groups.component";
 
 let COMPONENTS = {
   dashboard: DashboardComponent,
   login: LoginSignupComponent,
   hierarchy: TagHierarchyComponent,
-  filter: FilterComponent,
+  filter: FilterGroupsComponent,
   calendar: CalendarComponent,
   library: LibraryComponent,
   mail_in: MailInComponent,

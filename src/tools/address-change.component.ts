@@ -28,23 +28,10 @@ import { SelectItem } from "./search-select.spec";
     <ion-content>  
      
       <ion-list>
-        <ion-item *ngFor="let field of FIELDS">
+        <ion-item *ngFor="let field of FIELDS_NO_SELECT">
           <ion-label floating>{{ "ADDRESS."+field | uppercase | translate }}</ion-label>
           <ion-input type="text" [(ngModel)]="data[field]"></ion-input>
         </ion-item>
-        
-        <ion-item>
-          <ion-label>{{ "ADDRESS.COUNTRY" | translate }}</ion-label>
-          <ion-select type="text" [(ngModel)]="data.country">
-            <ion-option value="DE">Germany</ion-option>
-          </ion-select>
-        </ion-item>
-        
-        <button ion-item>
-          <small>{{ "ADDRESS.COUNTRY" | translate }}</small><br>
-          FOO
-          <ion-icon name="arrow-dropright" itemright></ion-icon>
-        </button>
         
         <filterize-select 
           title="{{ 'ADDRESS.STATE' | translate }}"
@@ -77,6 +64,7 @@ export class AddressChangeComponent implements OnInit {
     "state",
     "country"
   ];
+  FIELDS_NO_SELECT = this.FIELDS.filter(obj => (obj != "state" && obj != "country"));
   obj = null;
   show_company: boolean = false;
 

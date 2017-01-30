@@ -34,7 +34,10 @@
     "DESC": "A nice tag hierarchy description."
   },
   "FILTER": {
-    "TITLE": "Filter"
+    "TITLE": "Filter",
+    "MY": "Personal filters",
+    "GLOBAL": "Business-wide filters",
+    "NO_STACK": "empty stack"
   },
   "CALENDAR": {
     "TITLE": "Calendar",

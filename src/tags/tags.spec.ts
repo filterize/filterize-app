@@ -1,6 +1,6 @@
 export interface Tag {
   name: string,
-  "#hash(pin)"?: string,
+  "#hash"?: string,
   parentGuid?: string,
   active: boolean,
   "#changed"?: number,

@@ -54,6 +54,10 @@ import { CustomDatePipe } from "../tools/customdate.pipe";
 import { AddressChangeComponent } from "../tools/address-change.component";
 import { SearchSelectModalComponent } from "../tools/search-select-modal.component";
 import { SearchSelectComponent } from "../tools/search-select.component";
+import { FilterGroupsComponent } from "../pages/filter/filter-groups.component";
+import { FilterStacksComponent } from "../pages/filter/filter-stacks.component";
+import { FilterListComponent } from "../pages/filter/filter-list.component";
+import { FilterService } from "../filter/filter.service";
 
 
 /*const appRoutes = [
@@ -86,7 +90,13 @@ let imports = [
       { component: UserSelectComponent, name: 'Select', segment: 'select-user' },
       { component: TagHierarchyComponent, name: 'Tag Hierarchy', segment: 'tag-hierarchy' },
       { component: DashboardComponent, name: 'Dashboard', segment: 'dashboard' },
-      { component: FilterComponent, name: 'Filter', segment: 'filter' },
+      { component: FilterGroupsComponent, name: 'Filter', segment: 'filter' },
+      { component: FilterStacksComponent, name: 'Filter Stacks', segment: 'filter/:profile/:business/:group',
+        defaultHistory: [FilterGroupsComponent]},
+      { component: FilterListComponent, name: 'Filter', segment: 'filter/:profile/:business/:group/:stack',
+        defaultHistory: [FilterGroupsComponent, FilterStacksComponent]},
+      { component: FilterComponent, name: 'Filter Details', segment: 'filter/:profile/:business/:group/:stack/:guid',
+        defaultHistory: [FilterGroupsComponent, FilterStacksComponent, FilterListComponent]},
       { component: CalendarComponent, name: 'Calendar', segment: 'calendar' },
       { component: CalendarDetailsComponent, name: 'Calendar Details', segment: 'calendar/:profile/:business/:guid',
         defaultHistory: [CalendarComponent]},
@@ -158,7 +168,10 @@ if (CONFIG.production) {
     CustomDatePipe,
     AddressChangeComponent,
     SearchSelectModalComponent,
-    SearchSelectComponent
+    SearchSelectComponent,
+    FilterGroupsComponent,
+    FilterStacksComponent,
+    FilterListComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -181,7 +194,10 @@ if (CONFIG.production) {
     CalendarDetailsComponent,
     AddressChangeComponent,
     SearchSelectModalComponent,
-    SearchSelectComponent
+    SearchSelectComponent,
+    FilterGroupsComponent,
+    FilterStacksComponent,
+    FilterListComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },
@@ -192,7 +208,8 @@ if (CONFIG.production) {
     ResourcesService,
     ZendeskService,
     CountryService,
-    ConfigService
+    ConfigService,
+    FilterService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
