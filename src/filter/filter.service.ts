@@ -59,30 +59,7 @@ export class FilterService {
       .map((obj: UserName[]) => obj.sort((a: UserName, b:UserName) => a.name < b.name ? -1 : 1));
   }
 
-  getFilterByGroup(business:boolean|string, group:string|number): Observable<Filter[]> {
-    if (typeof business == "string") {
-      business = (business as string).toLowerCase() == "true";
-    }
-
-    let condition: (Filter)=>boolean = (f) => true;
-
-    if (business) {
-
-      if (group == "global") {
-        condition = (f) => !f.users
-      }
-      else {
-        if (group == "my") {
-          this.user$.first().subscribe(user => group = user["user_id"] as number);
-        }
-        group = typeof group == "string" ? parseInt(group as string) : group;
-        condition = (f) => f.users.find((elem: FilterUser) => elem.user == group);
-      }
-    }
-    return this.filters$.map(list => list.filter(f => condition(f)));
-  }
-
-  getStacksByGroup(business:boolean|string, group:string|number): Observable<string[]> {
+  getFilterByGroupAndStack(business:boolean|string, group:string|number, stack: string): Observable<Filter[]> {
     if (typeof business == "string") {
       business = (business as string).toLowerCase() == "true";
     }
@@ -114,6 +91,67 @@ export class FilterService {
           }
           return false;
         };
+      }
+      toStack = (f) => {
+        for (let u in f.users) {
+          if (f.users[u].user == group) return f.users[u].stack ? f.users[u].stack : "";
+        }
+        return "";
+      };
+    }
+
+    let stack_condition: (Filter)=>boolean;
+    if (stack == null) {
+      stack_condition = (f) => true;
+    } else {
+      stack_condition = (f) => toStack(f) == stack;
+    }
+
+    return this.filters$
+      // ignore deleted filter
+      .map(list => list.filter(f => !f.deleted))
+      // check for group
+      .map(list => list.filter(f => condition(f)))
+      // check for stack
+      .map(list => list.filter(f => stack_condition(f)))
+      // sort by order
+      .map(list => list.sort((a:Filter, b:Filter) => Math.sign(a.order-b.order)));
+  }
+
+  getStacksByGroup(business:boolean|string, group:string|number): Observable<string[]> {
+    if (typeof business == "string") {
+      business = (business as string).toLowerCase() == "true";
+    }
+
+    let condition: (Filter)=>boolean = (f) => true;
+    let toStack: (Filter)=>string = (f) => f.stack ? f.stack : "";
+
+    if (business) {
+
+      if (group == "global") {
+        condition = (f) => {
+          for (let x in f.users) {
+            return false;
+          }
+          return true;
+        }
+      }
+      else {
+        if (group == "my") {
+          this.user$
+            .first()
+            .subscribe(user => group = user ? user["user_id"] as number : null);
+        }
+        group = typeof group == "string" ? parseInt(group as string) : group;
+        condition = (f) => {
+          if (!f.users) {
+            return false;
+          }
+          for (let u in f.users) {
+            if (f.users[u].user == group) return true;
+          }
+          return false;
+        };
         toStack = (f) => {
           for (let u in f.users) {
             if (f.users[u].user == group) return f.users[u].stack ? f.users[u].stack : "";
@@ -123,6 +161,8 @@ export class FilterService {
       }
     }
     return this.filters$
+      // ignore deleted filter
+      .map(list => list.filter(f => !f.deleted))
       // check if in selected group
       .map(list => list.filter(f => condition(f)))
       // extract stack

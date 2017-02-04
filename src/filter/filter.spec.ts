@@ -39,6 +39,8 @@ export interface Filter {
   "#dirty-server"?: boolean,
   "#dirty-server-sync"?: boolean,
   "#dirty-db"?: boolean,
+  "#can_edit": boolean,
+  deleted?: boolean,
   _id?: string
   _rev?: string
 }
