@@ -3,12 +3,13 @@ import { Store } from '@ngrx/store'
 import { AppState } from "../../app/appstate";
 import * as UserActions from "../../user/user.actions";
 import { Actions } from "@ngrx/effects";
-import { AlertController, NavParams } from "ionic-angular";
+import { AlertController, NavParams, ModalController, Modal } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
 import { FilterService } from "../../filter/filter.service";
 import { Observable } from "rxjs";
 import { Filter } from "../../filter/filter.spec";
 import { filter } from "rxjs/operator/filter";
+import { FilterComponent } from "./filter.component";
 
 
 @Component({
@@ -30,7 +31,7 @@ import { filter } from "rxjs/operator/filter";
     <ion-content>  
      <filterize-tbd feature="filter"></filterize-tbd>
      <ion-list [virtualScroll]="filters$ | async">
-        <button ion-item *virtualItem="let filter">
+        <button ion-item *virtualItem="let filter" (click)="openFilter(filter)">
           <ion-label>{{ filter.name }}</ion-label>
           <ion-toggle 
             [disabled]="!filter['#can_edit']" 
@@ -52,6 +53,7 @@ export class FilterListComponent {
   constructor(private store: Store<AppState>,
               private actions$: Actions,
               private alertCtrl: AlertController,
+              private modalCtrl: ModalController,
               private params: NavParams,
               private filterSrv: FilterService,
               private translate: TranslateService) {
@@ -75,6 +77,21 @@ export class FilterListComponent {
         active: state
       }
     })
+  }
+
+  openFilter(filter: Filter) {
+    let modal = this.modalCtrl.create(FilterComponent, {
+      filter: filter
+    });
+    modal.onDidDismiss((data) => {
+      if (data != null) {
+        this.store.dispatch({
+          type: "FILTER_CHANGED",
+          payload: data
+        })
+      }
+    });
+    modal.present();
   }
 
 }

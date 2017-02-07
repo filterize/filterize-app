@@ -58,6 +58,8 @@ import { FilterGroupsComponent } from "../pages/filter/filter-groups.component";
 import { FilterStacksComponent } from "../pages/filter/filter-stacks.component";
 import { FilterListComponent } from "../pages/filter/filter-list.component";
 import { FilterService } from "../filter/filter.service";
+import { ActionItemComponent } from "../pages/filter/action-item.component";
+import { ConditionItemComponent } from "../pages/filter/condition-item.component";
 
 
 /*const appRoutes = [
@@ -171,7 +173,9 @@ if (CONFIG.production) {
     SearchSelectComponent,
     FilterGroupsComponent,
     FilterStacksComponent,
-    FilterListComponent
+    FilterListComponent,
+    ActionItemComponent,
+    ConditionItemComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],

@@ -37,7 +37,12 @@
     "TITLE": "Filter",
     "MY": "Personal filters",
     "GLOBAL": "Business-wide filters",
-    "NO_STACK": "empty stack"
+    "NO_STACK": "empty stack",
+    "NAME": "Name",
+    "STACK": "Stack",
+    "ACTIONS": "Actions",
+    "CONDITIONS": "Conditions",
+    "ACTIVE": "Active"
   },
   "CALENDAR": {
     "TITLE": "Calendar",
