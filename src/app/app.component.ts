@@ -44,6 +44,7 @@ export class MyApp {
               private actions$: Actions,
               private zendeskSrv: ZendeskService) {
     translate.setDefaultLang("en");
+    translate.resetLang("en");
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

@@ -1,3 +1,4 @@
+import { i18n_dict } from "../tools/tools.spec";
 export interface FilterAction {
   type: string,
   guid?: string,
@@ -9,6 +10,31 @@ export interface FilterCondition {
   conditions?: FilterCondition[],
   guid?: string,
   "not"?: boolean
+}
+
+export interface FieldSpec {
+  name: string,
+  title: string | i18n_dict,
+  description?: string | i18n_dict,
+  type: string,
+  "default"?: any,
+  format?: string,
+  pattern?: string,
+  source?: string,
+  values?: {
+    value: any,
+    name: string | i18n_dict
+  }[]
+}
+
+export interface ConditionActionSpec {
+  name: string,
+  title: string | i18n_dict,
+  description?: string | i18n_dict,
+  parameters: FieldSpec[],
+  hide_private?: boolean,
+  hide_business?: boolean,
+  stack?: string | i18n_dict
 }
 
 export interface FilterUser {

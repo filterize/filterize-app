@@ -60,6 +60,7 @@ import { FilterListComponent } from "../pages/filter/filter-list.component";
 import { FilterService } from "../filter/filter.service";
 import { ActionItemComponent } from "../pages/filter/action-item.component";
 import { ConditionItemComponent } from "../pages/filter/condition-item.component";
+import { FilterizeTranslatePipe } from "../tools/filterize-translate.pipe";
 
 
 /*const appRoutes = [
@@ -168,6 +169,7 @@ if (CONFIG.production) {
     FixedSizeIconComponent,
     AddressComponent,
     CustomDatePipe,
+    FilterizeTranslatePipe,
     AddressChangeComponent,
     SearchSelectModalComponent,
     SearchSelectComponent,

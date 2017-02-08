@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Filter, FilterUser } from "./filter.spec";
+import { Filter, FilterUser, ConditionActionSpec } from "./filter.spec";
 import { Store } from "@ngrx/store";
 import { AppState } from "../app/appstate";
 import { UserService } from "../services/user.service";
@@ -16,6 +16,8 @@ export class FilterService {
   filters$: Observable<Filter[]>;
   user$: Observable<any>;
   business$: Observable<boolean>;
+  condition_specs: ConditionActionSpec[] = [];
+  action_specs: ConditionActionSpec[] = [];
 
   constructor(private store: Store<AppState>, private userSrv: UserService) {
     this.filters$ = store.select("filters") as Observable<Filter[]>;
@@ -23,6 +25,54 @@ export class FilterService {
     this.business$ = store.select("current_user")
       .map(obj => obj["business"])
       .distinctUntilChanged();
+
+    this.store.select("globals")
+      .map(data => data["actions"])
+      .distinctUntilChanged()
+      .subscribe(data => {
+        this.action_specs = [];
+        for (let key in data) {
+          if (!data[key]["actions"]) {
+            continue
+          }
+          for (let ac of data[key]["actions"]) {
+            this.action_specs.push(Object.assign({}, ac, {stack: data[key]["title"]}))
+          }
+        }
+      });
+
+    this.store.select("globals")
+      .map(data => data["conditions"])
+      .distinctUntilChanged()
+      .subscribe(data => {
+        console.log("conditions", data);
+        this.condition_specs = [];
+        for (let key in data) {
+          if (!data[key]["conditions"]) {
+            continue
+          }
+          for (let cond of data[key]["conditions"]) {
+            this.condition_specs.push(Object.assign({}, cond, {stack: data[key]["title"]}))
+          }
+        }
+        console.log(this.condition_specs)
+      })
+  }
+
+  getActionSpecs() {
+    this.action_specs;
+  }
+
+  getActionSpecByName(name: string) {
+    return this.action_specs.find((obj: ConditionActionSpec) => obj.name == name)
+  }
+
+  getConditionSpecs() {
+    return this.condition_specs;
+  }
+
+  getConditionSpecByName(name: string) {
+    return this.condition_specs.find((obj: ConditionActionSpec) => obj.name == name)
   }
 
   getOtherUsers(): Observable<UserName[]> {
