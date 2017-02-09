@@ -29,8 +29,8 @@ import { FilterListComponent } from "./filter-list.component";
     <ion-content>  
       <ion-list [virtualScroll]="stacks$ | async">
         <button ion-item *virtualItem="let stack" (click)="selectStack(stack)">
-          <span *ngIf="stack">{{ stack }}</span>
-          <i *ngIf="!stack">{{ "FILTER.NO_STACK" | translate }}</i>
+          <span *ngIf="stack != '__EMPTY__'">{{ stack }}</span>
+          <i *ngIf="stack == '__EMPTY__'">{{ "FILTER.NO_STACK" | translate }}</i>
         </button>
       </ion-list>
     </ion-content>
@@ -60,6 +60,9 @@ export class FilterStacksComponent {
   }
 
   selectStack(stack) {
+    if (!stack) {
+      stack = "__EMPTY__";
+    }
     this.nav.push(FilterListComponent, {
       "profile": this.profile,
       "business": this.business,

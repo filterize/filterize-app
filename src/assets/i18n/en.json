@@ -42,7 +42,8 @@
     "STACK": "Stack",
     "ACTIONS": "Actions",
     "CONDITIONS": "Conditions",
-    "ACTIVE": "Active"
+    "ACTIVE": "Active",
+    "NEGATE": "Negate condition"
   },
   "CALENDAR": {
     "TITLE": "Calendar",

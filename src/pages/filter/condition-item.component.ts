@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from "@angular/core";
 import { FilterCondition, ConditionActionSpec } from "../../filter/filter.spec";
 import { FilterService } from "../../filter/filter.service";
+import { ModalController } from "ionic-angular";
+import { ConditionActionEditComponent } from "./condition-action-edit.component";
 @Component({
   selector: "filterize-condition-item",
   template: `
@@ -8,7 +10,9 @@ import { FilterService } from "../../filter/filter.service";
       <span [innerHTML]="space"></span>
       <ion-icon name="arrow-dropright" *ngIf="collapse && condition.conditions?.length > 0"></ion-icon>
       <ion-icon name="arrow-dropdown" *ngIf="!collapse && condition.conditions?.length > 0"></ion-icon>
+      <ion-icon name="alert" *ngIf="condition.not" color="danger"></ion-icon>
       {{ spec?.title | filterize_translate }}
+      <ion-note item-right *ngIf="note">{{ note }}</ion-note>
     </button>
     
     <filterize-condition-item
@@ -23,13 +27,15 @@ export class ConditionItemComponent implements OnInit, OnChanges {
   @Input() level: number = 0;
   @Input() collapse: boolean = false;
   space: string = "";
+  note: string;
 
   spec: ConditionActionSpec = {} as ConditionActionSpec;
 
-  constructor(private filterSrv:FilterService) {}
+  constructor(private filterSrv:FilterService, private modalCtrl: ModalController) {}
 
   loadSpec() {
-    this.spec = this.filterSrv.getConditionSpecByName(this.condition.type)
+    this.spec = this.filterSrv.getConditionSpecByName(this.condition.type);
+    this.note = this.filterSrv.getFirstFieldValueLabel(this.condition, this.spec);
     console.log("load spec", this.spec, this.condition)
   }
 
@@ -43,6 +49,16 @@ export class ConditionItemComponent implements OnInit, OnChanges {
   }
 
   click() {
-    this.collapse = !this.collapse;
+    if (this.condition.conditions != null) {
+      this.collapse = !this.collapse;
+    }
+    else {
+      let modal = this.modalCtrl.create(ConditionActionEditComponent, {
+        spec: this.spec,
+        value: this.condition,
+        show_not: true
+      });
+      modal.present();
+    }
   }
 }

@@ -1,10 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Filter, FilterUser, ConditionActionSpec } from "./filter.spec";
+import { Filter, FilterUser, ConditionActionSpec, FieldSpec } from "./filter.spec";
 import { Store } from "@ngrx/store";
 import { AppState } from "../app/appstate";
 import { UserService } from "../services/user.service";
 import { filter } from "rxjs/operator/filter";
+import { Notebook } from "../notebook/notebook.spec";
+import { Tag } from "../tags/tags.spec";
 
 interface UserName {
   name: string,
@@ -18,6 +20,8 @@ export class FilterService {
   business$: Observable<boolean>;
   condition_specs: ConditionActionSpec[] = [];
   action_specs: ConditionActionSpec[] = [];
+  tags: Tag[];
+  notebooks: Notebook[];
 
   constructor(private store: Store<AppState>, private userSrv: UserService) {
     this.filters$ = store.select("filters") as Observable<Filter[]>;
@@ -56,7 +60,13 @@ export class FilterService {
           }
         }
         console.log(this.condition_specs)
-      })
+      });
+
+    this.store.select("notebooks")
+      .subscribe((data:Notebook[]) => this.notebooks = data);
+
+    this.store.select("tags")
+      .subscribe((data:Tag[]) => this.tags = data);
   }
 
   getActionSpecs() {
@@ -73,6 +83,30 @@ export class FilterService {
 
   getConditionSpecByName(name: string) {
     return this.condition_specs.find((obj: ConditionActionSpec) => obj.name == name)
+  }
+
+  getFieldValueLabel(value: any, spec: FieldSpec) {
+    if (spec.source == "tags") {
+      let tag = this.tags.find((tag:Tag) => tag.guid == value);
+      if (tag) {
+        return tag.name;
+      }
+    }
+    if (spec.source == "notebooks") {
+      let nb = this.notebooks.find((nb:Notebook) => nb.guid == value);
+      if (nb) {
+        return nb.name;
+      }
+    }
+    return value;
+  }
+
+  getFirstFieldValueLabel(obj: any, spec: ConditionActionSpec) {
+    if (spec.parameters == null || spec.parameters.length==0) {
+      return null;
+    }
+    let field:FieldSpec = spec.parameters[0];
+    return this.getFieldValueLabel(obj[field.name], field);
   }
 
   getOtherUsers(): Observable<UserName[]> {
@@ -115,7 +149,7 @@ export class FilterService {
     }
 
     let condition: (Filter)=>boolean = (f) => true;
-    let toStack: (Filter)=>string = (f) => f.stack ? f.stack : "";
+    let toStack: (Filter)=>string = (f) => f.stack ? f.stack : "__EMPTY__";
 
     if (business) {
 
@@ -144,7 +178,7 @@ export class FilterService {
       }
       toStack = (f) => {
         for (let u in f.users) {
-          if (f.users[u].user == group) return f.users[u].stack ? f.users[u].stack : "";
+          if (f.users[u].user == group) return f.users[u].stack ? f.users[u].stack : "__EMPTY__";
         }
         return "";
       };
@@ -174,7 +208,7 @@ export class FilterService {
     }
 
     let condition: (Filter)=>boolean = (f) => true;
-    let toStack: (Filter)=>string = (f) => f.stack ? f.stack : "";
+    let toStack: (Filter)=>string = (f) => f.stack ? f.stack : "__EMPTY__";
 
     if (business) {
 
@@ -204,7 +238,7 @@ export class FilterService {
         };
         toStack = (f) => {
           for (let u in f.users) {
-            if (f.users[u].user == group) return f.users[u].stack ? f.users[u].stack : "";
+            if (f.users[u].user == group) return f.users[u].stack ? f.users[u].stack : "__EMPTY__";
           }
           return "";
         };
@@ -220,7 +254,7 @@ export class FilterService {
       // make stacks unique
       .map(list => list.filter((value, index, self) => self.indexOf(value) === index))
       // sort
-      .map(list => list.sort((a:string, b:string) => a < b ? -1 : 1));
+      .map(list => list.sort((a:string, b:string) => a < b || a=="__EMPTY__" ? -1 : 1));
   }
 
 }

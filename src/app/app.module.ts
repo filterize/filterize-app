@@ -61,6 +61,9 @@ import { FilterService } from "../filter/filter.service";
 import { ActionItemComponent } from "../pages/filter/action-item.component";
 import { ConditionItemComponent } from "../pages/filter/condition-item.component";
 import { FilterizeTranslatePipe } from "../tools/filterize-translate.pipe";
+import { FilterizeTranslateService } from "../tools/filterize-translate.service";
+import { ConditionActionEditComponent } from "../pages/filter/condition-action-edit.component";
+import { ConditionActionFieldComponent } from "../pages/filter/condition-action-field.component";
 
 
 /*const appRoutes = [
@@ -177,7 +180,9 @@ if (CONFIG.production) {
     FilterStacksComponent,
     FilterListComponent,
     ActionItemComponent,
-    ConditionItemComponent
+    ConditionItemComponent,
+    ConditionActionEditComponent,
+    ConditionActionFieldComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -203,7 +208,8 @@ if (CONFIG.production) {
     SearchSelectComponent,
     FilterGroupsComponent,
     FilterStacksComponent,
-    FilterListComponent
+    FilterListComponent,
+    ConditionActionEditComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },
@@ -213,6 +219,7 @@ if (CONFIG.production) {
     UserService,
     ResourcesService,
     ZendeskService,
+    FilterizeTranslateService,
     CountryService,
     ConfigService,
     FilterService
