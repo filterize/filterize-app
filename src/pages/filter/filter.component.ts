@@ -51,14 +51,16 @@ import { Filter } from "../../filter/filter.spec";
           {{ "FILTER.CONDITIONS" | translate }}
         </ion-list-header>
         
-        <filterize-condition-item [condition]="data.condition"></filterize-condition-item>
+        <filterize-condition-item [condition]="data.condition" [can_edit]="can_edit">
+        </filterize-condition-item>
         
         <ion-list-header>
           {{ "FILTER.ACTIONS" | translate }}
           <ion-icon item-right name="add-circle" (click)="addAction()"></ion-icon>
         </ion-list-header>
         
-        <filterize-action-item *ngFor="let a of data.action" [action]="a"></filterize-action-item>
+        <filterize-action-item *ngFor="let a of data.action" [action]="a" [can_edit]="can_edit">
+        </filterize-action-item>
       </ion-list>
       
     </ion-content>

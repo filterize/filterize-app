@@ -6,6 +6,7 @@ export interface Tag {
   "#changed"?: number,
   guid: string,
   updateSequenceNum: number
+  deleted?: boolean,
   _id?: string
   _rev?: string
 }

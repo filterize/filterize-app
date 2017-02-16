@@ -23,7 +23,7 @@ export interface FieldSpec {
   source?: string,
   values?: {
     value: any,
-    name: string | i18n_dict
+    title: string | i18n_dict
   }[]
 }
 

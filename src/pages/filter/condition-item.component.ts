@@ -18,7 +18,8 @@ import { ConditionActionEditComponent } from "./condition-action-edit.component"
     <filterize-condition-item
       *ngFor="let cond of (!collapse && condition.conditions ? condition.conditions : [])" 
       [condition]="cond"
-      [level]="level + 1">
+      [level]="level + 1"
+      [can_edit]="can_edit">
     </filterize-condition-item>
   `
 })
@@ -26,6 +27,7 @@ export class ConditionItemComponent implements OnInit, OnChanges {
   @Input() condition: FilterCondition;
   @Input() level: number = 0;
   @Input() collapse: boolean = false;
+  @Input() can_edit: boolean = true;
   space: string = "";
   note: string;
 
@@ -36,7 +38,6 @@ export class ConditionItemComponent implements OnInit, OnChanges {
   loadSpec() {
     this.spec = this.filterSrv.getConditionSpecByName(this.condition.type);
     this.note = this.filterSrv.getFirstFieldValueLabel(this.condition, this.spec);
-    console.log("load spec", this.spec, this.condition)
   }
 
   ngOnInit() {
@@ -56,7 +57,8 @@ export class ConditionItemComponent implements OnInit, OnChanges {
       let modal = this.modalCtrl.create(ConditionActionEditComponent, {
         spec: this.spec,
         value: this.condition,
-        show_not: true
+        show_not: true,
+        can_edit: this.can_edit
       });
       modal.present();
     }

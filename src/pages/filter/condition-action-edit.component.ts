@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { NavParams, ViewController } from "ionic-angular";
-import { ConditionActionSpec } from "../../filter/filter.spec";
+import { ConditionActionSpec, FilterAction, FilterCondition } from "../../filter/filter.spec";
 @Component({
   template: `
     <ion-header>
@@ -36,6 +36,7 @@ import { ConditionActionSpec } from "../../filter/filter.spec";
           <ion-toggle
             [checked]="value.not"
             (ionChange)="clickNegate($event.checked)"
+            [disabled]="!can_edit"
           >
           </ion-toggle>
         </ion-item>
@@ -44,6 +45,7 @@ import { ConditionActionSpec } from "../../filter/filter.spec";
           *ngFor="let field of spec.parameters"
           [spec]="field"
           [(conditionOrAction)]="value"
+          [can_edit]="can_edit"
         >
         </filterize-condition-action-field>
       </ion-list>
@@ -53,13 +55,15 @@ import { ConditionActionSpec } from "../../filter/filter.spec";
 })
 export class ConditionActionEditComponent {
   spec: ConditionActionSpec;
-  value: any;
+  value: FilterAction | FilterCondition;
   show_not: boolean;
+  can_edit: boolean;
 
   constructor(private params: NavParams, private viewCtrl: ViewController) {
     this.spec = params.get("spec");
     this.value = params.get("value");
     this.show_not = !!params.get("show_not");
+    this.can_edit = params.get("can_edit");
   }
 
   dismiss(value: any) {
@@ -67,6 +71,6 @@ export class ConditionActionEditComponent {
   }
 
   clickNegate(state: boolean) {
-    this.value.not = state;
+    this.value["not"] = state;
   }
 }

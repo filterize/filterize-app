@@ -11,12 +11,15 @@ import { jwtHeaderOnlyOptions } from "../user/user.tools";
 import { Observable } from "rxjs";
 import { Notebook } from "../notebook/notebook.spec";
 import { notebookIgnoreDeleted, notebookSort } from "../notebook/notebook.tools";
+import { Tag } from "../tags/tags.spec";
+import { tagIgnoreDeleted, tagSort } from "../tags/tag.tools";
 
 @Injectable()
 export class ResourcesService {
   private last_changed = Object();
   private openSync$: Observable<number>;
   private notebooks$: Observable<Notebook[]>;
+  private tags$: Observable<Tag[]>;
 
   constructor(private http: Http,
               private userSrv: UserService,
@@ -30,6 +33,9 @@ export class ResourcesService {
     this.notebooks$ = store.select(USER_RESOURCES.notebook.store)
       .map(notebookIgnoreDeleted)
       .map(notebookSort)
+    this.tags$ = store.select(USER_RESOURCES.tag.store)
+      .map(tagIgnoreDeleted)
+      .map(tagSort)
   }
 
   getOpenSyncCount () {
@@ -216,5 +222,9 @@ export class ResourcesService {
 
   getNotebooks() {
     return this.notebooks$;
+  }
+
+  getTags() {
+    return this.tags$;
   }
 }

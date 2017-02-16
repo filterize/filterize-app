@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Filter, FilterUser, ConditionActionSpec, FieldSpec } from "./filter.spec";
+import { Filter, FilterUser, ConditionActionSpec, FieldSpec, FilterAction } from "./filter.spec";
 import { Store } from "@ngrx/store";
 import { AppState } from "../app/appstate";
 import { UserService } from "../services/user.service";
 import { filter } from "rxjs/operator/filter";
 import { Notebook } from "../notebook/notebook.spec";
 import { Tag } from "../tags/tags.spec";
+import { FilterizeTranslateService } from "../tools/filterize-translate.service";
 
 interface UserName {
   name: string,
@@ -23,7 +24,7 @@ export class FilterService {
   tags: Tag[];
   notebooks: Notebook[];
 
-  constructor(private store: Store<AppState>, private userSrv: UserService) {
+  constructor(private store: Store<AppState>, private userSrv: UserService, private filterizeTransSrv: FilterizeTranslateService) {
     this.filters$ = store.select("filters") as Observable<Filter[]>;
     this.user$ = this.userSrv.getCurrentUser();
     this.business$ = store.select("current_user")
@@ -36,10 +37,10 @@ export class FilterService {
       .subscribe(data => {
         this.action_specs = [];
         for (let key in data) {
-          if (!data[key]["actions"]) {
+          if (!data[key]["elements"]) {
             continue
           }
-          for (let ac of data[key]["actions"]) {
+          for (let ac of data[key]["elements"]) {
             this.action_specs.push(Object.assign({}, ac, {stack: data[key]["title"]}))
           }
         }
@@ -52,14 +53,13 @@ export class FilterService {
         console.log("conditions", data);
         this.condition_specs = [];
         for (let key in data) {
-          if (!data[key]["conditions"]) {
+          if (!data[key]["elements"]) {
             continue
           }
-          for (let cond of data[key]["conditions"]) {
+          for (let cond of data[key]["elements"]) {
             this.condition_specs.push(Object.assign({}, cond, {stack: data[key]["title"]}))
           }
         }
-        console.log(this.condition_specs)
       });
 
     this.store.select("notebooks")
@@ -73,19 +73,28 @@ export class FilterService {
     this.action_specs;
   }
 
-  getActionSpecByName(name: string) {
-    return this.action_specs.find((obj: ConditionActionSpec) => obj.name == name)
+  getActionSpecByName(name: string): ConditionActionSpec {
+    let spec = this.action_specs.find((obj: ConditionActionSpec) => obj.name == name);
+    return spec ? spec : {name: name, title:name, parameters:[]}
   }
 
   getConditionSpecs() {
     return this.condition_specs;
   }
 
-  getConditionSpecByName(name: string) {
-    return this.condition_specs.find((obj: ConditionActionSpec) => obj.name == name)
+  getConditionSpecByName(name: string): ConditionActionSpec {
+    let spec = this.condition_specs.find((obj: ConditionActionSpec) => obj.name == name);
+    return spec ? spec : {name: name, title:name, parameters:[]}
   }
 
   getFieldValueLabel(value: any, spec: FieldSpec) {
+    if (spec.values) {
+      for (let val of spec.values) {
+        if (val.value == value) {
+          return this.filterizeTransSrv.translate(val.title);
+        }
+      }
+    }
     if (spec.source == "tags") {
       let tag = this.tags.find((tag:Tag) => tag.guid == value);
       if (tag) {
