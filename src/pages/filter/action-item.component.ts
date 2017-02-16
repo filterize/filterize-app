@@ -15,6 +15,7 @@ import { ModalController } from "ionic-angular";
 export class ActionItemComponent implements OnInit, OnChanges {
   @Input() action: FilterAction;
   @Input() can_edit: boolean = true;
+  @Output() actionChange: EventEmitter<FilterAction> = new EventEmitter<FilterAction>();
   spec: ConditionActionSpec = {} as ConditionActionSpec;
   note: string;
 
@@ -40,6 +41,12 @@ export class ActionItemComponent implements OnInit, OnChanges {
       value: this.action,
       show_not: false,
       can_edit: true
+    });
+    modal.onDidDismiss(value => {
+      if (value != null) {
+        this.action = value;
+        this.actionChange.emit(value)
+      }
     });
     modal.present();
   }

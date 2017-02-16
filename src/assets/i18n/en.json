@@ -43,7 +43,9 @@
     "ACTIONS": "Actions",
     "CONDITIONS": "Conditions",
     "ACTIVE": "Active",
-    "NEGATE": "Negate condition"
+    "NEGATE": "Negate condition",
+    "NEW_ACTION": "New action",
+    "NEW_CONDITION": "New condition"
   },
   "CALENDAR": {
     "TITLE": "Calendar",

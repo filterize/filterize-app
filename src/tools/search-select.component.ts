@@ -6,8 +6,8 @@ import { SearchSelectModalComponent } from "./search-select-modal.component";
   selector: "filterize-select",
   template: `
     <button *ngIf="!hideOnEmpty || searchItemsProcessed.length > 0" ion-item (click)="openModal()">
-      <small *ngIf="label" style="color: #999;">{{ title }}</small>
-      <span *ngIf="!label" style="color: #999;">{{ title }}</span><br>
+      <small *ngIf="label" style="color: #999;">{{ title | filterize_translate }}</small>
+      <span *ngIf="!label" style="color: #999;">{{ title | filterize_translate }}</span><br>
       {{ label }}
       <ion-icon name="arrow-dropright" item-right></ion-icon>
     </button>

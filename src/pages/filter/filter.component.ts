@@ -3,9 +3,11 @@ import { Store } from '@ngrx/store'
 import { AppState } from "../../app/appstate";
 import * as UserActions from "../../user/user.actions";
 import { Actions } from "@ngrx/effects";
-import { AlertController, ViewController, NavParams } from "ionic-angular";
+import { AlertController, ViewController, NavParams, ModalController } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
-import { Filter } from "../../filter/filter.spec";
+import { Filter, FilterCondition, FilterAction } from "../../filter/filter.spec";
+import { ConditionActionSelectComponent } from "./condition-action-select.component";
+import { ConditionActionEditComponent } from "./condition-action-edit.component";
 
 
 @Component({
@@ -51,7 +53,11 @@ import { Filter } from "../../filter/filter.spec";
           {{ "FILTER.CONDITIONS" | translate }}
         </ion-list-header>
         
-        <filterize-condition-item [condition]="data.condition" [can_edit]="can_edit">
+        <filterize-condition-item 
+          [condition]="data.condition" 
+          [can_edit]="can_edit" 
+          (conditionChange)="conditionChanged($event)"
+          >
         </filterize-condition-item>
         
         <ion-list-header>
@@ -59,27 +65,64 @@ import { Filter } from "../../filter/filter.spec";
           <ion-icon item-right name="add-circle" (click)="addAction()"></ion-icon>
         </ion-list-header>
         
-        <filterize-action-item *ngFor="let a of data.action" [action]="a" [can_edit]="can_edit">
+        <filterize-action-item 
+          *ngFor="let a of data.action; let i = index" 
+          [action]="a" 
+          [can_edit]="can_edit"
+          (actionChange)="actionChanged($event, i)"
+          >
         </filterize-action-item>
       </ion-list>
       
     </ion-content>
   `
 })
-export class FilterComponent {
+export class FilterComponent implements OnInit {
   data: Filter;
   can_edit: boolean;
 
   constructor(private params: NavParams,
               private viewCtrl: ViewController,
-              private translate: TranslateService) {
-    this.data = this.params.get("filter");
-    console.log(this.data);
+              private translate: TranslateService,
+              private modalCtrl: ModalController) {}
+
+  ngOnInit() {
+    this.data = JSON.parse(JSON.stringify(this.params.get("filter")));
     this.can_edit = !!this.data["#can_edit"];
   }
 
   addAction() {
-    console.log("add action");
+    let modal = this.modalCtrl.create(ConditionActionSelectComponent, {
+      type: "action"
+    });
+    modal.onDidDismiss(data => {
+      if (data != null) {
+        let action = data["obj"];
+        let modal = this.modalCtrl.create(ConditionActionEditComponent, {
+          spec: data["spec"],
+          value: action,
+          show_not: false,
+          can_edit: true
+        });
+        modal.onDidDismiss(value => {
+          if (value != null) {
+            this.data.action.push(value);
+          }
+        });
+        modal.present();
+      }
+    });
+    modal.present();
+  }
+
+  conditionChanged(cond: FilterCondition) {
+    this.data.condtion = cond;
+    console.log("cond changed", cond);
+  }
+
+  actionChanged(act: FilterAction, idx: number) {
+    console.log("action changed", act, idx);
+    this.data.action[idx] = act;
   }
 
   dismiss(filter?: Filter) {

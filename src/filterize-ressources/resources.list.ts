@@ -14,7 +14,12 @@ export const USER_RESOURCES = {
     path: "/tags",
     id: "guid",
     personal: true,
-    business: true
+    business: true,
+    icon: "pricetag",
+    title: {
+      "default": "tag",
+      "de": "Schlagwort"
+    }
   },
   notebook: {
     action_prefix: "NOTEBOOK",
@@ -23,7 +28,12 @@ export const USER_RESOURCES = {
     id: "guid",
     personal: true,
     business: true,
-    reducer: notebookReducer
+    reducer: notebookReducer,
+    icon: "book",
+    title: {
+      "default": "notebook",
+      "de": "Notizbuch"
+    }
   }
 };
 

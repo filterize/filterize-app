@@ -21,6 +21,7 @@ export interface FieldSpec {
   format?: string,
   pattern?: string,
   source?: string,
+  null?: boolean,
   values?: {
     value: any,
     title: string | i18n_dict
@@ -34,7 +35,13 @@ export interface ConditionActionSpec {
   parameters: FieldSpec[],
   hide_private?: boolean,
   hide_business?: boolean,
-  stack?: string | i18n_dict
+  stack?: string | i18n_dict,
+  sub_conditions?: boolean
+}
+
+export interface ConditionActionSpecStack {
+  title: string | i18n_dict,
+  elements: ConditionActionSpec[];
 }
 
 export interface FilterUser {

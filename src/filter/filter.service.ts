@@ -69,8 +69,8 @@ export class FilterService {
       .subscribe((data:Tag[]) => this.tags = data);
   }
 
-  getActionSpecs() {
-    this.action_specs;
+  getActionSpecs(): ConditionActionSpec[] {
+    return this.action_specs;
   }
 
   getActionSpecByName(name: string): ConditionActionSpec {
@@ -78,7 +78,7 @@ export class FilterService {
     return spec ? spec : {name: name, title:name, parameters:[]}
   }
 
-  getConditionSpecs() {
+  getConditionSpecs(): ConditionActionSpec[] {
     return this.condition_specs;
   }
 

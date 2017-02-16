@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NavParams, ViewController } from "ionic-angular";
 import { ConditionActionSpec, FilterAction, FilterCondition } from "../../filter/filter.spec";
 @Component({
@@ -53,20 +53,23 @@ import { ConditionActionSpec, FilterAction, FilterCondition } from "../../filter
     </ion-content>
   `
 })
-export class ConditionActionEditComponent {
+export class ConditionActionEditComponent implements OnInit {
   spec: ConditionActionSpec;
   value: FilterAction | FilterCondition;
   show_not: boolean;
   can_edit: boolean;
 
-  constructor(private params: NavParams, private viewCtrl: ViewController) {
-    this.spec = params.get("spec");
-    this.value = params.get("value");
-    this.show_not = !!params.get("show_not");
-    this.can_edit = params.get("can_edit");
+  constructor(private params: NavParams, private viewCtrl: ViewController) {}
+
+  ngOnInit(): void {
+    this.spec = this.params.get("spec");
+    this.value = JSON.parse(JSON.stringify(this.params.get("value")));
+    this.show_not = !!this.params.get("show_not");
+    this.can_edit = this.params.get("can_edit");
   }
 
   dismiss(value: any) {
+    console.log("dismiss", value);
     this.viewCtrl.dismiss(value);
   }
 
