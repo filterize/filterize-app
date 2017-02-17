@@ -10,6 +10,8 @@ import { Observable } from "rxjs";
 import { Filter } from "../../filter/filter.spec";
 import { filter } from "rxjs/operator/filter";
 import { FilterComponent } from "./filter.component";
+import { v4 } from "uuid";
+import { USER_RESOURCES } from "../../filterize-ressources/resources.list";
 
 
 @Component({
@@ -25,6 +27,13 @@ import { FilterComponent } from "./filter.component";
           <ion-icon name="funnel"></ion-icon>
           {{ "FILTER.TITLE" | translate }}
         </ion-title>
+        
+        <ion-buttons right>
+          <button ion-button icon-only (click)="createFilter()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-buttons>
+
       </ion-navbar>
     </ion-header>
     
@@ -79,19 +88,39 @@ export class FilterListComponent {
     })
   }
 
-  openFilter(filter: Filter) {
+  openFilter(filter: Filter, signal?: string) {
+    signal = signal ? signal : "FILTER_CHANGED";
     let modal = this.modalCtrl.create(FilterComponent, {
       filter: filter
     });
     modal.onDidDismiss((data) => {
       if (data != null) {
         this.store.dispatch({
-          type: "FILTER_CHANGED",
+          type: signal,
           payload: data
         })
       }
     });
     modal.present();
+  }
+
+  createFilter() {
+    let filter: Filter = {
+      name: "",
+      action: [],
+      condition: {
+        type: "ALL",
+        conditions: []
+      },
+      active: true,
+      guid: v4(),
+      "#can_edit": true,
+    };
+
+    if (this.stack != "__EMPTY__") {
+      filter.stack = this.stack;
+    }
+    this.openFilter(filter, "FILTER_CREATED");
   }
 
 }

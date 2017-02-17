@@ -78,6 +78,21 @@ let getSpecialUserResourceReducer = (type: any, type_name) => {
             : obj
           );
 
+      case `${type.action_prefix}_CREATED`:
+        return [
+          ...state,
+          Object.assign(
+            {},
+            action.payload,
+            {
+              _id: `${type_name}_${action.payload[type.id]}`,
+              "#dirty-db": true,
+              "#dirty-server": true,
+              "#dirty-server-sync": false
+            }
+          )
+        ];
+
       case `${type.action_prefix}_SINGLE_SYNC_OK`:
         return state.map(obj =>
           (obj._id == action.payload._id && obj._rev == action.payload._rev)

@@ -189,7 +189,7 @@ export class FilterService {
         for (let u in f.users) {
           if (f.users[u].user == group) return f.users[u].stack ? f.users[u].stack : "__EMPTY__";
         }
-        return "";
+        return "__EMPTY__";
       };
     }
 

@@ -116,7 +116,7 @@ export class FilterComponent implements OnInit {
   }
 
   conditionChanged(cond: FilterCondition) {
-    this.data.condtion = cond;
+    this.data.condition = cond;
     console.log("cond changed", cond);
   }
 

@@ -59,7 +59,7 @@ export interface FilterUserMap {
 export interface Filter {
   name: string,
   action: FilterAction[],
-  condtion: FilterCondition,
+  condition: FilterCondition,
   stack?: string,
   active: boolean,
   creator?: number,
