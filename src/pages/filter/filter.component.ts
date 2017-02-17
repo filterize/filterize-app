@@ -62,17 +62,21 @@ import { ConditionActionEditComponent } from "./condition-action-edit.component"
         
         <ion-list-header>
           {{ "FILTER.ACTIONS" | translate }}
+          <!--<ion-icon item-right name="reorder" (click)="reorder=!reorder"></ion-icon>-->
           <ion-icon item-right name="add-circle" (click)="addAction()"></ion-icon>
         </ion-list-header>
         
-        <filterize-action-item 
-          *ngFor="let a of data.action; let i = index" 
-          [action]="a" 
-          [can_edit]="can_edit"
-          (actionChange)="actionChanged($event, i)"
-          (actionDelete)="actionDelete(i)"
-          >
-        </filterize-action-item>
+        <ion-item-group [reorder]="reorder" (ionItemReorder)="$event.applyTo(data.action)">
+          <filterize-action-item 
+            *ngFor="let a of data.action; let i = index" 
+            [action]="a" 
+            [can_edit]="can_edit"
+            (actionChange)="actionChanged($event, i)"
+            (actionDelete)="actionDelete(i)"
+            >
+          </filterize-action-item>
+        </ion-item-group>
+        
       </ion-list>
       
     </ion-content>
@@ -81,6 +85,8 @@ import { ConditionActionEditComponent } from "./condition-action-edit.component"
 export class FilterComponent implements OnInit {
   data: Filter;
   can_edit: boolean;
+  reorder = false;
+  test = ["a", "b", "c"];
 
   constructor(private params: NavParams,
               private viewCtrl: ViewController,

@@ -32,6 +32,9 @@ import { USER_RESOURCES } from "../../filterize-ressources/resources.list";
           <button ion-button icon-only (click)="createFilter()">
             <ion-icon name="add"></ion-icon>
           </button>
+          <button ion-button icon-only (click)="reorder = !reorder">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
         </ion-buttons>
 
       </ion-navbar>
@@ -39,8 +42,8 @@ import { USER_RESOURCES } from "../../filterize-ressources/resources.list";
     
     <ion-content>  
      <filterize-tbd feature="filter"></filterize-tbd>
-     <ion-list [virtualScroll]="filters$ | async">
-        <button ion-item *virtualItem="let filter" (click)="openFilter(filter)">
+     <ion-list [reorder]="reorder" (ionItemReorder)="doReorder($event)">
+        <button ion-item *ngFor="let filter of (filters$|async)" (click)="openFilter(filter)">
           <ion-label>{{ filter.name }}</ion-label>
           <ion-toggle 
             [disabled]="!filter['#can_edit']" 
@@ -58,6 +61,7 @@ export class FilterListComponent {
   group: string|number;
   profile: string;
   filters$: Observable<Filter[]>;
+  reorder: boolean = false;
 
   constructor(private store: Store<AppState>,
               private actions$: Actions,
@@ -121,6 +125,32 @@ export class FilterListComponent {
       filter.stack = this.stack;
     }
     this.openFilter(filter, "FILTER_CREATED");
+  }
+
+  doReorder(index: {from: number, to:number}) {
+    this.filters$
+      .withLatestFrom(
+        this.store
+          .select("settings")
+          .map(data => data["time_offset"])
+          .map((data:number): number => data == null ? 0 : data)
+      )
+      .first()
+      .subscribe(([filters, time_offset]) => {
+        let cur_filter: Filter = filters[index.from];
+        if (index.to == 0) {
+          cur_filter.order = filters[0].order - 86400000; // = 24*60*60*1000 = 1 day
+        } else if (index.to == filters.length - 1) {
+          cur_filter.order = Math.round(new Date().getTime() + 1000*time_offset);
+        } else {
+          cur_filter.order = Math.round((filters[index.to].order + filters[index.to + 1].order)/2);
+        }
+        this.store.dispatch({
+          type: "FILTER_CHANGED",
+          payload: cur_filter
+        })
+      });
+    console.log("reorder", index);
   }
 
 }
