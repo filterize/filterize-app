@@ -70,6 +70,7 @@ import { ConditionActionEditComponent } from "./condition-action-edit.component"
           [action]="a" 
           [can_edit]="can_edit"
           (actionChange)="actionChanged($event, i)"
+          (actionDelete)="actionDelete(i)"
           >
         </filterize-action-item>
       </ion-list>
@@ -123,6 +124,10 @@ export class FilterComponent implements OnInit {
   actionChanged(act: FilterAction, idx: number) {
     console.log("action changed", act, idx);
     this.data.action[idx] = act;
+  }
+
+  actionDelete(idx: number) {
+    this.data.action.splice(idx, 1);
   }
 
   dismiss(filter?: Filter) {

@@ -6,16 +6,25 @@ import { ModalController } from "ionic-angular";
 @Component({
   selector: "filterize-action-item",
   template: `
-    <button ion-item (click)="click()">
-      {{ spec?.title | filterize_translate }}
-      <ion-note item-right *ngIf="note">{{ note }}</ion-note>
-    </button>
+    <ion-item-sliding #item>
+      <button ion-item (click)="click()">
+        {{ spec?.title | filterize_translate }}
+        <ion-note item-right *ngIf="note">{{ note }}</ion-note>
+      </button>
+      <ion-item-options>
+        <button ion-button color="danger" (click)="actionDelete.emit(true)">
+          <ion-icon name="trash"></ion-icon>
+          {{ "UI.DELETE" | translate}}
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   `
 })
 export class ActionItemComponent implements OnInit, OnChanges {
   @Input() action: FilterAction;
   @Input() can_edit: boolean = true;
   @Output() actionChange: EventEmitter<FilterAction> = new EventEmitter<FilterAction>();
+  @Output() actionDelete: EventEmitter<any> = new EventEmitter();
   spec: ConditionActionSpec = {} as ConditionActionSpec;
   note: string;
 
@@ -44,8 +53,12 @@ export class ActionItemComponent implements OnInit, OnChanges {
     });
     modal.onDidDismiss(value => {
       if (value != null) {
-        this.action = value;
-        this.actionChange.emit(value)
+        if (value == false) {
+          this.actionDelete.emit(true);
+        } else {
+          this.action = value;
+          this.actionChange.emit(value)
+        }
       }
     });
     modal.present();

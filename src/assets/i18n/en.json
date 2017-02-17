@@ -4,7 +4,8 @@
     "OK": "Ok",
     "CANCEL": "Cancel",
     "LOADING": "please wait...",
-    "SYNC": "Synchronize"
+    "SYNC": "Synchronize",
+    "DELETE": "Delete"
   },
   "LOGIN": {
     "LOGIN": "Login",
@@ -45,7 +46,8 @@
     "ACTIVE": "Active",
     "NEGATE": "Negate condition",
     "NEW_ACTION": "New action",
-    "NEW_CONDITION": "New condition"
+    "NEW_CONDITION": "New condition",
+    "INVERSE": "Inverse"
   },
   "CALENDAR": {
     "TITLE": "Calendar",

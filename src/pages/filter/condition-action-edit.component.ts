@@ -48,6 +48,10 @@ import { ConditionActionSpec, FilterAction, FilterCondition } from "../../filter
           [can_edit]="can_edit"
         >
         </filterize-condition-action-field>
+        
+        <button ion-item outline color="danger" (click)="dismiss(false)">
+          {{ "UI.DELETE" | translate }}
+        </button>
       </ion-list>
       
     </ion-content>
