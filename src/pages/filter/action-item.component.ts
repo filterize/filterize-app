@@ -6,7 +6,7 @@ import { ModalController } from "ionic-angular";
 @Component({
   selector: "filterize-action-item",
   template: `
-    <ion-item-sliding #item>
+    <ion-item-sliding *ngIf="!reorder" #item>
       <button ion-item (click)="click()">
         {{ spec?.title | filterize_translate }}
         <ion-note item-right *ngIf="note">{{ note }}</ion-note>
@@ -18,11 +18,18 @@ import { ModalController } from "ionic-angular";
         </button>
       </ion-item-options>
     </ion-item-sliding>
+    
+    <button ion-item *ngIf="reorder" (click)="click()">
+      {{ spec?.title | filterize_translate }}
+      <ion-note item-right *ngIf="note">{{ note }}</ion-note>
+    </button>
+      
   `
 })
 export class ActionItemComponent implements OnInit, OnChanges {
   @Input() action: FilterAction;
   @Input() can_edit: boolean = true;
+  @Input() reorder: boolean = false;
   @Output() actionChange: EventEmitter<FilterAction> = new EventEmitter<FilterAction>();
   @Output() actionDelete: EventEmitter<any> = new EventEmitter();
   spec: ConditionActionSpec = {} as ConditionActionSpec;

@@ -41,18 +41,37 @@ import { USER_RESOURCES } from "../../filterize-ressources/resources.list";
     </ion-header>
     
     <ion-content>  
-     <filterize-tbd feature="filter"></filterize-tbd>
-     <ion-list [reorder]="reorder" (ionItemReorder)="doReorder($event)">
-        <button ion-item *ngFor="let filter of (filters$|async)" (click)="openFilter(filter)">
-          <ion-label>{{ filter.name }}</ion-label>
-          <ion-toggle 
-            [disabled]="!filter['#can_edit']" 
-            [checked]="filter.active" 
-            (ionChange)="setFilterActive(filter, $event.checked)"
-          ></ion-toggle>
-        </button>
-      </ion-list>
-    </ion-content>
+      <filterize-tbd feature="filter"></filterize-tbd>
+      <ion-list [reorder]="reorder" (ionItemReorder)="doReorder($event)">
+        <ng-container *ngFor="let filter of (filters$|async)">
+          <ion-item-sliding *ngIf="!reorder" #item>
+            <button ion-item (click)="openFilter(filter)">
+              <ion-label>{{ filter.name }}</ion-label>
+              <ion-toggle 
+                [disabled]="!filter['#can_edit']" 
+                [checked]="filter.active" 
+                (ionChange)="setFilterActive(filter, $event.checked)"
+              ></ion-toggle>
+            </button>
+            <ion-item-options>
+              <button ion-button color="danger" *ngIf="filter['#can_edit']">
+                <ion-icon name="trash"></ion-icon>
+                {{ "UI.DELETE" | translate}}
+              </button>
+           </ion-item-options>
+          </ion-item-sliding>
+ 
+          <button ion-item *ngIf="reorder" (click)="openFilter(filter)">
+            <ion-label>{{ filter.name }}</ion-label>
+            <ion-toggle 
+              [disabled]="!filter['#can_edit']" 
+              [checked]="filter.active" 
+              (ionChange)="setFilterActive(filter, $event.checked)"
+            ></ion-toggle>
+          </button>
+        </ng-container>
+       </ion-list>
+     </ion-content>
   `
 })
 export class FilterListComponent {
@@ -143,7 +162,8 @@ export class FilterListComponent {
         } else if (index.to == filters.length - 1) {
           cur_filter.order = Math.round(new Date().getTime() + 1000*time_offset);
         } else {
-          cur_filter.order = Math.round((filters[index.to].order + filters[index.to + 1].order)/2);
+          let to_fixed = index.to > index.from ? index.to : index.to - 1;
+          cur_filter.order = Math.round((filters[to_fixed].order + filters[to_fixed + 1].order)/2);
         }
         this.store.dispatch({
           type: "FILTER_CHANGED",

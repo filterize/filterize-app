@@ -62,8 +62,8 @@ import { ConditionActionEditComponent } from "./condition-action-edit.component"
         
         <ion-list-header>
           {{ "FILTER.ACTIONS" | translate }}
-          <!--<ion-icon item-right name="reorder" (click)="reorder=!reorder"></ion-icon>-->
           <ion-icon item-right name="add-circle" (click)="addAction()"></ion-icon>
+          <ion-icon item-right name="reorder" (click)="reorder=!reorder"></ion-icon>
         </ion-list-header>
         
         <ion-item-group [reorder]="reorder" (ionItemReorder)="$event.applyTo(data.action)">
@@ -73,6 +73,7 @@ import { ConditionActionEditComponent } from "./condition-action-edit.component"
             [can_edit]="can_edit"
             (actionChange)="actionChanged($event, i)"
             (actionDelete)="actionDelete(i)"
+            [reorder]="reorder"
             >
           </filterize-action-item>
         </ion-item-group>

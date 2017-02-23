@@ -65,6 +65,7 @@ import { FilterizeTranslateService } from "../tools/filterize-translate.service"
 import { ConditionActionEditComponent } from "../pages/filter/condition-action-edit.component";
 import { ConditionActionFieldComponent } from "../pages/filter/condition-action-field.component";
 import { ConditionActionSelectComponent } from "../pages/filter/condition-action-select.component";
+import { ConsultantComponent } from "../pages/consultant/consultant.component";
 
 
 /*const appRoutes = [
@@ -184,7 +185,8 @@ if (CONFIG.production) {
     ConditionItemComponent,
     ConditionActionEditComponent,
     ConditionActionFieldComponent,
-    ConditionActionSelectComponent
+    ConditionActionSelectComponent,
+    ConsultantComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -212,7 +214,8 @@ if (CONFIG.production) {
     FilterStacksComponent,
     FilterListComponent,
     ConditionActionEditComponent,
-    ConditionActionSelectComponent
+    ConditionActionSelectComponent,
+    ConsultantComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },

@@ -5,7 +5,8 @@
     "CANCEL": "Cancel",
     "LOADING": "please wait...",
     "SYNC": "Synchronize",
-    "DELETE": "Delete"
+    "DELETE": "Delete",
+    "VIA": "via"
   },
   "LOGIN": {
     "LOGIN": "Login",
@@ -99,5 +100,12 @@
     "ZIP_CODE": "Zip code",
     "STATE": "State / Province",
     "COUNTRY": "Country"
+  },
+  "CONSULTANT": {
+    "TITLE": "Consultant Access",
+    "CLIENTS": "Your Clients",
+    "CONSULTANTS": "Your Consultant(s)",
+    "UNTIL": "limited until",
+    "LINK": "Your invitation link:"
   }
 }

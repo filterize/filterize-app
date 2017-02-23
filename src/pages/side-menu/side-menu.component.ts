@@ -22,9 +22,11 @@ import { PaymentComponent } from "../payment/payment.component";
 import { SettingsComponent } from "../settings/settings.component";
 import { ZendeskService } from "../../services/zendesk.service";
 import { FilterGroupsComponent } from "../filter/filter-groups.component";
+import { ConsultantComponent } from "../consultant/consultant.component";
 
 let COMPONENTS = {
   dashboard: DashboardComponent,
+  consultant: ConsultantComponent,
   login: LoginSignupComponent,
   hierarchy: TagHierarchyComponent,
   filter: FilterGroupsComponent,
@@ -91,6 +93,11 @@ let COMPONENTS = {
         <button ion-item menuClose (click)="goto('dashboard')">
           <ion-avatar item-left><ion-icon name="speedometer"></ion-icon></ion-avatar>
           {{ "DASHBOARD.TITLE" | translate }}
+        </button>
+
+        <button ion-item menuClose (click)="goto('consultant')">
+          <ion-avatar item-left><ion-icon name="contacts"></ion-icon></ion-avatar>
+          {{ "CONSULTANT.TITLE" | translate }}
         </button>
 
         <button ion-item menuClose (click)="goto('hierarchy')">
