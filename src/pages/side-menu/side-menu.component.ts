@@ -95,7 +95,10 @@ let COMPONENTS = {
           {{ "DASHBOARD.TITLE" | translate }}
         </button>
 
-        <button ion-item menuClose (click)="goto('consultant')">
+        <button ion-item menuClose 
+          (click)="goto('consultant')"
+          *ngIf="!(currentUser$|async)?.consultant_id && ((currentUser$|async)?.has_consultant || (currentUser$|async)?.is_consultant)"
+          >
           <ion-avatar item-left><ion-icon name="contacts"></ion-icon></ion-avatar>
           {{ "CONSULTANT.TITLE" | translate }}
         </button>

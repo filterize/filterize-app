@@ -106,6 +106,15 @@
     "CLIENTS": "Your Clients",
     "CONSULTANTS": "Your Consultant(s)",
     "UNTIL": "limited until",
-    "LINK": "Your invitation link:"
+    "LINK": "Your invitation link:",
+    "ERROR": {
+      "LOGIN": "Error switchung user",
+      "DELETE_CONSULTANT": "Error deleting selected consultant",
+      "DELETE_CLIENT": "Error deleting selected client"
+    },
+    "DELETE_CONSULTANT": "Delete Consultant",
+    "DELETE_CONSULTANT_MSG": "Do you really want to delete the selected consultant?",
+    "DELETE_CLIENT": "Delete Client",
+    "DELETE_CLIENT_MSG": "Do you really want to delete the selected client?"
   }
 }
