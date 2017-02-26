@@ -40,8 +40,13 @@ import { USER_RESOURCES } from "../../filterize-ressources/resources.list";
       </ion-navbar>
     </ion-header>
     
-    <ion-content>  
-      <filterize-tbd feature="filter"></filterize-tbd>
+    <ion-content>
+      <ion-card *ngIf="business == 'true' || business == true">
+        <ion-card-header>Filter Business Logic</ion-card-header>
+        <ion-card-content>
+          <filterize-tbd feature="filter"></filterize-tbd>
+        </ion-card-content>
+      </ion-card>
       <ion-list [reorder]="reorder" (ionItemReorder)="doReorder($event)">
         <ng-container *ngFor="let filter of (filters$|async)">
           <ion-item-sliding *ngIf="!reorder" #item>
@@ -54,9 +59,13 @@ import { USER_RESOURCES } from "../../filterize-ressources/resources.list";
               ></ion-toggle>
             </button>
             <ion-item-options>
-              <button ion-button color="danger" *ngIf="filter['#can_edit']">
+              <button ion-button color="danger" *ngIf="filter['#can_edit']" (click)="deleteFilter(filter, item)">
                 <ion-icon name="trash"></ion-icon>
                 {{ "UI.DELETE" | translate}}
+              </button>
+              <button ion-button (click)="cloneFilter(filter, item)">
+                <ion-icon name="copy"></ion-icon>
+                {{ "UI.CLONE" | translate}}
               </button>
            </ion-item-options>
           </ion-item-sliding>
@@ -146,6 +155,22 @@ export class FilterListComponent {
     this.openFilter(filter, "FILTER_CREATED");
   }
 
+  cloneFilter(filter: Filter, item) {
+    item.close();
+
+    let newFilter: Filter = {
+      name: filter.name,
+      action: JSON.parse(JSON.stringify(filter.action)),
+      condition: JSON.parse(JSON.stringify(filter.condition)),
+      active: true,
+      guid: v4(),
+      "#can_edit": true,
+      stack: filter.stack
+    };
+
+    this.openFilter(newFilter, "FILTER_CREATED");
+  }
+
   doReorder(index: {from: number, to:number}) {
     this.filters$
       .withLatestFrom(
@@ -171,6 +196,32 @@ export class FilterListComponent {
         })
       });
     console.log("reorder", index);
+  }
+
+  deleteFilter(filter: Filter, item) {
+    item.close();
+    this.translate.get(["FILTER.DELETE", "FILTER.DELETE_MSG", "UI.OK", "UI.CANCEL"])
+      .subscribe(t => {
+        let confirm = this.alertCtrl.create({
+          title: t["FILTER.DELETE"],
+          message: t["FILTER.DELETE_MSG"],
+          buttons: [
+            {
+              text: t["UI.CANCEL"]
+            },
+            {
+              text: t["UI.OK"],
+              handler: () => {
+                this.store.dispatch({
+                  type: "FILTER_DELETED",
+                  payload: filter
+                })
+              }
+            }
+          ]
+        });
+        confirm.present();
+      })
   }
 
 }

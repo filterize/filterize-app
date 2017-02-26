@@ -36,8 +36,6 @@ import { ConditionActionEditComponent } from "./condition-action-edit.component"
     </ion-header>
     
     <ion-content>  
-      <filterize-tbd feature="filter"></filterize-tbd>
-     
       <ion-list>
         <ion-item>
           <ion-label floating>{{ "FILTER.NAME" | translate }}</ion-label>

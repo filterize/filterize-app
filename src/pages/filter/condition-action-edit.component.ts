@@ -27,10 +27,10 @@ import { ConditionActionSpec, FilterAction, FilterCondition } from "../../filter
     </ion-header>
     
     <ion-content>  
-      <filterize-tbd feature="filter"></filterize-tbd>
-      <p *ngIf="spec.description">{{ spec.description }}</p>
-      
       <ion-list>
+        <ion-item *ngIf="spec.description" text-wrap>
+          <p [innerHTML]="spec.description"></p>
+        </ion-item>
         <ion-item *ngIf="show_not">
           <ion-label>{{ "FILTER.NEGATE" | translate }}</ion-label>
           <ion-toggle

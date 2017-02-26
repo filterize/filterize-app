@@ -6,7 +6,8 @@
     "LOADING": "please wait...",
     "SYNC": "Synchronize",
     "DELETE": "Delete",
-    "VIA": "via"
+    "VIA": "via",
+    "CLONE": "Clone"
   },
   "LOGIN": {
     "LOGIN": "Login",
@@ -48,7 +49,9 @@
     "NEGATE": "Negate condition",
     "NEW_ACTION": "New action",
     "NEW_CONDITION": "New condition",
-    "INVERSE": "Inverse"
+    "INVERSE": "Inverse",
+    "DELETE": "Delete Filter",
+    "DELETE_MSG": "Do you really want to delete this filter?"
   },
   "CALENDAR": {
     "TITLE": "Calendar",

@@ -66,6 +66,18 @@ let getSpecialUserResourceReducer = (type: any, type_name) => {
         return result;
       }
 
+      case `${type.action_prefix}_DELETED`:
+        return state.map(obj =>
+          (obj._id == action.payload._id)
+            ? Object.assign(
+                {},
+                obj,
+                {deleted: true},
+                {"#dirty-db": true, "#dirty-server": true, "#dirty-server-sync": false}
+              )
+            : obj
+          );
+
       case `${type.action_prefix}_CHANGED`:
         return state.map(obj =>
           (obj._id == action.payload._id)
