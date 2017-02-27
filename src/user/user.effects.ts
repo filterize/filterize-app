@@ -26,6 +26,19 @@ export class UserEffects {
     .map(res => ({type: UserActions.LOGIN_SUCCESS, payload: res.json()}))
     .catch(res => Observable.of({type: UserActions.LOGIN_FAILED, payload: res.json()}));
 
+  @Effect() google_login$ = this.actions$
+  // Listen for Login
+    .ofType(UserActions.GOOGLE_LOGIN)
+    .switchMap(action => this.http.post(
+      `${CONFIG.filterize.oauth_url}/token`,
+      {
+        grant_type: "google_token",
+        token: action.payload,
+        client_id: CONFIG.filterize.client_id
+      }))
+    .map(res => ({type: UserActions.LOGIN_SUCCESS, payload: res.json()}))
+    .catch(res => Observable.of({type: UserActions.LOGIN_FAILED, payload: res.json()}));
+
   /*
   @Effect() basicData$ = this.actions$
   // Listen for Login

@@ -15,3 +15,5 @@ export const CLEAR_DATA = "USER_CLEAR_DATA";
 export const REFRESH_TOKEN = "USER_REFRESH_TOKEN";
 export const START_SYNC = "START_USER_SYNC";
 export const CHANGED = "USER_CHANGED";
+export const GOOGLE_LOGIN = "USER_GOOGLE_LOGIN";
+

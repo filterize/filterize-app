@@ -5,6 +5,7 @@ import * as UserActions from "../../user/user.actions";
 import { Actions } from "@ngrx/effects";
 import { AlertController } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
+import { GoogleLoginService } from "../../services/google.login.service";
 
 
 @Component({
@@ -36,6 +37,11 @@ import { TranslateService } from "ng2-translate";
       
       <button ion-button block [disabled]="in_progress" (click)="onLogin()">{{ "LOGIN.LOGIN" | translate }}</button>
       </form>
+      <br>
+      <button ion-button block outline [disabled]="in_progress" (click)="onGoogleLogin()" color="danger">
+        <ion-icon name="googleplus"></ion-icon>
+        {{ "LOGIN.LOGIN_GOOGLE" | translate }}
+      </button>
     </ion-content>
   `
 })
@@ -47,6 +53,7 @@ export class LoginComponent {
   constructor(private store: Store<AppState>,
               private actions$: Actions,
               private alertCtrl: AlertController,
+              private googleLoginSrv: GoogleLoginService,
               private translate: TranslateService) {
   }
 
@@ -67,7 +74,7 @@ export class LoginComponent {
   }
 
   onLoginFailed() {
-    this.in_progress = false
+    this.in_progress = false;
     this.translate.get(["UI.OK", "UI.ERROR", "LOGIN.LOGIN_ERROR_MSG"]).first().subscribe(data => {
       let alert = this.alertCtrl.create({
         title: data["UI.ERROR"],
@@ -76,5 +83,9 @@ export class LoginComponent {
       });
       alert.present();
     })
+  }
+
+  onGoogleLogin() {
+    this.googleLoginSrv.login();
   }
 }

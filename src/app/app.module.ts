@@ -66,6 +66,7 @@ import { ConditionActionEditComponent } from "../pages/filter/condition-action-e
 import { ConditionActionFieldComponent } from "../pages/filter/condition-action-field.component";
 import { ConditionActionSelectComponent } from "../pages/filter/condition-action-select.component";
 import { ConsultantComponent } from "../pages/consultant/consultant.component";
+import { GoogleLoginService } from "../services/google.login.service";
 
 
 /*const appRoutes = [
@@ -228,7 +229,8 @@ if (CONFIG.production) {
     FilterizeTranslateService,
     CountryService,
     ConfigService,
-    FilterService
+    FilterService,
+    GoogleLoginService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

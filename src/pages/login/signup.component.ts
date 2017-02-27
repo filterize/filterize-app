@@ -5,6 +5,7 @@ import { TranslateService } from "ng2-translate";
 import { AlertController } from "ionic-angular";
 import { Actions } from "@ngrx/effects";
 import * as UserActions from "../../user/user.actions";
+import { GoogleLoginService } from "../../services/google.login.service";
 
 
 @Component({
@@ -43,6 +44,13 @@ import * as UserActions from "../../user/user.actions";
       </ion-list>
       
       <button ion-button block (click)="onSignup()" [disabled]="in_progress">{{ "LOGIN.SIGN_UP" | translate }}</button>
+      
+      <br>
+      <button ion-button block outline [disabled]="in_progress" (click)="onGoogleLogin()" color="danger">
+        <ion-icon name="googleplus"></ion-icon>
+        {{ "LOGIN.LOGIN_GOOGLE" | translate }}
+      </button>
+
     </ion-content>
     
     
@@ -58,6 +66,7 @@ export class SignupComponent {
   constructor(private store: Store<AppState>,
               private actions$: Actions,
               private alertCtrl: AlertController,
+              private googleLoginSrv: GoogleLoginService,
               private translate: TranslateService) { }
 
   onSignup() {
@@ -88,5 +97,9 @@ export class SignupComponent {
       });
       alert.present();
     })
+  }
+
+  onGoogleLogin() {
+    this.googleLoginSrv.login();
   }
 }

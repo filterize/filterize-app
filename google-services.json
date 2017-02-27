@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "812732464823",
+    "firebase_url": "https://filterize-eu.firebaseio.com",
+    "project_id": "filterize-eu",
+    "storage_bucket": "filterize-eu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812732464823:android:8d546e23ea21e257",
+        "android_client_info": {
+          "package_name": "net.filterize.console"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812732464823-7hs2tagpuugqsr5dgni9pi7jti4hp7o3.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "812732464823-29qo9pdpk3v4d7f2nmhk4q2htor12223.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAohUJZJn5zxwJpYXGLLvbMjzFqE6A-gUs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

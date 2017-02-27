@@ -11,6 +11,7 @@
   },
   "LOGIN": {
     "LOGIN": "Login",
+    "LOGIN_GOOGLE": "Log in with google",
     "LOGOUT": "Logout",
     "SIGN_UP": "Sign-Up",
     "LOGIN_ERROR_MSG": "The proposed login credentials are invalid. Please check your e-mail and password.",
