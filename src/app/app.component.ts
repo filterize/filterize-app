@@ -43,6 +43,7 @@ export class MyApp {
               private store: Store<AppState>,
               private actions$: Actions,
               private zendeskSrv: ZendeskService) {
+    console.log(window.location.hash);
     translate.setDefaultLang("en");
     translate.resetLang("en");
     platform.ready().then(() => {

@@ -10,6 +10,7 @@ import { UserService } from "../../services/user.service";
 import { CountryService } from "../../services/country.service";
 import { PaymentComponent } from "../payment/payment.component";
 import { AddressChangeComponent } from "../../tools/address-change.component";
+import { EvernoteService } from "../../services/evernote.service";
 
 
 @Component({
@@ -63,7 +64,11 @@ import { AddressChangeComponent } from "../../tools/address-change.component";
      
     <ion-card>
       <ion-card-header>Evernote</ion-card-header>
-      <ion-card-content><filterize-tbd feature="dashboard"></filterize-tbd></ion-card-content>
+      <ion-card-content>
+        <filterize-tbd feature="dashboard"></filterize-tbd>
+        
+        <button (click)="validateEvernote()">validate</button>
+      </ion-card-content>
     </ion-card>
      
     </ion-content>
@@ -81,6 +86,7 @@ export class DashboardComponent {
               private userSrv: UserService,
               private countrySrv: CountryService,
               private modalCtrl: ModalController,
+              private evernoteSrv: EvernoteService,
               private translate: TranslateService) {
     this.current_user$ = this.userSrv.getCurrentUser();
   }
@@ -114,4 +120,7 @@ export class DashboardComponent {
     modal.present();
   }
 
+  validateEvernote() {
+    this.evernoteSrv.validate();
+  }
 }

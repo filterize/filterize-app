@@ -1,11 +1,12 @@
 export const CONFIG = {
-  "version": "0.6.4",
+  "version": "0.6.5-0",
   "production": false,
   "analytics": {
     "tracking_id": "UA-73257223-4",
   },
   "filterize": {
     "api_url": "https://api.filterize.net/v1",
+    "evernote_auth_url": "https://api.filterize.net/evernote_auth/",
     "oauth_url": "https://api.filterize.net/oauth2",
     "client_id": "net.filterize.console"
   },

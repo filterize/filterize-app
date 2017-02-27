@@ -67,6 +67,7 @@ import { ConditionActionFieldComponent } from "../pages/filter/condition-action-
 import { ConditionActionSelectComponent } from "../pages/filter/condition-action-select.component";
 import { ConsultantComponent } from "../pages/consultant/consultant.component";
 import { GoogleLoginService } from "../services/google.login.service";
+import { EvernoteService } from "../services/evernote.service";
 
 
 /*const appRoutes = [
@@ -230,7 +231,8 @@ if (CONFIG.production) {
     CountryService,
     ConfigService,
     FilterService,
-    GoogleLoginService
+    GoogleLoginService,
+    EvernoteService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
