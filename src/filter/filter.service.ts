@@ -28,7 +28,7 @@ export class FilterService {
     this.filters$ = store.select("filters") as Observable<Filter[]>;
     this.user$ = this.userSrv.getCurrentUser();
     this.business$ = store.select("current_user")
-      .map(obj => obj["business"])
+      .map(obj => !!obj["business"])
       .distinctUntilChanged();
 
     this.store.select("globals")

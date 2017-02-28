@@ -19,6 +19,7 @@ import { Actions } from "@ngrx/effects";
 import * as UserActions from "../user/user.actions";
 import { TagHierarchyComponent } from "../pages/tag-hierarchy/tag-hierarchy.component";
 import { ZendeskService } from "../services/zendesk.service";
+import { DashboardComponent } from "../pages/dashboard/dashboard.component";
 
 
 @Component({
@@ -29,7 +30,7 @@ import { ZendeskService } from "../services/zendesk.service";
   `
 })
 export class MyApp {
-  user_start = HomePage;
+  user_start = DashboardComponent;
   login_start = LoginSignupComponent;
   rootPage = this.user_start;
   @ViewChild(Nav) navChild: Nav;

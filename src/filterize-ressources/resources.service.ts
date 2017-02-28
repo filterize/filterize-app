@@ -85,6 +85,9 @@ export class ResourcesService {
       )
       .subscribe(([action, user_data, business]) => {
         let obj_id = business ? user_data["business_id"] : user_data["user_id"];
+        if (obj_id == null) {
+          return;
+        }
         let access_token = (action.payload) ? action.payload.access_token : user_data["access_token"];
         this.startSync(obj_id, access_token, business);
 

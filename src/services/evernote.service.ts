@@ -32,6 +32,12 @@ export class EvernoteService {
             payload: {
               access_token: token
             }
+          });
+          this.store.dispatch({
+            type: UserActions.START_SYNC,
+            payload: {
+              access_token: token
+            }
           })
         }
       }

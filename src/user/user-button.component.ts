@@ -6,7 +6,7 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
     <button ion-item>
       <ion-icon name="person"></ion-icon> &nbsp;
       {{ user.realname }}
-      <small dark>({{ user.username }})</small>
+      <small dark *ngIf="user.username">({{ user.username }})</small>
       <small dark *ngIf="user.consultant">[{{ "UI.VIA" | translate }} {{ user.consultant }}]</small>
     </button>
   `

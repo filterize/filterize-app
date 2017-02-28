@@ -1,16 +1,15 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store'
 import { AppState } from "../../app/appstate";
 import * as UserActions from "../../user/user.actions";
 import { Actions } from "@ngrx/effects";
 import { AlertController, ModalController, NavController, App } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { currentUserSelector } from "../../user/user.selectors";
 import { UserService } from "../../services/user.service";
 import { UserSelectComponent } from "../../user/user-select.component";
 import { LoginSignupComponent } from "../login/login-signup.component";
-import { HomePage } from "../home/home";
 import { TagHierarchyComponent } from "../tag-hierarchy/tag-hierarchy.component";
 import { ResourcesService } from "../../filterize-ressources/resources.service";
 import { DashboardComponent } from "../dashboard/dashboard.component";
@@ -35,6 +34,13 @@ let COMPONENTS = {
   mail_in: MailInComponent,
   payment: PaymentComponent,
   settings: SettingsComponent
+};
+
+let ANONYM_COMPONENTS = {
+  dashboard: true,
+  login: true,
+  settings: true,
+  library: true
 };
 
 @Component({
@@ -98,32 +104,33 @@ let COMPONENTS = {
         <button ion-item menuClose 
           (click)="goto('consultant')"
           *ngIf="!(currentUser$|async)?.consultant_id && ((currentUser$|async)?.has_consultant || (currentUser$|async)?.is_consultant)"
+          [disabled]="anonym"
           >
           <ion-avatar item-left><ion-icon name="contacts"></ion-icon></ion-avatar>
           {{ "CONSULTANT.TITLE" | translate }}
         </button>
 
-        <button ion-item menuClose (click)="goto('hierarchy')">
+        <button ion-item menuClose (click)="goto('hierarchy')" [disabled]="anonym">
           <ion-avatar item-left><ion-icon name="git-pull-request"></ion-icon></ion-avatar>
           {{ "HIERARCHY.TITLE" | translate }}
         </button>
 
-        <button ion-item menuClose (click)="goto('filter')">
+        <button ion-item menuClose (click)="goto('filter')" [disabled]="anonym">
           <ion-avatar item-left><ion-icon name="funnel"></ion-icon></ion-avatar>
           {{ "FILTER.TITLE" | translate }}
         </button>
 
-        <button ion-item menuClose (click)="goto('calendar')">
+        <button ion-item menuClose (click)="goto('calendar')" [disabled]="anonym">
           <ion-avatar item-left><ion-icon name="calendar"></ion-icon></ion-avatar>
           {{ "CALENDAR.TITLE" | translate }}
         </button>
 
-        <button ion-item menuClose (click)="goto('mail_in')">
+        <button ion-item menuClose (click)="goto('mail_in')" [disabled]="anonym">
           <ion-avatar item-left><ion-icon name="mail"></ion-icon></ion-avatar>
           {{ "MAIL_IN.TITLE" | translate }}
         </button>
 
-        <button ion-item menuClose (click)="goto('payment')">
+        <button ion-item menuClose (click)="goto('payment')" [disabled]="anonym">
           <ion-avatar item-left><ion-icon name="card"></ion-icon></ion-avatar>
           {{ "PAYMENT.TITLE" | translate }}
         </button>
@@ -133,7 +140,7 @@ let COMPONENTS = {
           {{ "LIBRARY.TITLE" | translate }}
         </button>
 
-        <button ion-item menuClose (click)="goto('settings')">
+        <button ion-item menuClose (click)="goto('settings')" [disabled]="anonym">
           <ion-avatar item-left><ion-icon name="settings"></ion-icon></ion-avatar>
           {{ "SETTINGS.TITLE" | translate }}
         </button>
@@ -172,12 +179,14 @@ let COMPONENTS = {
   `]
 
 })
-export class SideMenuComponent {
+export class SideMenuComponent implements OnInit, OnDestroy {
   @Input() enabled = true;
 
   currentUser$;
   business$;
   openSync$;
+  anonym: boolean = true;
+  sub: Subscription;
 
   constructor(private store: Store<AppState>,
               private translate: TranslateService,
@@ -195,13 +204,26 @@ export class SideMenuComponent {
 
   @Input() content;
 
-  goto(target) {
-    this.currentUser$.first().subscribe(user => console.log("goto", "user", user));
-    console.log("preif");
-    if (target in COMPONENTS) {
-      console.log("if");
-      this.appCtrl.getRootNav().setRoot(COMPONENTS[target]);
+  ngOnInit(): void {
+    this.sub = this.currentUser$.subscribe((user) => this.anonym = !user || !user.user_id);
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
+  }
+
+  goto(target) {
+    this.currentUser$.first().subscribe(user => {
+      if (user.user_id == null && !(target in ANONYM_COMPONENTS)) {
+        console.log("invalid page change without user_id");
+        return;
+      }
+      if (target in COMPONENTS) {
+        this.appCtrl.getRootNav().setRoot(COMPONENTS[target]);
+      }
+    });
   }
 
   openUserSelect() {
