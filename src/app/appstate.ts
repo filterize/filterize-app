@@ -10,4 +10,7 @@ export interface AppState {
   globals: {
     country_devisions: Object
   };
+  settings: {
+    language: string
+  }
 };

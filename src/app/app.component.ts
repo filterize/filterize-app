@@ -46,7 +46,7 @@ export class MyApp {
               private zendeskSrv: ZendeskService) {
     console.log(window.location.hash);
     translate.setDefaultLang("en");
-    translate.resetLang("en");
+    // translate.resetLang("en");
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -76,6 +76,13 @@ export class MyApp {
     this.actions$.ofType(UserActions.LOGOUT).subscribe(() => this.navChild.setRoot(this.login_start));
 
     this.navChild.viewDidEnter.subscribe(() => this.zendeskSrv.updatePath());
+    this.store.select("settings")
+      .filter(data => data && data["language"])
+      .map(data => data["language"])
+      .subscribe((lang:string) => {
+        this.translate.use(lang);
+        console.log("update_lang", lang)
+      })
   }
 
   // https://gist.github.com/t00ts/3542ac4573ffbc73745641fa269326b8

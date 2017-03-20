@@ -103,7 +103,12 @@
     "TITLE": "Library"
   },
   "SETTINGS": {
-    "TITLE": "Settings"
+    "TITLE": "Settings",
+    "LANGUAGE": {
+      "LABEL": "Language",
+      "de": "german",
+      "en": "english"
+    }
   },
   "ZENDESK": {
     "SUPPORT": "Support"

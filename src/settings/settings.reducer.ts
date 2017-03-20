@@ -12,6 +12,9 @@ export const settingsReducer = (state={_id: "settings", time_offset: 0}, action)
         "#dirty-db": true
       });
 
+    case SettingsActions.UPDATE:
+      return Object.assign({}, state, action.payload, {"#dirty-db": true});
+
     default:
       return state
   }
