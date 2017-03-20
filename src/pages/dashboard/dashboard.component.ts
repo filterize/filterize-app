@@ -30,7 +30,7 @@ import { EvernoteService } from "../../services/evernote.service";
     </ion-header>
     
     <ion-content>  
-    <ion-card>
+    <ion-card *ngIf="current_user.user_id">
       <ion-card-header>Profile</ion-card-header>
       
       <ion-list>
@@ -62,13 +62,50 @@ import { EvernoteService } from "../../services/evernote.service";
       </ion-list>
     </ion-card>
      
-    <ion-card>
+    <ion-card *ngIf="current_user.token_expires">
       <ion-card-header>Evernote</ion-card-header>
-      <ion-card-content>
-        <filterize-tbd feature="dashboard"></filterize-tbd>
+      <ion-list>
+        <ion-item>
+          {{ "DASHBOARD.EVERNOTE_VALID_UNTIL" | translate }}
+          <ion-note item-right>
+            {{ current_user.token_expires * 1000 | filterize_date: "date-time" }}
+          </ion-note>
+        </ion-item>
+        <ion-item text-wrap *ngIf="rate_limited">
+          <ion-icon name="alert" color="danger"></ion-icon>
+          {{ "DASHBOARD.EVERNOTE_RATE_LIMIT_UNTIL" | translate }}
+          <p>{{ "DASHBOARD.EVERNOTE_RATE_LIMIT_DESCRIPTION" | translate }}</p>
+          <ion-note item-right>
+            {{ current_user.rate_limit_until * 1000 | filterize_date: "date-time" }}
+          </ion-note>
+        </ion-item>
+        <ion-item> 
+          <button ion-button round (click)="validateEvernote()">
+            {{ "DASHBOARD.EVERNOTE_REVALIDATE" | translate}}
+          </button>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+     
+    <ion-card *ngIf="!current_user.token_expires">
+      <ion-card-header>Evernote</ion-card-header>
+      <ion-card-content text-wrap>
+        <p>{{ "DASHBOARD.EVERNOTE_CONNECT_MESSAGE" | translate }}</p>
         
-        <button (click)="validateEvernote()">validate</button>
+        <button ion-button round (click)="validateEvernote()">
+          {{ "DASHBOARD.EVERNOTE_VALIDATE" | translate}}
+        </button>
       </ion-card-content>
+    </ion-card>
+    
+    <ion-card *ngIf="current_user.business">
+      <ion-card-header>{{ "BUSINESS.TITLE" | translate}}: {{current_user.business.name}}</ion-card-header>
+      <ion-list>
+        <ion-item>
+          {{ "BUSINESS.ROLE.LABEL" | translate}}
+          <ion-note item-right>{{ "BUSINESS.ROLE." + current_user.business_role | translate }}</ion-note>
+        </ion-item>
+      </ion-list>
     </ion-card>
      
     </ion-content>
@@ -78,6 +115,7 @@ export class DashboardComponent {
   current_user$: Observable<any>;
   current_user: any;
   sub: Subscription = null;
+  rate_limited: boolean = false;
 
   constructor(private store: Store<AppState>,
               private actions$: Actions,
@@ -94,6 +132,7 @@ export class DashboardComponent {
   ngOnInit() {
     this.sub = this.current_user$.subscribe(user => {
       this.current_user = user;
+      this.rate_limited = this.current_user.rate_limit_until * 1000 > new Date().getTime();
     });
   }
 

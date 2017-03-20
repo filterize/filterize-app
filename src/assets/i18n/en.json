@@ -31,7 +31,21 @@
     "TITLE": "Navigation"
   },
   "DASHBOARD": {
-    "TITLE": "Dashboard"
+    "TITLE": "Dashboard",
+    "EVERNOTE_VALID_UNTIL": "Evernote validated until",
+    "EVERNOTE_RATE_LIMIT_UNTIL": "Rate limit until",
+    "EVERNOTE_RATE_LIMIT_DESCRIPTION": "Evernote limits the number of accesses for third party-applications. Once this limit is reached, no further changes or synchronizations are possible until the rate limit is gone. For our service, this means that no filters can apply, and no changes in Evernote’s notebooks and tags are synchronized to filterize. These limitations can occur if you update a lot of notes within a short period of time. We queue all interactions with Evernote so that they will be processed when the rate limit has gone. In this case your changes are not lost, but only delayed.",
+    "EVERNOTE_REVALIDATE": "Revalidate",
+    "EVERNOTE_VALIDATE": "Connect Evernote",
+    "EVERNOTE_CONNECT_MESSAGE": "Please connect Evernote to your account, in order to process your note with Filterize."
+  },
+  "BUSINESS": {
+    "TITLE": "Business",
+    "ROLE": {
+      "1": "Admin",
+      "2": "User",
+      "LABEL": "Your business role"
+    }
   },
   "HIERARCHY": {
     "TITLE": "Tag Hierarchy",
