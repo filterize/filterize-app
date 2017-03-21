@@ -25,7 +25,6 @@ import { Observable } from "rxjs";
     </ion-header>
     
     <ion-content>  
-      <filterize-tbd feature="settings"></filterize-tbd>
       <ion-list>
         <ion-item>
           <ion-label color="dark">{{ "SETTINGS.LANGUAGE.LABEL" | translate }}</ion-label>
