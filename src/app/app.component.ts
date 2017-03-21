@@ -79,6 +79,7 @@ export class MyApp {
     this.store.select("settings")
       .filter(data => data && data["language"])
       .map(data => data["language"])
+      .distinctUntilChanged()
       .subscribe((lang:string) => {
         this.translate.use(lang);
         console.log("update_lang", lang)

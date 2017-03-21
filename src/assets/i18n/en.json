@@ -108,7 +108,9 @@
       "LABEL": "Language",
       "de": "german",
       "en": "english"
-    }
+    },
+    "DATE_FORMAT": "Date format",
+    "TIME_FORMAT": "Time format"
   },
   "ZENDESK": {
     "SUPPORT": "Support"
