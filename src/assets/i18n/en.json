@@ -97,7 +97,20 @@
     "CURRENT_PLAN": "Current plan",
     "SUBSCRIPTION": "Subscription",
     "NEXT_CAPTURE": "Next capture",
-    "VALID_UNTIL": "Valid until"
+    "VALID_UNTIL": "Valid until",
+    "HIERARCHY": "Automatic Tag Hierarchy",
+    "FILTER": "Note Filter",
+    "CALENDAR": "Calendar Exports",
+    "MAIL": "Mail-In for every notebook",
+    "INF": "unlimited",
+    "SUBSCRIBE": "subscribe",
+    "BUY": "one-time",
+    "SWITCH": "switch",
+    "SUBSCRIBE_CANCEL": "unsubscribe",
+    "PAY_MONTHLY": "Pay monthly",
+    "PAY_ANNUALLY": "Pay annually",
+    "CURRENCY": "Currency",
+    "DOWNGRADE": "Downgrade at"
   },
   "LIBRARY": {
     "TITLE": "Library"

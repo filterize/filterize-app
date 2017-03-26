@@ -49,11 +49,11 @@ import { EvernoteService } from "../../services/evernote.service";
           </strong>
           <span *ngIf="!(current_user?.business_paying) && (current_user?.validation_level > 0)">
             <br>
-            <span *ngIf="current_user?.next_capture">
+            <span *ngIf="current_user?.subscription?.next_capture">
               {{ "PAYMENT.NEXT_CAPTURE" | translate}}:
-              {{ current_user.next_capture | filterize_date: "date"}}
+              {{ current_user.subscription.next_capture | filterize_date: "date"}}
             </span>
-            <span *ngIf="!(current_user?.next_capture)">
+            <span *ngIf="!(current_user?.valid_until)">
               {{ "PAYMENT.VALID_UNTIL" | translate}}:
               {{ current_user.valid_until | filterize_date: "date"}}
             </span>
