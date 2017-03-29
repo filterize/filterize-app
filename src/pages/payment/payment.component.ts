@@ -7,6 +7,9 @@ import { AlertController } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
 import { UserService } from "../../services/user.service";
 import { Subscription } from "rxjs";
+import { Http } from "@angular/http";
+import { jwtHeaderOnlyOptions } from "../../user/user.tools";
+import { CONFIG } from "../../app/config";
 
 
 @Component({
@@ -27,7 +30,7 @@ import { Subscription } from "rxjs";
     
     <ion-content>  
       <filterize-tbd feature="payment"></filterize-tbd>
-      <ion-segment [(ngModel)]="annually">
+      <ion-segment [(ngModel)]="annually" (ionChange)="updateParams()">
         <ion-segment-button [value]="true">
           {{ "PAYMENT.PAY_ANNUALLY" | translate }}
         </ion-segment-button>
@@ -39,7 +42,7 @@ import { Subscription } from "rxjs";
       <ion-list>
         <ion-item>
           <ion-label>{{ "PAYMENT.CURRENCY" | translate }}</ion-label>
-          <ion-select [ngModel]="currency">
+          <ion-select [(ngModel)]="currency" (ionChange)="updateParams()">
             <ion-option value="EUR">&euro; EUR</ion-option>
             <ion-option value="USD">$ USD</ion-option>
           </ion-select>
@@ -88,7 +91,10 @@ import { Subscription } from "rxjs";
           </ion-col>
           <ion-col col-12 col-md>
             <ion-card>
-              <ion-card-header>{{ "PAYMENT.1" | translate }}</ion-card-header>
+              <ion-item>
+                <h2>{{ "PAYMENT.1" | translate }}</h2>
+                <strong item-right>{{ prices.plus|currency:currency:true}}</strong>
+              </ion-item>
               <ion-card-content>
                 <p>
                   <ion-icon name="checkmark-circle"></ion-icon> &nbsp;
@@ -139,7 +145,10 @@ import { Subscription } from "rxjs";
           </ion-col>
           <ion-col col-12 col-md>
             <ion-card>
-              <ion-card-header>{{ "PAYMENT.2" | translate }}</ion-card-header>
+              <ion-item>
+                <h2>{{ "PAYMENT.2" | translate }}</h2>
+                <strong item-right>{{ prices.premium|currency:currency:true}}</strong>
+              </ion-item>
               <ion-card-content>
                 <p>
                   <ion-icon name="checkmark-circle"></ion-icon> &nbsp;
@@ -206,13 +215,39 @@ export class PaymentComponent implements OnInit, OnDestroy {
   sub:Subscription = null;
   pricing: any = null;
   user: any = null;
+  digits = 1;
+  prices = {
+    plus: 0,
+    premium: 0
+  };
+  token: string = null;
 
 
   constructor(private store: Store<AppState>,
               private actions$: Actions,
               private alertCtrl: AlertController,
               private userSrv: UserService,
+              private http: Http,
               private translate: TranslateService) {
+  }
+
+  updateParams() {
+    if (this.subscription) {
+      this.currency = this.subscription.currency;
+      this.annually = this.subscription.annually;
+    } else if (this.user) {
+      this.http.get(
+        `${CONFIG.filterize.api_url}/user/${this.user.user_id}/payment/token`,
+        jwtHeaderOnlyOptions(this.user.access_token),
+      )
+        .map(result => result.json())
+        .subscribe(data => this.token = data[data])
+    }
+    let intervalstring = this.annually ? "annually" : "monthly";
+    if (this.pricing) {
+      this.prices.plus = this.pricing[this.currency][1][intervalstring];
+      this.prices.premium = this.pricing[this.currency][2][intervalstring];
+    }
   }
 
   ngOnInit() {
@@ -222,6 +257,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.user = user;
         this.subscription = user["subscription"];
         this.pricing = user["pricing"];
+        this.updateParams();
       })
   }
 
