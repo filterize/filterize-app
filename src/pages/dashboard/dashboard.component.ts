@@ -130,9 +130,13 @@ export class DashboardComponent {
   }
 
   ngOnInit() {
-    this.sub = this.current_user$.subscribe(user => {
+    this.sub = this.current_user$
+      .filter(user => user != null)
+      .subscribe(user => {
       this.current_user = user;
-      this.rate_limited = this.current_user.rate_limit_until * 1000 > new Date().getTime();
+      this.rate_limited = this.current_user.rate_limit_until
+        ? this.current_user.rate_limit_until * 1000 > new Date().getTime()
+        : false;
     });
   }
 
@@ -155,7 +159,7 @@ export class DashboardComponent {
           payload: Object.assign({}, {_id: this.current_user._id}, data)
         })
       }
-    })
+    });
     modal.present();
   }
 

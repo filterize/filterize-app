@@ -128,7 +128,7 @@ export class FilterService {
         if (!business) {
           return [];
         }
-        if (!user["business"]) {
+        if (!user || !user["business"]) {
           return []
         }
         if (user["business_admin"]) {

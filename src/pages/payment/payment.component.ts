@@ -3,13 +3,14 @@ import { Store } from '@ngrx/store'
 import { AppState } from "../../app/appstate";
 import * as UserActions from "../../user/user.actions";
 import { Actions } from "@ngrx/effects";
-import { AlertController } from "ionic-angular";
+import { AlertController, ModalController } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
 import { UserService } from "../../services/user.service";
 import { Subscription } from "rxjs";
 import { Http } from "@angular/http";
 import { jwtHeaderOnlyOptions } from "../../user/user.tools";
 import { CONFIG } from "../../app/config";
+import { OrderComponent } from "./order.component";
 
 
 @Component({
@@ -226,6 +227,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>,
               private actions$: Actions,
               private alertCtrl: AlertController,
+              private modalCtrl: ModalController,
               private userSrv: UserService,
               private http: Http,
               private translate: TranslateService) {
@@ -241,7 +243,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         jwtHeaderOnlyOptions(this.user.access_token),
       )
         .map(result => result.json())
-        .subscribe(data => this.token = data[data])
+        .subscribe(data => {this.token = data.data; console.log("token data recv", data)})
     }
     let intervalstring = this.annually ? "annually" : "monthly";
     if (this.pricing) {
@@ -268,11 +270,26 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   doBuy(plan) {
-    console.log("buy", plan);
+    this.openOrder(false, plan);
   }
 
   doSubscribe(plan) {
-    console.log("subscribe", plan);
+    this.openOrder(true, plan);
+  }
+
+  openOrder(subscription: boolean, plan) {
+    let p_label = plan == 1 ? "plus" : "premium";
+    console.log("token", this.token);
+    let modal = this.modalCtrl.create(OrderComponent, {
+      subscription: subscription,
+      plan: plan,
+      plan_label: p_label,
+      currency: this.currency,
+      annually: this.annually,
+      price: this.prices[p_label],
+      token: this.token,
+    });
+    modal.present();
   }
 
   doSwitch(plan) {

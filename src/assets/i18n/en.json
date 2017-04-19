@@ -105,12 +105,18 @@
     "INF": "unlimited",
     "SUBSCRIBE": "subscribe",
     "BUY": "one-time",
+    "ONE_TIME_BUY": "One-time buy",
     "SWITCH": "switch",
     "SUBSCRIBE_CANCEL": "unsubscribe",
     "PAY_MONTHLY": "Pay monthly",
     "PAY_ANNUALLY": "Pay annually",
     "CURRENCY": "Currency",
-    "DOWNGRADE": "Downgrade at"
+    "DOWNGRADE": "Downgrade at",
+    "PLAN": "Plan",
+    "MONTH": "month",
+    "YEAR": "year",
+    "BILLING_ADDRESS": "Billing address",
+    "ORDER": "Order"
   },
   "LIBRARY": {
     "TITLE": "Library"

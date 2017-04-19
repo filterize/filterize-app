@@ -68,6 +68,7 @@ import { ConditionActionSelectComponent } from "../pages/filter/condition-action
 import { ConsultantComponent } from "../pages/consultant/consultant.component";
 import { GoogleLoginService } from "../services/google.login.service";
 import { EvernoteService } from "../services/evernote.service";
+import { OrderComponent } from "../pages/payment/order.component";
 
 
 /*const appRoutes = [
@@ -188,7 +189,8 @@ if (CONFIG.production) {
     ConditionActionEditComponent,
     ConditionActionFieldComponent,
     ConditionActionSelectComponent,
-    ConsultantComponent
+    ConsultantComponent,
+    OrderComponent
   ],
   imports: imports,
   bootstrap: [IonicApp],
@@ -217,7 +219,8 @@ if (CONFIG.production) {
     FilterListComponent,
     ConditionActionEditComponent,
     ConditionActionSelectComponent,
-    ConsultantComponent
+    ConsultantComponent,
+    OrderComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: RavenErrorHandler },

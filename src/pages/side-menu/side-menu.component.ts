@@ -216,7 +216,7 @@ export class SideMenuComponent implements OnInit, OnDestroy {
 
   goto(target) {
     this.currentUser$.first().subscribe(user => {
-      if (user.user_id == null && !(target in ANONYM_COMPONENTS)) {
+      if ((user == null || user.user_id == null) && !(target in ANONYM_COMPONENTS)) {
         console.log("invalid page change without user_id");
         return;
       }

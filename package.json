@@ -38,6 +38,7 @@
     "@ngrx/store": "^2.2.1",
     "@ngrx/store-devtools": "^3.2.2",
     "angular2-jwt": "^0.1.27",
+    "braintree-web": "^2.31.0",
     "google-oauth2-web-client": "^0.1.2",
     "ionic-angular": "2.2.0",
     "ionic-native": "2.4.1",
