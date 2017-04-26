@@ -107,7 +107,11 @@ export class GO2 {
 
     // rewrite redirect_uri
     if (options.redirectUriSuffix) {
-      this._redirectUri = this._redirectUri + options.redirectUriSuffix;
+      let sep = "";
+      if (this._redirectUri.length > 0 && this._redirectUri[this._redirectUri.length-1] != "/" && options.redirectUriSuffix[0] != "/") {
+        sep = "/";
+      }
+      this._redirectUri = this._redirectUri + sep + options.redirectUriSuffix;
     }
 
     // popup dimensions

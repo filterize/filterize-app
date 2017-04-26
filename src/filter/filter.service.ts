@@ -172,7 +172,7 @@ export class FilterService {
       }
       else {
         if (group == "my") {
-          this.user$.first().subscribe(user => group = user["user_id"] as number);
+          this.user$.first().subscribe(user => group = user ? user["user_id"] as number : 0);
         }
         group = typeof group == "string" ? parseInt(group as string) : group;
         condition = (f) => {

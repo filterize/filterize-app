@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+                 script-src
+                    'self'
+                    https://www.googletagmanager.com
+                    https://assets.zendesk.com
+                    http://www.google-analytics.com
+                    https://v2.zopim.com
+                    http://localhost:*
+                    'unsafe-inline' 'unsafe-eval';
+                 connect-src
+                    'self'
+                    https://*.filterize.net
+                    https://filterize.zendesk.com
+                    wss://*.zopim.com
+                    https://sentry.io
+                    ws://localhost:*
+                    'unsafe-eval';
+                 object-src 'self';
+                 style-src
+                    https://v2.zopim.com
+                    'self'
+                    'unsafe-inline';
+                 font-src
+                    'self'
+                    https://v2.zopim.com
+                    data:;
+                 img-src
+                    'self'
+                    https://v2.zopim.com
+                    data:">
+
   <script>
     dataLayer = [];
   </script>
@@ -34,7 +66,8 @@
   </script>
 
   <link href="build/main.css" rel="stylesheet">
-  <base href="/">
+  <!--<base href="/">-->
+
   <style>
     .scroll-content {
       overflow-y: auto;!important;

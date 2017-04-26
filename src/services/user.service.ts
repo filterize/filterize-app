@@ -58,6 +58,9 @@ export class UserService {
 
   private checkToken(action, user, time_offset) {
     // convert to client time, subtract 5 minutes, convert to milliseconds
+    if (user == null) {
+      return;
+    }
     let valid_until = (user["exp"] - time_offset - 300) * 1000;
     if (valid_until > new Date().getTime()) {
       if (action.payload) {
