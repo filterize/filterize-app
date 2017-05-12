@@ -9,6 +9,8 @@ import { Subscription, Observable } from "rxjs";
 import { AddressChangeComponent } from "../../tools/address-change.component";
 import * as UserActions from "../../user/user.actions";
 import * as braintree from "braintree-web";
+import { CONFIG } from "../../app/config";
+import { jwtHeaderOnlyOptions } from "../../user/user.tools";
 
 
 @Component({
@@ -104,7 +106,17 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.current_user = user;
     });
     this.changed_address_data = null;
-    this.init_braintree();
+    if (this.token) {
+      this.init_braintree();
+    } else {
+      this.http.get(
+        `${CONFIG.filterize.api_url}/user/${this.current_user.user_id}/payment/token`,
+        jwtHeaderOnlyOptions(this.current_user.access_token),
+      )
+        .map(result => result.json())
+        .subscribe(data => {this.token = data.data; this.init_braintree(); console.log("token data recv", data)})
+    }
+
   }
 
   ngOnDestroy() {
@@ -135,8 +147,11 @@ export class OrderComponent implements OnInit, OnDestroy {
         // kount: {environment: window.KOUNT_ENV},
         paypal: true,
       },
-      onPaymentMethodReceived: (data) => {
-        console.log("received:", data);
+      paypal: {
+        enableShippingAddress: true
+      },
+      onPaymentMethodReceived: (data:{nonce: string}) => {
+        this.order(data.nonce)
       }
       // onReady: (braintreeInstance) =>
       //   $("#device_data").val(braintreeInstance.deviceData)
@@ -145,6 +160,26 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   dismiss() {
     this.viewCtrl.dismiss();
+  }
+
+  order(nonce) {
+    let data = {
+      currency: this.currency,
+      cycle: this.annually ? "annually" : "monthly",
+      payment_method_nonce: nonce,
+      method: this.subscription ? "subscription": "onetime",
+      level: this.plan_label
+    };
+
+    this.http.post(
+      `${CONFIG.filterize.api_url}/user/${this.current_user.user_id}/payment/order`,
+      data,
+      jwtHeaderOnlyOptions(this.current_user.access_token),
+    )
+      .map(result => result.json())
+      .subscribe(data => {console.log("order recv", data)})
+
+    console.log("order data:", data);
   }
 
   submit(form, event:Event) {

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+///<reference path="../../../node_modules/@angular/core/src/metadata/lifecycle_hooks.d.ts"/>
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store'
 import { AppState } from "../../app/appstate";
 import * as UserActions from "../../user/user.actions";
@@ -6,6 +7,7 @@ import { Actions } from "@ngrx/effects";
 import { AlertController } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
 import { GoogleLoginService } from "../../services/google.login.service";
+import { Subscription } from "rxjs";
 
 
 @Component({
@@ -35,7 +37,7 @@ import { GoogleLoginService } from "../../services/google.login.service";
         </ion-item>
       </ion-list>
       
-      <button ion-button block [disabled]="in_progress" (click)="onLogin()">{{ "LOGIN.LOGIN" | translate }}</button>
+      <button ion-button block type="submit" [disabled]="in_progress">{{ "LOGIN.LOGIN" | translate }}</button>
       </form>
       <br>
       <button ion-button block outline [disabled]="in_progress" (click)="onGoogleLogin()" color="danger">
@@ -45,10 +47,11 @@ import { GoogleLoginService } from "../../services/google.login.service";
     </ion-content>
   `
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
   in_progress = false;
   email = "";
   password = "";
+  sub: Subscription;
 
   constructor(private store: Store<AppState>,
               private actions$: Actions,
@@ -57,12 +60,24 @@ export class LoginComponent {
               private translate: TranslateService) {
   }
 
-  onLogin() {
-    this.in_progress = true;
-
-    this.actions$.ofType(UserActions.LOGIN_FAILED).first().subscribe(() => {
+  ngOnInit(): void {
+    this.in_progress = false;
+    this.sub = this.actions$.ofType(UserActions.LOGIN_FAILED).subscribe(() => {
       this.onLoginFailed();
     });
+
+
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
+
+  onLogin() {
+    console.log("login-klick");
+    this.in_progress = true;
 
     this.store.dispatch({
       type: UserActions.LOGIN,

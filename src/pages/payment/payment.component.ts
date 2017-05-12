@@ -81,7 +81,7 @@ import { OrderComponent } from "./order.component";
                     {{ "PAYMENT.SWITCH" | translate }}
                   </button>
                 </ion-col>
-                <ion-col center text-center>
+                <ion-col center text-center  *ngIf="!subscription">
                   <strong color="danger">
                     {{ "PAYMENT.DOWNGRADE" | translate }}
                     {{ user?.valid_until * 1000 | filterize_date: "date-time"}}
@@ -237,7 +237,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.currency = this.subscription.currency;
       this.annually = this.subscription.annually;
-    } else if (this.user) {
+    } else if (this.user && !this.token) {
       this.http.get(
         `${CONFIG.filterize.api_url}/user/${this.user.user_id}/payment/token`,
         jwtHeaderOnlyOptions(this.user.access_token),
@@ -257,6 +257,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       .filter(user => user)
       .subscribe(user => {
         this.user = user;
+        this.token == null;
         this.subscription = user["subscription"];
         this.pricing = user["pricing"];
         this.updateParams();

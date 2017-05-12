@@ -93,6 +93,7 @@
     "0": "Free",
     "1": "Plus",
     "2": "Premium",
+    "undefined": "",
     "BUSINESS": "Business",
     "CURRENT_PLAN": "Current plan",
     "SUBSCRIPTION": "Subscription",
@@ -116,7 +117,8 @@
     "MONTH": "month",
     "YEAR": "year",
     "BILLING_ADDRESS": "Billing address",
-    "ORDER": "Order"
+    "ORDER": "Order",
+    "ORDER_NOW": "Order Now"
   },
   "LIBRARY": {
     "TITLE": "Library"

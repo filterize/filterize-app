@@ -18,7 +18,6 @@
     "electron dist": "electron .",
     "test": "grunt bump-only:prerelease && ionic serve",
     "browserify": "browserify -s main www/build/main.js | exorcist www/build/bundle.js.map > www/build/bundle.js",
-    "minify": "uglifyjs www/build/main.js --in-source-map www/build/main.js.map --source-map www/build/main.min.js.map --screw-ie8 --compress warnings=false --mangle --output www/build/main.min.js",
     "start": "grunt bump && ionic build browser && grunt swPrecache:release && firebase deploy"
   },
   "dependencies": {

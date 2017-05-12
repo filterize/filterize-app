@@ -22,9 +22,11 @@ export class UserEffects {
         username: action.payload.email,
         password: action.payload.password,
         client_id: CONFIG.filterize.client_id
-      }))
-    .map(res => ({type: UserActions.LOGIN_SUCCESS, payload: res.json()}))
-    .catch(res => Observable.of({type: UserActions.LOGIN_FAILED, payload: res.json()}));
+      })
+      .map(res => ({type: UserActions.LOGIN_SUCCESS, payload: res.json()}))
+      .catch(res => Observable.of({type: UserActions.LOGIN_FAILED, payload: res.json()}))
+    );
+
 
   @Effect() google_login$ = this.actions$
   // Listen for Login
@@ -35,9 +37,10 @@ export class UserEffects {
         grant_type: "google_token",
         token: action.payload,
         client_id: CONFIG.filterize.client_id
-      }))
-    .map(res => ({type: UserActions.LOGIN_SUCCESS, payload: res.json()}))
-    .catch(res => Observable.of({type: UserActions.LOGIN_FAILED, payload: res.json()}));
+      })
+      .map(res => ({type: UserActions.LOGIN_SUCCESS, payload: res.json()}))
+      .catch(res => Observable.of({type: UserActions.LOGIN_FAILED, payload: res.json()}))
+    );
 
   /*
   @Effect() basicData$ = this.actions$

@@ -192,7 +192,7 @@ export class ResourcesService {
           )
             .map(data => data.json())
             .withLatestFrom(this.userSrv.currentUser$, this.store.select("current_user"))
-            .filter(([data, user, current]) => data.user.id == user["user_id"] && data.user.business == current["business"])
+            .filter(([data, user, current]) => user && data.user.id == user["user_id"] && data.user.business == current["business"])
             .map(([data, user, current]) => data["data"])
             .filter(data => data.length > 0)
             .subscribe(obj => {
