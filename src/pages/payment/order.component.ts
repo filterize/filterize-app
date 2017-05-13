@@ -4,7 +4,7 @@ import { AppState } from "../../app/appstate";
 import { UserService } from "../../services/user.service";
 import { Http } from "@angular/http";
 import { TranslateService } from "ng2-translate";
-import { NavParams, ViewController, ModalController } from "ionic-angular";
+import { NavParams, ViewController, ModalController, LoadingController, ToastController } from "ionic-angular";
 import { Subscription, Observable } from "rxjs";
 import { AddressChangeComponent } from "../../tools/address-change.component";
 import * as UserActions from "../../user/user.actions";
@@ -90,6 +90,8 @@ export class OrderComponent implements OnInit, OnDestroy {
               private params: NavParams,
               private viewCtrl: ViewController,
               private modalCtrl: ModalController,
+              private loadingCtrl: LoadingController,
+              private toastCtrl: ToastController,
               private translate: TranslateService) {
   }
 
@@ -132,7 +134,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.store.dispatch({
           type: UserActions.CHANGED,
           payload: Object.assign({}, {_id: this.current_user._id}, data)
-        })
+        });
         this.changed_address_data = data;
       }
     });
@@ -171,15 +173,52 @@ export class OrderComponent implements OnInit, OnDestroy {
       level: this.plan_label
     };
 
+    let loading = this.loadingCtrl.create();
+    this.translate.get("UI.LOADING").subscribe(content => {
+      loading.setContent(content);
+    });
+    loading.present();
+
+
     this.http.post(
       `${CONFIG.filterize.api_url}/user/${this.current_user.user_id}/payment/order`,
       data,
       jwtHeaderOnlyOptions(this.current_user.access_token),
     )
       .map(result => result.json())
-      .subscribe(data => {console.log("order recv", data)})
+      .subscribe(data => this.orderResultHttpOk(data, loading), err => this.orderResultHttpError(err, loading))
 
     console.log("order data:", data);
+  }
+
+  orderResultHttpOk(data, loading) {
+    console.log("order recv", data);
+    loading.dismiss();
+    this.translate.get(data.data.msg).subscribe(trans => {
+      let toast = this.toastCtrl.create({
+        message: trans,
+        duration: 3000
+      });
+      toast.present();
+    });
+    this.store.dispatch({
+      type: UserActions.CHANGED,
+      payload: Object.assign({}, {_id: this.current_user._id}, data.user)
+    });
+    this.viewCtrl.dismiss(data.data.success);
+  }
+
+  orderResultHttpError(error, loading) {
+    console.log("could not place order");
+    loading.dismiss();
+    this.translate.get("PAYMENT.ERROR").subscribe(trans => {
+      let toast = this.toastCtrl.create({
+        message: trans,
+        duration: 3000
+      });
+      toast.present();
+    });
+    this.viewCtrl.dismiss(false);
   }
 
   submit(form, event:Event) {

@@ -118,7 +118,8 @@
     "YEAR": "year",
     "BILLING_ADDRESS": "Billing address",
     "ORDER": "Order",
-    "ORDER_NOW": "Order Now"
+    "ORDER_NOW": "Order Now",
+    "ERROR": "Error: Could not place order!"
   },
   "LIBRARY": {
     "TITLE": "Library"
