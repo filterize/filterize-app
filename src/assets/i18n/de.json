@@ -3,14 +3,20 @@
     "ERROR": "Fehler",
     "OK": "Ok",
     "CANCEL": "Abbrechen",
-    "LOADING": "Bitte warten...",
-    "SYNC": "Synchronisation"
+    "LOADING": "bitte warten...",
+    "SYNC": "Synchronisation",
+    "DELETE": "Löschen",
+    "VIA": "via",
+    "CLONE": "Klonen"
   },
   "LOGIN": {
-    "LOGIN": "Einloggen",
-    "LOGOUT": "Ausloggen",
-    "SIGN_UP": "Anmelden",
-    "LOGIN_ERROR_MSG": "Die angegebenen Login-Daten sind ungültig. Bitte überprüfen Sie ihre E-Mail Adresse und das Passwort."
+    "LOGIN": "Login",
+    "LOGIN_GOOGLE": "Log in mit google",
+    "LOGOUT": "Logout",
+    "SIGN_UP": "Registrieren",
+    "LOGIN_ERROR_MSG": "Die angegebenen Login Daten sind ungültig. Bitte überprüfen die Benutzername und Passwort.",
+    "SIGN_UP_ERROR_409": "Die gewählte Email Adresse ist bereits in Verwendung.",
+    "SIGN_UP_ERROR_422": "Ungültige Email Adresse."
   },
   "USER": {
     "FIRST_NAME": "Vorname",
@@ -19,13 +25,143 @@
     "E_MAIL": "E-Mail",
     "BUSINESS": "Business",
     "PRIVATE": "Privat",
-    "SELECT": "Auswählen"
+    "SELECT": "Wählen"
   },
   "MENU": {
     "TITLE": "Navigation"
   },
+  "DASHBOARD": {
+    "TITLE": "Übersicht",
+    "EVERNOTE_VALID_UNTIL": "Evernote Freigabe bis",
+    "EVERNOTE_RATE_LIMIT_UNTIL": "Zugriffsbeschränkung bis",
+    "EVERNOTE_RATE_LIMIT_DESCRIPTION": "Evernote limitiert die Anzahl der Zugriffe von Drittanwendungen. Sobald dieses Limit erreicht ist, sind keine weiteren Änderungen oder Synchronisationen möglich. Für uns bedeutet dies, dass keine Filter angewendet werden können und das keine Änderungen an Notizbüchern oder Schlagwörtern vorgenommen werden können. Diese Begrenzungen können auftreten, wenn viele Notizen in einer kurzen Zeit verändert werden. Wir speichern alle Interaktionen in einer Warteschlange, so dass sie mit Evernote synchronisiert werden, sobald die Beschränkungen wieder aufgehoben sind. Änderungen sind also nicht verloren, sondern nur verspätet.",
+    "EVERNOTE_REVALIDATE": "Neu verbinden",
+    "EVERNOTE_VALIDATE": "Evernote verbinden",
+    "EVERNOTE_CONNECT_MESSAGE": "Bitte verbinden Sie Evernote mit Ihrem Account, um ihre Notizen mit Filterize zu verarbeiten."
+  },
+  "BUSINESS": {
+    "TITLE": "Unternehmen",
+    "ROLE": {
+      "1": "Admin",
+      "2": "Butzer",
+      "LABEL": "Ihre Unternehmensrolle"
+    }
+  },
   "HIERARCHY": {
-    "TITLE": "Tag Hierarchy",
-    "DESC": "Eine nette Beschreibung für die Tag Hierarchie."
+    "TITLE": "Tag Hierarchie",
+    "DESC": "A nice tag hierarchy description."
+  },
+  "FILTER": {
+    "TITLE": "Filter",
+    "MY": "Persönliche Filter",
+    "GLOBAL": "Unternehmensweite Filters",
+    "NO_STACK": "unkategorisiert",
+    "NAME": "Name",
+    "STACK": "Stapel",
+    "ACTIONS": "Aktionen",
+    "CONDITIONS": "Bedingungen",
+    "ACTIVE": "Activ",
+    "NEGATE": "Bedingung verneinen",
+    "NEW_ACTION": "Neue Aktion",
+    "NEW_CONDITION": "Neue Bedingung",
+    "INVERSE": "Invertieren",
+    "DELETE": "Filter löschen",
+    "DELETE_MSG": "Möchten Sie diesen Filter wirklich löschen?"
+  },
+  "CALENDAR": {
+    "TITLE": "Kalender",
+    "DURATION": "Dauer",
+    "LINK_TYPE": "Linktyp",
+    "LINK_APP": "In-App Link",
+    "LINK_WEB": "Weblink",
+    "DAY": "ganzer Tag",
+    "REVOKE": "Kalender Links widerrufen",
+    "SYNC_FIRST": "Link kann nur für synchronisierte Notizbücher erstellt werden.",
+    "ALL": "Alle aktivierten Kalender"
+  },
+  "MAIL_IN": {
+    "TITLE": "Mail-In",
+    "ADDRESS": "Evernote Mail-in Adresse",
+    "ADDRESS_SHORT": "Mail-in Addresse",
+    "INTRO": "Bitte geben Sie Ihre Evernote Mail-In Adresse ein, um diese Funktion zu aktivieren",
+    "REQUIRE_TOKEN": "Sicherheitstoken notwendig",
+    "RESET_TOKEN": "Sicherheitstoken zurücksetzen",
+    "NOTEBOOKS": "Notizbücher"
+  },
+  "PAYMENT": {
+    "TITLE": "Bezahlung",
+    "0": "Frei",
+    "1": "Plus",
+    "2": "Premium",
+    "undefined": "",
+    "BUSINESS": "Business",
+    "CURRENT_PLAN": "Aktueller Tarif",
+    "SUBSCRIPTION": "Abbonement",
+    "NEXT_CAPTURE": "Nächste Abbuchung",
+    "VALID_UNTIL": "Gültig bis",
+    "HIERARCHY": "Automatische Tag Hierarchie",
+    "FILTER": "Notiz Filter",
+    "CALENDAR": "Kalender Exporte",
+    "MAIL": "Mail-In für jedes Notizbuch",
+    "INF": "unbegrenzt",
+    "SUBSCRIBE": "abbonieren",
+    "BUY": "einmalig",
+    "ONE_TIME_BUY": "Einmal-Kauf",
+    "SWITCH": "wechseln",
+    "SUBSCRIBE_CANCEL": "kündigen",
+    "PAY_MONTHLY": "Monatliche Zahlung",
+    "PAY_ANNUALLY": "Jährliche Zahlung",
+    "CURRENCY": "Währung",
+    "DOWNGRADE": "Abstufung am",
+    "PLAN": "Tarif",
+    "MONTH": "Monat",
+    "YEAR": "Jahr",
+    "BILLING_ADDRESS": "Zahlungsadresse",
+    "ORDER": "Bestellung",
+    "ORDER_NOW": "Jetzt bestellen",
+    "ERROR": "Fehler beim Erstellen der Bestellung"
+  },
+  "LIBRARY": {
+    "TITLE": "Bibliothek"
+  },
+  "SETTINGS": {
+    "TITLE": "Einstellungen",
+    "LANGUAGE": {
+      "LABEL": "Sprache",
+      "de": "deutsch",
+      "en": "englisch"
+    },
+    "DATE_FORMAT": "Datumsformat",
+    "TIME_FORMAT": "Zeitformat"
+  },
+  "ZENDESK": {
+    "SUPPORT": "Support"
+  },
+  "ADDRESS": {
+    "CHANGE": "Adresse ändern",
+    "COMPANY": "Firma",
+    "FIRST_NAME": "Vorname",
+    "LAST_NAME": "Nachname",
+    "ADDRESS": "Adresse",
+    "ADDRESS_EXTRA": "Adresszeile 2 (optional)",
+    "ZIP_CODE": "Postleitzahl",
+    "STATE": "Staat / Provinz",
+    "COUNTRY": "Land"
+  },
+  "CONSULTANT": {
+    "TITLE": "Consultant Zugang",
+    "CLIENTS": "Ihre Kunden",
+    "CONSULTANTS": "Ihre Consultant(s)",
+    "UNTIL": "begreinzt bis",
+    "LINK": "Ihr Einladungslink:",
+    "ERROR": {
+      "LOGIN": "Fehler beim Wechseln des Nutzers",
+      "DELETE_CONSULTANT": "Fehler beim Löschen des Consultants",
+      "DELETE_CLIENT": "Fehler beim Löschen des Kunden"
+    },
+    "DELETE_CONSULTANT": "Consultant löschen",
+    "DELETE_CONSULTANT_MSG": "Möchten Sie wirklich den gewählten Consultant löschen?",
+    "DELETE_CLIENT": "Kunde Löschen",
+    "DELETE_CLIENT_MSG": "Möchten Sie wirklich den gewählten Kunden löschen?"
   }
 }
