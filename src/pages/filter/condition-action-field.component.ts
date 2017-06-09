@@ -38,7 +38,8 @@ import { i18n_dict } from "../../tools/tools.spec";
     </ion-item>
     
     <filterize-select *ngIf="edit == 'search-select'"
-      [(value)]="value"
+      [value]="value"
+      (valueChange)="updateSelect($event)"
       [searchItems]="select_items"
       [title]="select_resource?.title"
       [icon]="select_resource?.icon"
@@ -115,6 +116,11 @@ export class ConditionActionFieldComponent implements OnInit, OnChanges{
 
   ngOnChanges(changes: SimpleChanges): void {
     this.ngOnInit();
+  }
+
+  updateSelect(val) {
+    this.value = val;
+    this.updateValue();
   }
 
   updateValue(evt?) {

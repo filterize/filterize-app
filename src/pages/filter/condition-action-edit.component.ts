@@ -70,6 +70,7 @@ export class ConditionActionEditComponent implements OnInit {
     this.value = JSON.parse(JSON.stringify(this.params.get("value")));
     this.show_not = !!this.params.get("show_not");
     this.can_edit = this.params.get("can_edit");
+    console.log("VALUE", this.value);
   }
 
   dismiss(value: any) {

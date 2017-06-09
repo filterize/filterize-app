@@ -113,7 +113,8 @@ export class DbUserService {
   fetch_changes(finished=null, type_only=null) {
     this.db.changes({
       since: this.seq,
-      include_docs: true
+      include_docs: true,
+      timeout: 1000
     }).then(changes => {
       let object_collection = Object();
       this.seq = changes.last_seq;
@@ -134,7 +135,8 @@ export class DbUserService {
           })
         }
       }
-    }).then(finished)
+
+    }).catch(err => console.log("ERROR", err)).then(finished);
   }
 
   initLogoutListener() {

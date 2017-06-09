@@ -69,10 +69,14 @@ export class MyApp {
       if (data["profile"] == "") this.navChild.setRoot(this.login_start);
     });
 
-    let goHome = () => this.navChild.setRoot(this.user_start);
+    let goHome = () => {
+      console.log("go home");
+      this.navChild.setRoot(this.user_start);
+    }
 
     this.actions$.ofType(UserActions.SELECT).subscribe(goHome);
     this.actions$.ofType(UserActions.LOGIN_SUCCESS).subscribe(goHome);
+    this.actions$.ofType(UserActions.FROM_DATABASE).subscribe(goHome);
     this.actions$.ofType(UserActions.LOGOUT).subscribe(() => this.navChild.setRoot(this.login_start));
 
     this.navChild.viewDidEnter.subscribe(() => this.zendeskSrv.updatePath());
