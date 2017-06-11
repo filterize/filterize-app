@@ -3,11 +3,14 @@ import { Store } from '@ngrx/store'
 import { AppState } from "../../app/appstate";
 import * as UserActions from "../../user/user.actions";
 import { Actions } from "@ngrx/effects";
-import { AlertController, NavParams, NavController } from "ionic-angular";
+import { AlertController, NavParams, NavController, ModalController } from "ionic-angular";
 import { TranslateService } from "ng2-translate";
 import { Observable } from "rxjs";
 import { FilterService } from "../../filter/filter.service";
 import { FilterListComponent } from "./filter-list.component";
+import { Filter } from "../../filter/filter.spec";
+import { v4 } from "uuid";
+import { FilterComponent } from "./filter.component";
 
 
 @Component({
@@ -23,6 +26,13 @@ import { FilterListComponent } from "./filter-list.component";
           <ion-icon name="funnel"></ion-icon>
           {{ "FILTER.TITLE" | translate }}
         </ion-title>
+        
+        <ion-buttons right>
+          <button ion-button icon-only (click)="createFilter()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-buttons>
+
       </ion-navbar>
     </ion-header>
     
@@ -46,6 +56,7 @@ export class FilterStacksComponent {
               private actions$: Actions,
               private alertCtrl: AlertController,
               private params: NavParams,
+              private modalCtrl: ModalController,
               private nav: NavController,
               private filterSrv: FilterService,
               private translate: TranslateService) {
@@ -70,5 +81,41 @@ export class FilterStacksComponent {
       "stack": stack
     });
   }
+
+  openFilter(filter: Filter, signal?: string) {
+    signal = signal ? signal : "FILTER_CHANGED";
+    let modal = this.modalCtrl.create(FilterComponent, {
+      filter: filter
+    });
+    modal.onDidDismiss((data) => {
+      if (data != null) {
+        this.store.dispatch({
+          type: signal,
+          payload: data
+        });
+        this.selectStack(data.stack);
+      }
+    });
+    modal.present();
+  }
+
+  createFilter() {
+    let filter: Filter = {
+      name: "",
+      action: [],
+      condition: {
+        type: "ALL",
+        conditions: []
+      },
+      active: true,
+      guid: v4(),
+      "#can_edit": true,
+      stack: ""
+    };
+
+    this.openFilter(filter, "FILTER_CREATED");
+  }
+
+
 
 }

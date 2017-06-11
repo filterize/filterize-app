@@ -260,6 +260,8 @@ export class FilterService {
       .map(list => list.filter(f => condition(f)))
       // extract stack
       .map(list => list.map(f => toStack(f)))
+      // add __EMPTY__ stack
+      .map(list => ["__EMPTY__", ...list])
       // make stacks unique
       .map(list => list.filter((value, index, self) => self.indexOf(value) === index))
       // sort
