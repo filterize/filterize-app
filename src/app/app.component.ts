@@ -20,6 +20,7 @@ import * as UserActions from "../user/user.actions";
 import { TagHierarchyComponent } from "../pages/tag-hierarchy/tag-hierarchy.component";
 import { ZendeskService } from "../services/zendesk.service";
 import { DashboardComponent } from "../pages/dashboard/dashboard.component";
+import { UserService } from "../services/user.service";
 
 
 @Component({
@@ -43,6 +44,7 @@ export class MyApp {
               private menuCtrl: MenuController,
               private store: Store<AppState>,
               private actions$: Actions,
+              private userSrv: UserService,
               private zendeskSrv: ZendeskService) {
     console.log(window.location.hash);
     translate.setDefaultLang("en");
@@ -72,11 +74,13 @@ export class MyApp {
     let goHome = () => {
       console.log("go home");
       this.navChild.setRoot(this.user_start);
-    }
+    };
 
-    this.actions$.ofType(UserActions.SELECT).subscribe(goHome);
-    this.actions$.ofType(UserActions.LOGIN_SUCCESS).subscribe(goHome);
-    this.actions$.ofType(UserActions.FROM_DATABASE).subscribe(goHome);
+    this.userSrv.getCurrentUser().filter(obj => obj != null && obj.user_id).subscribe(goHome);
+
+    // this.actions$.ofType(UserActions.SELECT).subscribe(goHome);
+    // this.actions$.ofType(UserActions.LOGIN_SUCCESS).subscribe(goHome);
+    // this.actions$.ofType(UserActions.FROM_DATABASE).subscribe(goHome);
     this.actions$.ofType(UserActions.LOGOUT).subscribe(() => this.navChild.setRoot(this.login_start));
 
     this.navChild.viewDidEnter.subscribe(() => this.zendeskSrv.updatePath());
