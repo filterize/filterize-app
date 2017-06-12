@@ -76,9 +76,7 @@ export class MyApp {
       this.navChild.setRoot(this.user_start);
     };
 
-    this.userSrv.getCurrentUser()
-      .filter(obj => obj != null && obj.user_id)
-      .map(user => Object({user_id: user.user_id, business:user.business}))
+    this.store.select("current_user")
       .distinctUntilChanged()
       .subscribe(goHome);
 
