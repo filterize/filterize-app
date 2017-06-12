@@ -76,7 +76,11 @@ export class MyApp {
       this.navChild.setRoot(this.user_start);
     };
 
-    this.userSrv.getCurrentUser().filter(obj => obj != null && obj.user_id).subscribe(goHome);
+    this.userSrv.getCurrentUser()
+      .filter(obj => obj != null && obj.user_id)
+      .map(user => Object({user_id: user.user_id, business:user.business}))
+      .distinctUntilChanged()
+      .subscribe(goHome);
 
     // this.actions$.ofType(UserActions.SELECT).subscribe(goHome);
     // this.actions$.ofType(UserActions.LOGIN_SUCCESS).subscribe(goHome);
