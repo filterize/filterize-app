@@ -30,7 +30,7 @@ import { EvernoteService } from "../../services/evernote.service";
     </ion-header>
     
     <ion-content>  
-    <ion-card *ngIf="current_user.user_id">
+    <ion-card *ngIf="current_user?.user_id">
       <ion-card-header>Profile</ion-card-header>
       
       <ion-list>
@@ -51,11 +51,11 @@ import { EvernoteService } from "../../services/evernote.service";
             <br>
             <span *ngIf="current_user?.subscription?.next_capture">
               {{ "PAYMENT.NEXT_CAPTURE" | translate}}:
-              {{ current_user.subscription.next_capture | filterize_date: "date"}}
+              {{ current_user?.subscription.next_capture | filterize_date: "date"}}
             </span>
             <span *ngIf="!(current_user?.valid_until)">
               {{ "PAYMENT.VALID_UNTIL" | translate}}:
-              {{ current_user.valid_until | filterize_date: "date"}}
+              {{ current_user?.valid_until | filterize_date: "date"}}
             </span>
           </span>
         </button>
