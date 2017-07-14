@@ -62,7 +62,7 @@ import { EvernoteService } from "../../services/evernote.service";
       </ion-list>
     </ion-card>
      
-    <ion-card *ngIf="current_user.token_expires">
+    <ion-card *ngIf="current_user?.token_expires">
       <ion-card-header>Evernote</ion-card-header>
       <ion-list>
         <ion-item>
@@ -87,7 +87,7 @@ import { EvernoteService } from "../../services/evernote.service";
       </ion-list>
     </ion-card>
      
-    <ion-card *ngIf="!current_user.token_expires">
+    <ion-card *ngIf="!current_user?.token_expires">
       <ion-card-header>Evernote</ion-card-header>
       <ion-card-content text-wrap>
         <p>{{ "DASHBOARD.EVERNOTE_CONNECT_MESSAGE" | translate }}</p>
@@ -98,7 +98,7 @@ import { EvernoteService } from "../../services/evernote.service";
       </ion-card-content>
     </ion-card>
     
-    <ion-card *ngIf="current_user.business">
+    <ion-card *ngIf="current_user?.business">
       <ion-card-header>{{ "BUSINESS.TITLE" | translate}}: {{current_user.business.name}}</ion-card-header>
       <ion-list>
         <ion-item>
