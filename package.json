@@ -14,6 +14,7 @@
     "deploy:before": "build",
     "build:before": "build",
     "run:before": "build",
+    "sw": "grunt swPrecache:release",
     "electron": "electron .",
     "electron dist": "electron .",
     "test": "grunt bump-only:prerelease && ionic serve",

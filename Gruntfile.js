@@ -9,6 +9,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-bump');
 
     // Project configuration.
+    var rootDir = "platforms/browser/www";
     grunt.initConfig({
         bump: {
             options: {
@@ -36,7 +37,7 @@ module.exports = function(grunt) {
           },
           release: {
             handleFetch: true,
-            rootDir: "platforms/browser/www"
+            rootDir: rootDir
           }
         }
     });
@@ -61,7 +62,7 @@ module.exports = function(grunt) {
       handleFetch: handleFetch,
       logger: grunt.log.writeln,
       staticFileGlobs: [
-        rootDir + '/build/*',
+        rootDir + '/build/*.{js,css}',
         rootDir + '/assets/**/*',
         rootDir + '/lib/*',
         rootDir + '/index.html',
