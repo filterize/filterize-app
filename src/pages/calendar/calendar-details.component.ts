@@ -62,6 +62,10 @@ import { UserService } from "../../services/user.service";
         <ion-item *ngIf="(item$|async)?.calendar_token">
           <a [href]="link">{{ link }}</a>
         </ion-item>
+        <ion-item *ngIf="(item$|async)?.calendar_token">
+          <a [href]="link">{{ webcal_link }}</a>
+          <ion-note>Outlook</ion-note>
+        </ion-item>
         <ion-item *ngIf="!(item$|async)?.calendar_token">
           <ion-label color="danger">
             <ion-icon name="warning"></ion-icon>
@@ -84,6 +88,7 @@ export class CalendarDetailsComponent {
   private duration = "15";
   private linkType = "app";
   private link = "";
+  private webcal_link = "";
   private sub: Subscription;
   private lastNotebook: Notebook;
 
@@ -135,8 +140,10 @@ export class CalendarDetailsComponent {
     }
     if (this.lastNotebook) {
       this.link = `https://api.filterize.net/calendar/${this.lastNotebook.calendar_token}.ics?d=${this.duration}&link=${this.linkType}`;
+      this.webcal_link = `webcal://api.filterize.net/calendar/${this.lastNotebook.calendar_token}.ics?d=${this.duration}&link=${this.linkType}`;
     } else {
       this.link = "";
+      this.webcal_link = "";
     }
   }
 
