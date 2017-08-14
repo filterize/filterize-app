@@ -54,7 +54,8 @@ import { USER_RESOURCES } from "../../filterize-ressources/resources.list";
               <ion-label>{{ filter.name }}</ion-label>
               <ion-toggle 
                 [disabled]="!filter['#can_edit']" 
-                [checked]="filter.active" 
+                [checked]="filter.active"
+                (click)="$event.preventDefault();$event.stopPropagation()"
                 (ionChange)="setFilterActive(filter, $event.checked)"
               ></ion-toggle>
             </button>
