@@ -98,6 +98,7 @@ export class CalendarDetailsComponent {
     this.business = this.params.get("business") === true || this.params.get("business") === "true";
     this.guid = this.params.get("guid");
 
+    /*
     this.store.select("current_user")
       .first()
       .subscribe(data => {
@@ -110,7 +111,7 @@ export class CalendarDetailsComponent {
             }
           })
         }
-      });
+      });*/
 
     if (this.guid != "all") {
       this.item$ = this.store.select(USER_RESOURCES.notebook.store)
