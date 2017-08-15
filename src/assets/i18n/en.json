@@ -85,6 +85,7 @@
     "ADDRESS_SHORT": "mail-in address",
     "INTRO": "Please insert your Evernote mail-in address to activate this feature.",
     "REQUIRE_TOKEN": "Require security token",
+    "SYNC_FIRST": "Link can only be created if user information is synchronized",
     "RESET_TOKEN": "Reset security token",
     "NOTEBOOKS": "Notebooks"
   },

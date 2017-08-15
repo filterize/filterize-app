@@ -44,7 +44,7 @@ import { ResourcesService } from "../../filterize-ressources/resources.service";
               (ionChange)="toggleToken($event)"
               [ngModel]="require_token"></ion-toggle>
           </ion-item>
-          <ion-button ion-item outline *ngIf="require_token" color="danger" >
+          <ion-button ion-item outline *ngIf="require_token" color="danger" (click)="revokeToken()">
             {{ "MAIL_IN.RESET_TOKEN" | translate}}
           </ion-button>
         </ion-item-group>
@@ -104,6 +104,18 @@ export class MailInComponent {
         payload: {
           _id: user._id,
           mailin_require_token: event.checked
+        }
+      });
+    });
+  }
+
+  revokeToken() {
+    this.current_user$.first().subscribe(user => {
+      this.store.dispatch({
+        type: UserActions.CHANGED,
+        payload: {
+          _id: user._id,
+          mailin_token: ""
         }
       });
     });

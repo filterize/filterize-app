@@ -59,12 +59,12 @@ import { UserService } from "../../services/user.service";
             <ion-option value="web">{{ "CALENDAR.LINK_WEB" | translate }}</ion-option>
           </ion-select>
         </ion-item>
-        <ion-item *ngIf="(item$|async)?.calendar_token">
+        <ion-item class="selectable" *ngIf="(item$|async)?.calendar_token">
           <a [href]="link">{{ link }}</a>
         </ion-item>
-        <ion-item *ngIf="(item$|async)?.calendar_token">
+        <ion-item class="selectable" *ngIf="(item$|async)?.calendar_token">
           <a [href]="link">{{ webcal_link }}</a>
-          <ion-note>Outlook</ion-note>
+          <ion-note class="unselectable">Outlook</ion-note>
         </ion-item>
         <ion-item *ngIf="!(item$|async)?.calendar_token">
           <ion-label color="danger">
@@ -77,7 +77,11 @@ import { UserService } from "../../services/user.service";
       </button>
      </ion-list>
     </ion-content>
-  `
+  `,
+  styles: [`
+    .selectable {user-select: text !important;}
+    .unselectable {user-select: none;}
+  `]
 })
 export class CalendarDetailsComponent {
   item$: Observable<Notebook>;
