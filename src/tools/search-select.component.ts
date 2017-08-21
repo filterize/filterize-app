@@ -52,7 +52,7 @@ export class SearchSelectComponent implements OnInit, OnChanges {
     this.searchItemsProcessed = Object.keys(this.searchItems)
       .map(key => Object({value: key, label: this.searchItems[key]}))
       .filter(obj => !obj.value.startsWith("#") && !obj.value.startsWith("_"))
-      .sort((a: SelectItem, b: SelectItem) => a.label < b.label ? -1 : 1);
+      .sort((a: SelectItem, b: SelectItem) => a.label.toUpperCase() < b.label.toUpperCase() ? -1 : 1);
   }
 
   updateLabel() {
