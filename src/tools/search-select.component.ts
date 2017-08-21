@@ -46,7 +46,8 @@ export class SearchSelectComponent implements OnInit, OnChanges {
       return;
     }
     if (this.searchItems instanceof Array) {
-      this.searchItemsProcessed = this.searchItems;
+      this.searchItemsProcessed = this.searchItems
+        .sort((a: SelectItem, b: SelectItem) => a.label.toUpperCase() < b.label.toUpperCase() ? -1 : 1);
       return
     }
     this.searchItemsProcessed = Object.keys(this.searchItems)
