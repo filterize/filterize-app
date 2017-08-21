@@ -58,7 +58,7 @@ export class SearchSelectModalComponent implements OnInit {
   }
 
   headerFn(record: SelectItem, recordIndex: number, records: SelectItem[]) {
-    if (recordIndex == 0 || (records[recordIndex-1] && record.label[0] != records[recordIndex-1].label[0])) {
+    if (recordIndex == 0 || (records[recordIndex-1] && record.label[0].toUpperCase() != records[recordIndex-1].label[0].toUpperCase())) {
       return record.label ? record.label[0].toUpperCase() : null;
     }
     return null;
